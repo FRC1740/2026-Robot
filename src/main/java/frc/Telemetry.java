@@ -8,6 +8,7 @@ import edu.wpi.first.networktables.DoublePublisher;
 import edu.wpi.first.networktables.DoubleTopic;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.units.measure.AngularVelocity;
 import frc.robot.subsystems.IntakeSubsystem;
 
 /** Add your docs here. */
@@ -26,7 +27,7 @@ public class Telemetry {
     return instance;
     }
 
-    public void telemetrizeIntake(double rpm) {
+    public void telemetrizeIntake(Double rpm) {
         intakeRPM.set(rpm);
     }
 }
