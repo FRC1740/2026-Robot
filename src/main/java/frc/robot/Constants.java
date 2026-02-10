@@ -4,6 +4,11 @@
 
 package frc.robot;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
  * constants. This class should not be used for any other purpose. All constants should be declared
@@ -15,5 +20,31 @@ package frc.robot;
 public final class Constants {
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
+  }
+  public static class CanIDs {
+    public static int shooterRightMotor = 9;
+    public static int shooterLeftMotor = 10;
+    public static int feederMotor = 11;
+  }
+  public static class Shooter {
+    static class CalibrationPoint {
+      CalibrationPoint (double distance, double angle, double rpm) {
+        this.distance = distance;
+        this.angle = angle;
+        this.rpm = rpm;
+      }
+      
+      double distance;
+      double angle;
+      double rpm;
+    }
+
+    public static final CalibrationPoint[] shooterCalibration = {
+      new CalibrationPoint(1.0, 0.0, 2000.0),
+    };
+
+    // public static CalibrationPoint getPoint(double distance) {
+      
+    // }
   }
 }
