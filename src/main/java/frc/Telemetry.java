@@ -15,9 +15,11 @@ public class Telemetry {
     NetworkTableInstance ins = NetworkTableInstance.getDefault();
     NetworkTable shooterTable = ins.getTable("Shooter table");
     NetworkTable intakeTable = ins.getTable("Intake table");
+    NetworkTable kickerTable = ins.getTable("Kicker table");
 
     DoublePublisher flywheelRPM = shooterTable.getDoubleTopic("Flywheel rpm").publish();
     DoublePublisher intakeRPM = intakeTable.getDoubleTopic("intake rpm").publish();
+    DoublePublisher kickerRPM = intakeTable.getDoubleTopic("kicker rpm").publish();
     
     public static Telemetry getInstance() {
     if(instance == null) {
@@ -28,6 +30,10 @@ public class Telemetry {
 
     public void telemetrizeShooter(double rpm) {
         flywheelRPM.set(rpm);
+    }
+
+    public void telemetrizeKicker(double rpm) {
+        kickerRPM.set(rpm);
     }
 
     public void telemetrizeIntake(double rpm) {

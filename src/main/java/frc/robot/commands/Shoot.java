@@ -31,7 +31,7 @@ public class Shoot extends Command {
   @Override
   public void execute() {
     m_shooterSubsystem.shootSB();
-    m_kickerSubsystem.feed();
+    m_kickerSubsystem.kick();
   }
 
   // Called once the command ends or is interrupted.
