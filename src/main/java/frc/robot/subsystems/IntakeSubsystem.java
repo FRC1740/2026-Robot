@@ -5,16 +5,23 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.hardware.TalonFXS;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.configs.TalonFXSConfiguration;
+import com.ctre.phoenix6.controls.DutyCycleOut;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.Telemetry;
 
 public class IntakeSubsystem extends SubsystemBase {
   // Creates a new TalonFX object
-  TalonFX intakeMotorController = new TalonFX(Constants.OperatorConstants.intakeMotorID);
+  TalonFXS intakeMotorController = new TalonFXS(Constants.OperatorConstants.intakeMotorID);
+  
+  //Create control request
+  DutyCycleOut intakMotorDutyCyleOut = new DutyCycleOut(0.0);
+  
   private final Telemetry telemetry = Telemetry.getInstance();
-
   private static Double motorVelocity;
   private static IntakeSubsystem instance;
 
@@ -28,7 +35,7 @@ public class IntakeSubsystem extends SubsystemBase {
   /** Creates a new IntakeSubsystem. */
   public IntakeSubsystem() {
     // Make new TalonFX config objects
-    TalonFXConfiguration intakeMotorConfig = new TalonFXConfiguration();
+    TalonFXSConfiguration intakeMotorConfig = new TalonFXSConfiguration();
 
     // Set the current limit of the Talon
     intakeMotorConfig.CurrentLimits.SupplyCurrentLimit = 20;
@@ -56,7 +63,10 @@ public class IntakeSubsystem extends SubsystemBase {
   public void intake() {
     // Starts the Motor
 
-    intakeMotorController.set(-1);
+    //intakeMotorController.set(-1);
+
+    intakeMotorController.setControl(intakMotorDutyCyleOut.withOutput(.5));
+
   }
 
   public void stop() {
