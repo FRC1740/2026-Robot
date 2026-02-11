@@ -39,6 +39,9 @@ public class ShooterSubsystem extends SubsystemBase {
   private GenericEntry shooter_velocity =
       tab.add("Shooter Velocity", 0)
          .getEntry();
+  private GenericEntry shooter_angle =
+      tab.add("Shooter Angle", 0)
+         .getEntry();
   
   private static ShooterSubsystem instance;
 
@@ -95,7 +98,7 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public void aimForDistance(double distance) {
-    m_hoodSubsystem.setPercent(.5);
+    m_hoodSubsystem.setPercent(shooter_angle.getDouble(0));
   }
 
   public void shootDumb() {

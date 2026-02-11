@@ -5,6 +5,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystems.FeederSubsystem;
 import frc.robot.subsystems.KickerSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 
@@ -12,15 +13,18 @@ import frc.robot.subsystems.ShooterSubsystem;
 public class Shoot extends Command {
   ShooterSubsystem m_shooterSubsystem;
   KickerSubsystem m_kickerSubsystem;
+  FeederSubsystem m_feederSubsystem;
 
   /** Creates a new Shoot. */
-  public Shoot(ShooterSubsystem shooterSubsystem, KickerSubsystem kickerSubsystem) {
+  public Shoot(ShooterSubsystem shooterSubsystem, KickerSubsystem kickerSubsystem, FeederSubsystem feederSubsystem) {
     m_shooterSubsystem = shooterSubsystem;
     m_kickerSubsystem = kickerSubsystem;
+    m_feederSubsystem = feederSubsystem;
+    
 
     // Use addRequirements() here to declare subsystem dependencies.
     // Prevents double accesses
-    addRequirements(m_shooterSubsystem, m_kickerSubsystem);
+    addRequirements(m_shooterSubsystem, m_kickerSubsystem, m_feederSubsystem);
   }
 
   // Called when the command is initially scheduled.
@@ -33,6 +37,7 @@ public class Shoot extends Command {
     m_shooterSubsystem.shootSB();
     m_shooterSubsystem.aimForDistance(10.0);
     m_kickerSubsystem.kick();
+    m_feederSubsystem.feed();
   }
 
   // Called once the command ends or is interrupted.
@@ -40,6 +45,7 @@ public class Shoot extends Command {
   public void end(boolean interrupted) {
     m_shooterSubsystem.stop();
     m_kickerSubsystem.stop();
+    m_feederSubsystem.stop();
   }
 
   // Returns true when the command should end.

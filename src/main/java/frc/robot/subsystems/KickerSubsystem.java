@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.hardware.TalonFXS;
+import com.ctre.phoenix6.signals.MotorArrangementValue;
 import com.ctre.phoenix6.configs.TalonFXSConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -38,6 +39,7 @@ public class KickerSubsystem extends SubsystemBase {
     // Set the current limit of the Talon
     kickerMotorConfig.CurrentLimits.SupplyCurrentLimit = 40;
     kickerMotorConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
+    kickerMotorConfig.Commutation.MotorArrangement = MotorArrangementValue.NEO_JST;
 
     kickerMotorController.getConfigurator().apply(kickerMotorConfig);
 
@@ -55,7 +57,7 @@ public class KickerSubsystem extends SubsystemBase {
 
   public void kick() {
     // Starts the Motor
-    kickerMotorController.setControl(intakMotorDutyCyleOut.withOutput(.5));
+    kickerMotorController.setControl(intakMotorDutyCyleOut.withOutput(1.0));
 
   }
 
