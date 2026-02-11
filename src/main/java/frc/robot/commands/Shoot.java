@@ -31,6 +31,7 @@ public class Shoot extends Command {
   @Override
   public void execute() {
     m_shooterSubsystem.shootSB();
+    m_shooterSubsystem.aimForDistance(10.0);
     m_kickerSubsystem.kick();
   }
 

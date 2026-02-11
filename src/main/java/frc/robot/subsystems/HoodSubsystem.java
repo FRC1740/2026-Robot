@@ -20,8 +20,8 @@ public class HoodSubsystem extends SubsystemBase {
 
   private static HoodSubsystem instance;
 
-  Servo servo = new Servo(1);
-  Servo servo2 = new Servo(2);
+  Servo servo = new Servo(0);
+  Servo servo2 = new Servo(1);
   final double far_distance = .465; // out
   final double close_distance = .55; // in
 
@@ -54,9 +54,9 @@ public class HoodSubsystem extends SubsystemBase {
     servo2.set(.465);
   }
 
-  private void set(double angle) {
-    servo.set(.55);
-    servo2.set(.465);
+  private void set(double angle, double angle2) {
+    servo.set(angle);
+    servo2.set(angle2);
   }
 
   private void setAngle(double degrees, Servo the_servo) {
@@ -73,6 +73,9 @@ public class HoodSubsystem extends SubsystemBase {
    * Takes in a 0-1 float representing the hood angle from 0 (least angled), to 1, most angled and flat
    */
   public void setPercent(double percent) {
-    set(((close_distance - far_distance) * percent) + far_distance);
+    set(
+      ((close_distance - far_distance) * percent) + far_distance,
+      ((close_distance - far_distance) * (1.0 - percent)) + far_distance
+    );
   }
 }
