@@ -27,6 +27,12 @@ public class FeederSubsystem extends SubsystemBase {
 
   private RelativeEncoder motorEncoder;
 
+  private ShuffleboardTab tab = Shuffleboard.getTab("Feeder");
+
+  private GenericEntry feederSpeed =
+      tab.add("Feeder Speed", .4)
+         .getEntry();
+
   private static FeederSubsystem instance;
 
   public static FeederSubsystem getInstance() {
@@ -62,7 +68,7 @@ public class FeederSubsystem extends SubsystemBase {
   }
 
   public void feed() {
-    motorController.set(-.4);
+    motorController.set(-feederSpeed.getDouble(0));
   }
 
   public void stop() {

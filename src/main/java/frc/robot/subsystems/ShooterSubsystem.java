@@ -68,9 +68,9 @@ public class ShooterSubsystem extends SubsystemBase {
 
     // PID
     Slot0Configs slot0Configs = new Slot0Configs();
-    slot0Configs.kP = 2.4; // An error of 1 rotation results in 2.4 V output
+    slot0Configs.kP = 4; // An error of 1 rotation results in 2.4 V output
     slot0Configs.kI = 0; // no output for integrated error
-    slot0Configs.kD = 0.1; // A velocity of 1 rps results in 0.1 V output
+    slot0Configs.kD = 0; // A velocity of 1 rps results in 0.1 V output
 
     rightMotor.setControl(VVShootRequest.withVelocity(0));
     leftMotor.setControl(new Follower(Constants.CanIDs.shooterRightMotor, MotorAlignmentValue.Opposed));
@@ -109,6 +109,10 @@ public class ShooterSubsystem extends SubsystemBase {
   }
   public void shootSB() {
     rightMotor.setControl(VVShootRequest.withVelocity(-shooter_velocity.getDouble(0) / 60.0));
+  }
+
+  public boolean atSpeed() {
+    return (-rightMotor.getVelocity().getValueAsDouble() * 60.0) > (shooter_velocity.getDouble(0) / 60.0) - 200;
   }
 
   public void stop() {

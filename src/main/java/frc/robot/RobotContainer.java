@@ -5,6 +5,7 @@
 package frc.robot;
 
 import frc.robot.Constants.OperatorConstants;
+import frc.robot.commands.Feed;
 import frc.robot.commands.Shoot;
 import frc.robot.subsystems.FeederSubsystem;
 import frc.robot.subsystems.KickerSubsystem;
@@ -46,6 +47,7 @@ public class RobotContainer {
    */
   private void configureBindings() {
     m_driverController.a().whileTrue(new Shoot(m_shooterSubsystem, m_kickerSubsystem, m_feederSubsystem));
+    m_driverController.b().whileTrue(new Feed(m_shooterSubsystem, m_kickerSubsystem, m_feederSubsystem));
   }
 
   /**
