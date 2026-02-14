@@ -78,6 +78,8 @@ public class ShooterSubsystem extends SubsystemBase {
     rightMotorconfigurator.apply(motorConfig);
     rightMotorconfigurator.apply(slot0Configs);
     leftMotorconfigurator.apply(motorConfig);
+
+    stop();
   }
 
 
