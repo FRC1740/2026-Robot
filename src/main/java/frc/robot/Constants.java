@@ -39,6 +39,9 @@ public final class Constants {
       double rpm;
     }
 
+    // 10ft .3 3000
+    // 0.3 ft 0 2300
+
     public static final CalibrationPoint[] shooterCalibration = {
       new CalibrationPoint(1.0, 0.0, 2000.0),
     };
