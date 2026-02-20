@@ -25,6 +25,8 @@ public final class Constants {
     public static int shooterRightMotor = 9;
     public static int shooterLeftMotor = 10;
     public static int feederMotor = 11;
+    public static int intakeExtensionMotor = 13;
+    public static int intakeMotor = 14;
   }
   public static class Shooter {
     static class CalibrationPoint {

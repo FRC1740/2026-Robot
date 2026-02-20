@@ -11,6 +11,7 @@ import frc.robot.commands.Shoot;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.FeederSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.KickerSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 
@@ -24,6 +25,8 @@ import com.ctre.phoenix6.swerve.SwerveRequest;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
@@ -40,6 +43,7 @@ public class RobotContainer {
   private final ShooterSubsystem m_shooterSubsystem = ShooterSubsystem.getInstance();
   private final KickerSubsystem m_kickerSubsystem = KickerSubsystem.getInstance();
   private final FeederSubsystem m_feederSubsystem = FeederSubsystem.getInstance();
+  private final IntakeSubsystem m_intakeSubsystem = IntakeSubsystem.getInstance();
   private final Telemetry m_telemetry = Telemetry.getInstance();
 
     private double MaxSpeed = 1.0 * TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
@@ -76,6 +80,10 @@ public class RobotContainer {
   private void configureBindings() {
     m_driverController.a().whileTrue(new Shoot(m_shooterSubsystem, m_kickerSubsystem, m_feederSubsystem));
     m_driverController.b().whileTrue(new Feed(m_shooterSubsystem, m_kickerSubsystem, m_feederSubsystem));
+    m_driverController.x().whileTrue(new InstantCommand(() -> {m_intakeSubsystem.intake();}))
+    .onFalse(new InstantCommand(() -> {m_intakeSubsystem.stop();}));
+    m_driverController.y().whileTrue(new InstantCommand(() -> {m_intakeSubsystem.retract();}))
+    .onFalse(new InstantCommand(() -> {m_intakeSubsystem.stop();}));
 
         // Note that X is defined as forward according to WPILib convention,
         // and Y is defined as to the left according to WPILib convention.
