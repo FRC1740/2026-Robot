@@ -46,7 +46,7 @@ public class IntakeSubsystem extends SubsystemBase {
     config.softLimit.reverseSoftLimitEnabled(true);
     config.encoder.positionConversionFactor(3);
     config.softLimit.forwardSoftLimit(0);
-    config.softLimit.reverseSoftLimit(-100);
+    config.softLimit.reverseSoftLimit(-133.33334);
     config.idleMode(IdleMode.kBrake);
     
     extensionMotorController.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
