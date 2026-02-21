@@ -145,4 +145,8 @@ public class ShooterSubsystem extends SubsystemBase {
     }
     isToggled = !isToggled;
   }
+
+  public void stop(){
+    rightMotor.set(0);
+  }
 }
