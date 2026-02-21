@@ -17,12 +17,13 @@ import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.Telemetry;
+import frc.robot.Constants;
 
 public class FeederSubsystem extends SubsystemBase {
   
   // Use id 0 to adress the motor via canbus, this is a neo so brushless.
   // Ideally we configure via a constants file but this is example code.
-  SparkMax motorController = new SparkMax(1, MotorType.kBrushless); 
+  SparkMax motorController = new SparkMax(Constants.CanIDs.feederMotor, MotorType.kBrushless); 
   private final Telemetry telemetry = Telemetry.getInstance();
 
   private RelativeEncoder motorEncoder;

@@ -24,7 +24,8 @@ public final class Constants {
   public static class CanIDs {
     public static int shooterRightMotor = 9;
     public static int shooterLeftMotor = 10;
-    public static int feederMotor = 11;
+    public static int feederMotor = 1;
+    public static int kickerMotor = 11;
     public static int intakeExtensionMotor = 13;
     public static int intakeMotor = 14;
   }
