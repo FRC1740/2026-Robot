@@ -8,6 +8,7 @@ import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.swerve.SwerveDrivetrain.SwerveDriveState;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
@@ -36,7 +37,6 @@ public class Telemetry {
     DoublePublisher flywheelRPM = shooterTable.getDoubleTopic("Flywheel rpm").publish();
     DoublePublisher intakeDist = intakeTable.getDoubleTopic("intake dist").publish();
     DoublePublisher kickerRPM = intakeTable.getDoubleTopic("kicker rpm").publish();
-
 
     private final double MaxSpeed = 6.0;
 
@@ -100,6 +100,9 @@ public class Telemetry {
 
     private final double[] m_poseArray = new double[3];
 
+    private final StructPublisher<Pose2d> questPose = driveStateTable.getStructTopic("QuestPose", Pose2d.struct).publish();
+
+
     /** Accept the swerve drive state and telemeterize it to SmartDashboard and SignalLogger. */
     public void telemeterize(SwerveDriveState state) {
         /* Telemeterize the swerve drive state */
@@ -152,5 +155,9 @@ public class Telemetry {
 
     public void telemetrizeIntake(double dist) {
         intakeDist.set(dist);
+    }
+    
+    public void telemeterizeQuestNav(Pose3d robotPose) {
+        this.questPose.set(robotPose.toPose2d());
     }
 }
