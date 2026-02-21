@@ -20,6 +20,7 @@ import static edu.wpi.first.units.Units.RadiansPerSecond;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators.None;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -62,6 +63,8 @@ public class RobotContainer {
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController m_driverController =
       new CommandXboxController(OperatorConstants.kDriverControllerPort);
+  private final CommandXboxController m_coDriverController =
+      new CommandXboxController(OperatorConstants.kCoDriverControllerPort);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
@@ -80,9 +83,14 @@ public class RobotContainer {
    */
   private void configureBindings() {
     m_driverController.leftTrigger().whileTrue(new Shoot(m_shooterSubsystem, m_kickerSubsystem, m_feederSubsystem));
+    m_coDriverController.rightTrigger().onTrue(new InstantCommand(() -> {m_shooterSubsystem.toggle();}));
 
     m_driverController.b().whileTrue(new Feed(m_shooterSubsystem, m_kickerSubsystem, m_feederSubsystem));
-    m_driverController.x().whileTrue(new InstantCommand(() -> {m_intakeSubsystem.intake();}))
+    
+    m_coDriverController.axisGreaterThan(1, 0.1).whileTrue(new RunCommand(() -> m_intakeSubsystem.set(m_coDriverController.getRawAxis(1)), m_intakeSubsystem));
+    m_coDriverController.a().whileTrue(new Shoot(m_shooterSubsystem, m_kickerSubsystem, m_feederSubsystem));
+
+    m_driverController.leftBumper().whileTrue(new InstantCommand(() -> {m_intakeSubsystem.intake();}))
     .onFalse(new InstantCommand(() -> {m_intakeSubsystem.stop();}));
     m_driverController.y().whileTrue(new InstantCommand(() -> {m_intakeSubsystem.retract();}))
     .onFalse(new InstantCommand(() -> {m_intakeSubsystem.stop();}));
@@ -117,8 +125,8 @@ public class RobotContainer {
         m_driverController.start().and(m_driverController.y()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kForward));
         m_driverController.start().and(m_driverController.x()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kReverse));
 
-        // Reset the field-centric heading on left bumper press.
-        m_driverController.leftBumper().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
+        // Reset the field-centric heading on the hamburger press.
+        m_driverController.button(8).onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
 
         drivetrain.registerTelemetry(m_telemetry::telemeterize);
     }

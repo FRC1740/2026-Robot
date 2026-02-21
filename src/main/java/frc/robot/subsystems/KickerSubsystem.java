@@ -18,7 +18,7 @@ import frc.Telemetry;
 
 public class KickerSubsystem extends SubsystemBase {
   // Creates a new TalonFX object
-  TalonFXS kickerMotorController = new TalonFXS(Constants.CanIDs.feederMotor, "*");
+  TalonFXS kickerMotorController = new TalonFXS(Constants.CanIDs.kickerMotor, "*");
   
   //Create control request
   DutyCycleOut intakMotorDutyCyleOut = new DutyCycleOut(0.0);
