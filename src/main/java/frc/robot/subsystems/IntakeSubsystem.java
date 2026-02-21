@@ -4,19 +4,29 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.revrobotics.PersistMode;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.ResetMode;
+import com.revrobotics.spark.SparkLowLevel.MotorType;
+import com.revrobotics.spark.config.SparkBaseConfig;
+import com.revrobotics.spark.config.SparkMaxConfig;
+import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+import com.revrobotics.spark.SparkMax;
+
+import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.Constants;
 import frc.Telemetry;
+import frc.robot.Constants;
 
 public class IntakeSubsystem extends SubsystemBase {
-  // Creates a new TalonFX object
-  TalonFX intakeMotorController = new TalonFX(Constants.OperatorConstants.intakeMotorID);
-  private final Telemetry telemetry = Telemetry.getInstance();
-
-  private static Double motorVelocity;
+  
+  SparkMax extensionMotorController = new SparkMax(Constants.CanIDs.intakeExtensionMotor, MotorType.kBrushless); 
+  SparkMax motorController = new SparkMax(Constants.CanIDs.intakeMotor, MotorType.kBrushless); 
   private static IntakeSubsystem instance;
+  private RelativeEncoder motorEncoder;
+
+  private final Telemetry telemetry = Telemetry.getInstance();
+  /** Creates a new FeederSubsystem. */
 
   public static IntakeSubsystem getInstance() {
     if(instance == null) {
@@ -25,43 +35,43 @@ public class IntakeSubsystem extends SubsystemBase {
     return instance;
   }
 
-  /** Creates a new IntakeSubsystem. */
   public IntakeSubsystem() {
-    // Make new TalonFX config objects
-    TalonFXConfiguration intakeMotorConfig = new TalonFXConfiguration();
+    // set params here
+    SparkMaxConfig config = new SparkMaxConfig();
 
-    // Set the current limit of the Talon
-    intakeMotorConfig.CurrentLimits.SupplyCurrentLimit = 20;
-    intakeMotorConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
+    // Incredibly important!!!!! 
+    // Without this the motor draws as much power as it wants and will die if stalled
+    config.smartCurrentLimit(20);
+    config.softLimit.forwardSoftLimitEnabled(true);
+    config.softLimit.reverseSoftLimitEnabled(true);
+    config.encoder.positionConversionFactor(3);
+    config.softLimit.forwardSoftLimit(0);
+    config.softLimit.reverseSoftLimit(-100);
+    config.idleMode(IdleMode.kBrake);
+    
+    extensionMotorController.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
-    intakeMotorController.getConfigurator().apply(intakeMotorConfig);
 
-    motorVelocity = intakeMotorController.getVelocity().getValueAsDouble();
+    motorEncoder = extensionMotorController.getEncoder();
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-
-    // Gather RPM dataof the intake motor
-    telemetry.telemetrizeIntake(getCurrentVelocity());
-  }
-
-  public double getCurrentVelocity() {
-    // motorVelocity multiplied by 60 to get RPM instead of RPS
-
-    return motorVelocity * 60.0;
+    telemetry.telemetrizeIntake(motorEncoder.getPosition());
   }
 
   public void intake() {
-    // Starts the Motor
-
-    intakeMotorController.set(-1);
+    extensionMotorController.set(-.4);
+    motorController.set(.8);
   }
 
+  public void retract() {
+    extensionMotorController.set(.4);
+    motorController.set(0);
+  }
   public void stop() {
-    // Stops the Motor
-
-    intakeMotorController.stopMotor();
+    extensionMotorController.set(0);
+    motorController.set(0);
   }
 }

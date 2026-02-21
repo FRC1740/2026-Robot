@@ -5,8 +5,13 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.hardware.TalonFXS;
+import com.ctre.phoenix6.signals.MotorArrangementValue;
 import com.ctre.phoenix6.configs.TalonFXSConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
+
+import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.Telemetry;
@@ -21,6 +26,12 @@ public class KickerSubsystem extends SubsystemBase {
   private final Telemetry telemetry = Telemetry.getInstance();
   private static Double motorVelocity;
   private static KickerSubsystem instance;
+
+  private ShuffleboardTab tab = Shuffleboard.getTab("Kicker");
+
+  private GenericEntry kickerSpeed =
+      tab.add("Kicker Speed", 1)
+         .getEntry();
 
   public static KickerSubsystem getInstance() {
     if(instance == null) {
@@ -38,6 +49,7 @@ public class KickerSubsystem extends SubsystemBase {
     // Set the current limit of the Talon
     kickerMotorConfig.CurrentLimits.SupplyCurrentLimit = 40;
     kickerMotorConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
+    kickerMotorConfig.Commutation.MotorArrangement = MotorArrangementValue.NEO_JST;
 
     kickerMotorController.getConfigurator().apply(kickerMotorConfig);
 
@@ -55,7 +67,7 @@ public class KickerSubsystem extends SubsystemBase {
 
   public void kick() {
     // Starts the Motor
-    kickerMotorController.setControl(intakMotorDutyCyleOut.withOutput(.5));
+    kickerMotorController.setControl(intakMotorDutyCyleOut.withOutput(kickerSpeed.getDouble(0)));
 
   }
 

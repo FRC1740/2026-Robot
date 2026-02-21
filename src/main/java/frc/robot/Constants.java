@@ -28,6 +28,8 @@ public final class Constants {
     public static int shooterRightMotor = 9;
     public static int shooterLeftMotor = 10;
     public static int feederMotor = 11;
+    public static int intakeExtensionMotor = 13;
+    public static int intakeMotor = 14;
   }
   public static class Shooter {
     static class CalibrationPoint {
@@ -41,6 +43,9 @@ public final class Constants {
       double angle;
       double rpm;
     }
+
+    // 10ft .3 3000
+    // 0.3 ft 0 2300
 
     public static final CalibrationPoint[] shooterCalibration = {
       new CalibrationPoint(1.0, 0.0, 2000.0),

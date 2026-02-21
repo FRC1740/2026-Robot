@@ -4,15 +4,33 @@
 
 package frc.robot;
 
+import frc.Telemetry;
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.Intake;
-import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.commands.Feed;
 import frc.robot.commands.Shoot;
+import frc.robot.generated.TunerConstants;
+import frc.robot.subsystems.CommandSwerveDrivetrain;
+import frc.robot.subsystems.FeederSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.KickerSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
+
+import static edu.wpi.first.units.Units.MetersPerSecond;
+import static edu.wpi.first.units.Units.RadiansPerSecond;
+import static edu.wpi.first.units.Units.RotationsPerSecond;
+
+import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
+import com.ctre.phoenix6.swerve.SwerveRequest;
+
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -25,6 +43,21 @@ public class RobotContainer {
   private final IntakeSubsystem m_IntakeSubsystem = IntakeSubsystem.getInstance();
   private final ShooterSubsystem m_shooterSubsystem = ShooterSubsystem.getInstance();
   private final KickerSubsystem m_kickerSubsystem = KickerSubsystem.getInstance();
+  private final FeederSubsystem m_feederSubsystem = FeederSubsystem.getInstance();
+  private final IntakeSubsystem m_intakeSubsystem = IntakeSubsystem.getInstance();
+  private final Telemetry m_telemetry = Telemetry.getInstance();
+
+    private double MaxSpeed = 1.0 * TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
+    private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
+
+    /* Setting up bindings for necessary control of the swerve drive platform */
+    private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
+            .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
+            .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
+    private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
+    private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
+
+    public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
 
   // Replace with CommandPS4Controller or CommandJoystick if needed
   private final CommandXboxController m_driverController =
@@ -46,19 +79,73 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
+    m_driverController.leftTrigger().whileTrue(new Shoot(m_shooterSubsystem, m_kickerSubsystem, m_feederSubsystem));
 
-    // cancelling on release.
-    m_driverController.b().whileTrue(new Intake(m_IntakeSubsystem));
-    m_driverController.a().whileTrue(new Shoot(m_shooterSubsystem, m_kickerSubsystem));
-  }
+    m_driverController.b().whileTrue(new Feed(m_shooterSubsystem, m_kickerSubsystem, m_feederSubsystem));
+    m_driverController.x().whileTrue(new InstantCommand(() -> {m_intakeSubsystem.intake();}))
+    .onFalse(new InstantCommand(() -> {m_intakeSubsystem.stop();}));
+    m_driverController.y().whileTrue(new InstantCommand(() -> {m_intakeSubsystem.retract();}))
+    .onFalse(new InstantCommand(() -> {m_intakeSubsystem.stop();}));
+
+        // Note that X is defined as forward according to WPILib convention,
+        // and Y is defined as to the left according to WPILib convention.
+        drivetrain.setDefaultCommand(
+            // Drivetrain will execute this command periodically
+            drivetrain.applyRequest(() ->
+                drive.withVelocityX(-m_driverController.getLeftY() * MaxSpeed) // Drive forward with negative Y (forward)
+                    .withVelocityY(-m_driverController.getLeftX() * MaxSpeed) // Drive left with negative X (left)
+                    .withRotationalRate(-m_driverController.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
+            )
+        );
+
+        // Idle while the robot is disabled. This ensures the configured
+        // neutral mode is applied to the drive motors while disabled.
+        final var idle = new SwerveRequest.Idle();
+        RobotModeTriggers.disabled().whileTrue(
+            drivetrain.applyRequest(() -> idle).ignoringDisable(true)
+        );
+
+        // m_driverController.a().whileTrue(drivetrain.applyRequest(() -> brake));
+        // m_driverController.b().whileTrue(drivetrain.applyRequest(() ->
+        //     point.withModuleDirection(new Rotation2d(-m_driverController.getLeftY(), -m_driverController.getLeftX()))
+        // ));
+
+        // Run SysId routines when holding back/start and X/Y.
+        // Note that each routine should be run exactly once in a single log.
+        m_driverController.back().and(m_driverController.y()).whileTrue(drivetrain.sysIdDynamic(Direction.kForward));
+        m_driverController.back().and(m_driverController.x()).whileTrue(drivetrain.sysIdDynamic(Direction.kReverse));
+        m_driverController.start().and(m_driverController.y()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kForward));
+        m_driverController.start().and(m_driverController.x()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kReverse));
+
+        // Reset the field-centric heading on left bumper press.
+        m_driverController.leftBumper().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
+
+        drivetrain.registerTelemetry(m_telemetry::telemeterize);
+    }
+
+ 
 
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *
    * @return the command to run in autonomous
    */
-  // public Command getAutonomousCommand() {
-  //   // An example command will be run in autonomous
-  //   // return Autos.exampleAuto(m_exampleSubsystem);
-  // }
+  public Command getAutonomousCommand() {
+        // Simple drive forward auton
+        final var idle = new SwerveRequest.Idle();
+        return Commands.sequence(
+            // Reset our field centric heading to match the robot
+            // facing away from our alliance station wall (0 deg).
+            drivetrain.runOnce(() -> drivetrain.seedFieldCentric(Rotation2d.kZero)),
+            // Then slowly drive forward (away from us) for 5 seconds.
+            drivetrain.applyRequest(() ->
+                drive.withVelocityX(0.5)
+                    .withVelocityY(0)
+                    .withRotationalRate(0)
+            )
+            .withTimeout(5.0),
+            // Finally idle for the rest of auton
+            drivetrain.applyRequest(() -> idle)
+        );
+    }
 }

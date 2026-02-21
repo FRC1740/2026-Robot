@@ -6,9 +6,11 @@ package frc.robot.subsystems;
 
 
 import com.ctre.phoenix6.configs.Slot0Configs;
+import com.ctre.phoenix6.configs.Slot1Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
 import com.ctre.phoenix6.controls.Follower;
+import com.ctre.phoenix6.controls.TorqueCurrentFOC;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
@@ -27,17 +29,26 @@ public class ShooterSubsystem extends SubsystemBase {
   TalonFX rightMotor = new TalonFX(Constants.CanIDs.shooterRightMotor, "*"); 
   TalonFX leftMotor = new TalonFX(Constants.CanIDs.shooterLeftMotor, "*");
 
+  boolean isToggled = false;
+
   private final Telemetry telemetry = Telemetry.getInstance();
+
+  private final TorqueCurrentFOC m_torqueRequest = new TorqueCurrentFOC(0);
 
   private final HoodSubsystem m_hoodSubsystem = HoodSubsystem.getInstance();
 
   final VelocityVoltage VVShootRequest = new VelocityVoltage(0).withSlot(0);
 
+  Slot1Configs slot1Configs = new Slot1Configs();
+  Slot0Configs slot0Configs = new Slot0Configs();
 
   private ShuffleboardTab tab = Shuffleboard.getTab("Drive");
 
   private GenericEntry shooter_velocity =
       tab.add("Shooter Velocity", 0)
+         .getEntry();
+  private GenericEntry shooter_angle =
+      tab.add("Shooter Angle", 0)
          .getEntry();
   
   private static ShooterSubsystem instance;
@@ -64,10 +75,15 @@ public class ShooterSubsystem extends SubsystemBase {
     motorConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
 
     // PID
-    Slot0Configs slot0Configs = new Slot0Configs();
-    slot0Configs.kP = 2.4; // An error of 1 rotation results in 2.4 V output
+    
+    slot0Configs.kP = 4; // An error of 1 rotation results in 2.4 V output
     slot0Configs.kI = 0; // no output for integrated error
-    slot0Configs.kD = 0.1; // A velocity of 1 rps results in 0.1 V output
+    slot0Configs.kD = 0; // A velocity of 1 rps results in 0.1 V output
+
+    slot1Configs.kP = 0;
+    slot1Configs.kI = 0;
+    slot1Configs.kD = 0;
+
 
     rightMotor.setControl(VVShootRequest.withVelocity(0));
     leftMotor.setControl(new Follower(Constants.CanIDs.shooterRightMotor, MotorAlignmentValue.Opposed));
@@ -94,8 +110,12 @@ public class ShooterSubsystem extends SubsystemBase {
     return rightMotor.getVelocity().getValueAsDouble() * 60.0; // RPS -> RPM
   }
 
+  public void setTorque(double Torque) {
+    rightMotor.setControl(m_torqueRequest.withOutput(Torque));
+  }
+
   public void aimForDistance(double distance) {
-    m_hoodSubsystem.setPercent(.5);
+    m_hoodSubsystem.setPercent(shooter_angle.getDouble(0));
   }
 
   public void shootDumb() {
@@ -108,7 +128,21 @@ public class ShooterSubsystem extends SubsystemBase {
     rightMotor.setControl(VVShootRequest.withVelocity(-shooter_velocity.getDouble(0) / 60.0));
   }
 
-  public void stop() {
-    rightMotor.set(0);
+  public boolean atSpeed() {
+    return (-rightMotor.getVelocity().getValueAsDouble() * 60.0) > (shooter_velocity.getDouble(0) / 60.0) - 200;
+  }
+
+  public void toggle() {
+    if (isToggled) {
+
+      //Slot1configs are disabled
+      rightMotor.getConfigurator().apply(slot1Configs);
+      rightMotor.set(0);
+    } else {
+
+      //Slot0configs are enabled
+      rightMotor.getConfigurator().apply(slot0Configs);
+    }
+    isToggled = !isToggled;
   }
 }
