@@ -20,6 +20,7 @@ import java.util.List;
 public final class Constants {
   public static class OperatorConstants {
     public static final int kDriverControllerPort = 0;
+    public static final int kCoDriverControllerPort = 1;
   }
   public static class CanIDs {
     public static int shooterRightMotor = 9;

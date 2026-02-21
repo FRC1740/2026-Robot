@@ -61,6 +61,9 @@ public class IntakeSubsystem extends SubsystemBase {
     telemetry.telemetrizeIntake(motorEncoder.getPosition());
   }
 
+  public void set(double speed) {
+    extensionMotorController.set(speed);
+  }
   public void intake() {
     extensionMotorController.set(-.4);
     motorController.set(.8);
