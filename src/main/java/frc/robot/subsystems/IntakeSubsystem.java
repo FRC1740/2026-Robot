@@ -46,7 +46,7 @@ public class IntakeSubsystem extends SubsystemBase {
     config.softLimit.reverseSoftLimitEnabled(true);
     config.encoder.positionConversionFactor(3);
     config.softLimit.forwardSoftLimit(0);
-    config.softLimit.reverseSoftLimit(-133.33334);
+    config.softLimit.reverseSoftLimit(-130.33334);
     config.idleMode(IdleMode.kBrake);
     
     extensionMotorController.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
@@ -65,12 +65,12 @@ public class IntakeSubsystem extends SubsystemBase {
     extensionMotorController.set(speed);
   }
   public void intake() {
-    extensionMotorController.set(-.4);
-    motorController.set(.8);
+    // extensionMotorController.set(-.4);
+    motorController.set(1);
   }
 
   public void retract() {
-    extensionMotorController.set(.4);
+    // extensionMotorController.set(.4);
     motorController.set(0);
   }
   public void stop() {

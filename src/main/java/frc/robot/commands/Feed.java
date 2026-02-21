@@ -5,6 +5,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.FeederSubsystem;
 import frc.robot.subsystems.KickerSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
@@ -34,8 +35,10 @@ public class Feed extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_kickerSubsystem.kick();
-    m_feederSubsystem.feed();
+    if (m_shooterSubsystem.spinning()) {
+      m_kickerSubsystem.kick();
+      m_feederSubsystem.feed();
+    }
   }
 
   // Called once the command ends or is interrupted.

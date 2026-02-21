@@ -43,9 +43,8 @@ public final class Constants {
       double angle;
       double rpm;
     }
-
-    // 10ft .3 3000
-    // 0.3 ft 0 2300
+    // edge hub center flywheel
+    // 15.3ft, .5
 
     public static final CalibrationPoint[] shooterCalibration = {
       new CalibrationPoint(1.0, 0.0, 2000.0),

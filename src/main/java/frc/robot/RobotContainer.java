@@ -20,13 +20,17 @@ import static edu.wpi.first.units.Units.RadiansPerSecond;
 import static edu.wpi.first.units.Units.RotationsPerSecond;
 
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
+import com.ctre.phoenix6.swerve.SwerveRequest.ForwardPerspectiveValue;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators.None;
+import com.ctre.phoenix6.configs.ParentConfiguration;
+import com.ctre.phoenix6.mechanisms.swerve.LegacySwerveModule.SteerRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
@@ -48,8 +52,10 @@ public class RobotContainer {
   private final IntakeSubsystem m_intakeSubsystem = IntakeSubsystem.getInstance();
   private final Telemetry m_telemetry = Telemetry.getInstance();
 
-    private double MaxSpeed = 1.0 * TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
-    private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
+  double time = 0.0;
+
+    private double MaxSpeed = 0.5 * TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
+    private double MaxAngularRate = 0.5 * RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
 
     /* Setting up bindings for necessary control of the swerve drive platform */
     private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
@@ -82,18 +88,23 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
-    m_driverController.leftTrigger().whileTrue(new Shoot(m_shooterSubsystem, m_kickerSubsystem, m_feederSubsystem));
+    m_coDriverController.leftTrigger().whileTrue(new Shoot(m_shooterSubsystem, m_kickerSubsystem, m_feederSubsystem));
     m_coDriverController.rightTrigger().onTrue(new InstantCommand(() -> {m_shooterSubsystem.toggle();}));
 
-    m_driverController.b().whileTrue(new Feed(m_shooterSubsystem, m_kickerSubsystem, m_feederSubsystem));
+    m_driverController.b().whileTrue(
+    new ParallelCommandGroup(
+        drivetrain.applyRequest(() ->
+                drive.withVelocityX(-Math.sin(time) / 3.0) // Drive forward with negative Y (forward)
+                    .withVelocityY(-Math.cos(time) / 3.0)), // Drive left with negative X (left)
+        new Feed(m_shooterSubsystem, m_kickerSubsystem, m_feederSubsystem)
+    ));
     
     m_coDriverController.axisGreaterThan(1, 0.1).whileTrue(new RunCommand(() -> m_intakeSubsystem.set(m_coDriverController.getRawAxis(1)), m_intakeSubsystem));
-    m_coDriverController.a().whileTrue(new Shoot(m_shooterSubsystem, m_kickerSubsystem, m_feederSubsystem));
 
-    m_driverController.leftBumper().whileTrue(new InstantCommand(() -> {m_intakeSubsystem.intake();}))
-    .onFalse(new InstantCommand(() -> {m_intakeSubsystem.stop();}));
-    m_driverController.y().whileTrue(new InstantCommand(() -> {m_intakeSubsystem.retract();}))
-    .onFalse(new InstantCommand(() -> {m_intakeSubsystem.stop();}));
+    m_coDriverController.leftBumper().whileTrue(new InstantCommand(() -> {m_intakeSubsystem.intake();}))
+        .onFalse(new InstantCommand(() -> {m_intakeSubsystem.stop();}));
+    // m_driverController.rightBumper().whileTrue(new InstantCommand(() -> {m_intakeSubsystem.retract();}))
+    //     .onFalse(new InstantCommand(() -> {m_intakeSubsystem.stop();}));
 
         // Note that X is defined as forward according to WPILib convention,
         // and Y is defined as to the left according to WPILib convention.
@@ -129,6 +140,10 @@ public class RobotContainer {
         m_driverController.button(8).onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
 
         drivetrain.registerTelemetry(m_telemetry::telemeterize);
+    }
+
+    public void periodic() {
+        time += 1;
     }
 
  

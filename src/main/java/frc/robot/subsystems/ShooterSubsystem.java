@@ -69,14 +69,14 @@ public class ShooterSubsystem extends SubsystemBase {
 
     // Incredibly important!!!!! 
     // Without this the motor draws as much power as it wants and will die if stalled
-    motorConfig.CurrentLimits.StatorCurrentLimit = 20;
+    motorConfig.CurrentLimits.StatorCurrentLimit = 50;
     motorConfig.CurrentLimits.StatorCurrentLimitEnable = true;
     motorConfig.OpenLoopRamps.DutyCycleOpenLoopRampPeriod = 1;
     motorConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
 
     // PID
     
-    slot0Configs.kP = 4; // An error of 1 rotation results in 2.4 V output
+    slot0Configs.kP = 3.5; // An error of 1 rotation results in 2.4 V output
     slot0Configs.kI = 0; // no output for integrated error
     slot0Configs.kD = 0; // A velocity of 1 rps results in 0.1 V output
 
@@ -85,7 +85,7 @@ public class ShooterSubsystem extends SubsystemBase {
     slot1Configs.kD = 0;
 
 
-    rightMotor.setControl(VVShootRequest.withVelocity(0));
+    // rightMotor.setControl(VVShootRequest.withVelocity(0));
     leftMotor.setControl(new Follower(Constants.CanIDs.shooterRightMotor, MotorAlignmentValue.Opposed));
 
     rightMotorconfigurator.apply(motorConfig);
@@ -130,6 +130,10 @@ public class ShooterSubsystem extends SubsystemBase {
 
   public boolean atSpeed() {
     return (-rightMotor.getVelocity().getValueAsDouble() * 60.0) > (shooter_velocity.getDouble(0) / 60.0) - 200;
+  }
+
+  public boolean spinning() {
+    return Math.abs(-rightMotor.getVelocity().getValueAsDouble() * 60.0) > 100;
   }
 
   public void toggle() {
