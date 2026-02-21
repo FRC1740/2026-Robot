@@ -30,7 +30,6 @@ public class PhotonVision extends SubsystemBase {
     /** Creates a new PhotonVision. */
     PhotonCamera cam;
     PhotonCamera cam2;
-    PhotonPoseEstimator Cam3PoseEstimator;
     PhotonPoseEstimator Cam2PoseEstimator;
     PhotonPoseEstimator Cam1PoseEstimator;
     PhotonTrackedTarget bestTarget;
@@ -145,10 +144,8 @@ public class PhotonVision extends SubsystemBase {
             if (lastResult.hasTargets()) {
                 if (lastCamName == "Cam1") {
                     return Cam1PoseEstimator.update(lastResult);
-                } else if (lastCamName == "Cam2") {
+                } else {
                     return Cam2PoseEstimator.update(lastResult);
-                }else {
-                    return Cam3PoseEstimator.update(lastResult);
                 }
             }
         }

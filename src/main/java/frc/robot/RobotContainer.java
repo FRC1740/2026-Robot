@@ -23,6 +23,7 @@ import static edu.wpi.first.units.Units.RotationsPerSecond;
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest.ForwardPerspectiveValue;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators.None;
+import com.pathplanner.lib.auto.AutoBuilder;
 import com.ctre.phoenix6.configs.ParentConfiguration;
 import com.ctre.phoenix6.mechanisms.swerve.LegacySwerveModule.SteerRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
@@ -76,15 +77,15 @@ public class RobotContainer {
       new CommandXboxController(OperatorConstants.kCoDriverControllerPort);
 
 
-  /* Path follower */
-  private final SendableChooser<Command> autoChooser;
+//   /* Path follower */de> autoChooser;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
+    // drivetrain.configureAutoBuilder();
     // Configure the trigger bindings
-    autoChooser = AutoBuilder.buildAutoChooser("Tests");
+    // autoChooser = AutoBuilder.buildAutoChooser("Tests");
     
-    SmartDashboard.putData("Auto Mode", autoChooser);
+    // SmartDashboard.putData("Auto Mode", autoChooser);
 
     configureBindings();
 }
@@ -164,8 +165,8 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
-    public Command getAutonomousCommand() {
-        /* Run the path selected from the auto chooser */
-        return autoChooser.getSelected();
-    }
+    // public Command getAutonomousCommand() {
+    //     /* Run the path selected from the auto chooser */
+    //     return autoChooser.getSelected();
+    // }
 }
