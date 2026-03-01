@@ -39,27 +39,59 @@ public final class Constants {
     public static int intakeMotor = 14;
   }
   public static class Shooter {
-    static class CalibrationPoint {
+    public static class CalibrationPoint {
       CalibrationPoint (double distance, double angle, double rpm) {
         this.distance = distance;
         this.angle = angle;
         this.rpm = rpm;
       }
       
-      double distance;
-      double angle;
-      double rpm;
+      public double distance;
+      public double angle;
+      public double rpm;
     }
     // edge hub center flywheel
     // 15.3ft, .5
 
+    // MUST BE IN ORDER CLOSEST TO FARTHEST
     public static final CalibrationPoint[] shooterCalibration = {
       new CalibrationPoint(1.0, 0.0, 2000.0),
+      new CalibrationPoint(3.0, 0.1, 2400.0),
     };
 
-    // public static CalibrationPoint getPoint(double distance) {
-      
-    // }
+    public static double lerp(double a, double b, double t) {
+      return a + (b - a) * t;
+    }
+
+
+    public static CalibrationPoint getPoint(double distance) {
+      CalibrationPoint previousPoint = new CalibrationPoint(0.0, 0.0, 0.0);
+      CalibrationPoint calibrationPoint = new CalibrationPoint(0.0, 0.0, 0.0);
+      // loop over all points
+      for (int i = 0; i < shooterCalibration.length; i++) {
+        calibrationPoint = shooterCalibration[i];
+        if (i == shooterCalibration.length - 1) {
+          // ensure previousPoint != previousPoint so lerp extrapolates at the extremes
+          break;
+        }
+        if (distance > calibrationPoint.distance) {
+          previousPoint = calibrationPoint;
+        }else {
+         break; // we have reached the endpoint for the lerp
+        }
+      }
+
+      // (Calibration point is larger), gets 0-1 position of the distance for interpolation
+      double position = 
+        (distance - previousPoint.distance) / 
+        (calibrationPoint.distance - previousPoint.distance);
+
+      return new CalibrationPoint(
+        distance,
+        lerp(previousPoint.angle, calibrationPoint.angle, position), // interpolate angle and rpm
+        lerp(previousPoint.rpm, calibrationPoint.rpm, position)
+      );
+    }
   }
 
 public static final class VisionConstants {

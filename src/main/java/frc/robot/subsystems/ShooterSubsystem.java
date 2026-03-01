@@ -114,6 +114,12 @@ public class ShooterSubsystem extends SubsystemBase {
     rightMotor.setControl(m_torqueRequest.withOutput(Torque));
   }
 
+  public void shootByCalibration(double distance) {
+    Constants.Shooter.CalibrationPoint point = Constants.Shooter.getPoint(distance);
+    m_hoodSubsystem.setPercent(point.angle);
+    rightMotor.setControl(VVShootRequest.withVelocity(-point.rpm));
+  }
+
   public void aimForDistance(double distance) {
     m_hoodSubsystem.setPercent(shooter_angle.getDouble(0));
   }
