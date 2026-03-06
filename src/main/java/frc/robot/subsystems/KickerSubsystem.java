@@ -29,7 +29,6 @@ public class KickerSubsystem extends SubsystemBase {
   final VelocityTorqueCurrentFOC VVKickerRequest = new VelocityTorqueCurrentFOC(0).withSlot(0);
   
   private final Telemetry telemetry = Telemetry.getInstance();
-  private static Double motorVelocity;
   private static KickerSubsystem instance;
 
   private ShuffleboardTab tab = Shuffleboard.getTab("Kicker");
@@ -60,10 +59,11 @@ public class KickerSubsystem extends SubsystemBase {
     slot0Configs.kP = 3.5; // An error of 1 rotation results in 2.4 V output
     slot0Configs.kI = 0; // no output for integrated error
     slot0Configs.kD = 0; // A velocity of 1 rps results in 0.1 V output
+    slot0Configs.kV = 0.12; 
 
     kickerMotorController.getConfigurator().apply(kickerMotorConfig);
-
-    motorVelocity = kickerMotorController.getVelocity().getValueAsDouble();
+    kickerMotorController.getConfigurator().apply(slot0Configs);
+    
   }
 
   @Override
@@ -72,7 +72,7 @@ public class KickerSubsystem extends SubsystemBase {
   }
 
   public double getCurrentVelocity() {
-    return motorVelocity / 60.0;
+    return kickerMotorController.getVelocity().getValueAsDouble() / 60.0;
   }
 
   public void kick() {
