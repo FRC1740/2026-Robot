@@ -35,8 +35,15 @@ public class Telemetry {
     NetworkTable kickerTable = ins.getTable("Kicker table");
 
     DoublePublisher flywheelRPM = shooterTable.getDoubleTopic("Flywheel rpm").publish();
+    DoublePublisher flywheelCurrentDrawL = shooterTable.getDoubleTopic("Flywheel Current Draw L").publish();
+    DoublePublisher flywheelCurrentDrawR = shooterTable.getDoubleTopic("Flywheel Current Draw R").publish();
+
     DoublePublisher intakeDist = intakeTable.getDoubleTopic("intake dist").publish();
+    DoublePublisher intakeRollersCurrentDraw = intakeTable.getDoubleTopic("intake rollers current draw").publish();
+    DoublePublisher intakeFlipCurrentDraw = intakeTable.getDoubleTopic("intake flip current draw").publish();
     DoublePublisher kickerRPM = intakeTable.getDoubleTopic("kicker rpm").publish();
+    DoublePublisher kickerCurrentDraw = intakeTable.getDoubleTopic("kicker current draw").publish();
+    DoublePublisher feederCurrentDraw = intakeTable.getDoubleTopic("feeder current draw").publish();
 
     private final double MaxSpeed = 6.0;
 
@@ -145,16 +152,25 @@ public class Telemetry {
     return instance;
   }
 
-    public void telemetrizeShooter(double rpm) {
+    public void telemetrizeShooter(double rpm, double leftCurrentDraw, double rightCurrentDraw) {
         flywheelRPM.set(rpm);
+        flywheelCurrentDrawL.set(leftCurrentDraw);
+        flywheelCurrentDrawR.set(rightCurrentDraw);
     }
 
-    public void telemetrizeKicker(double rpm) {
+    public void telemetrizeFeeder(double currentDraw) {
+        feederCurrentDraw.set(currentDraw);
+    }
+
+    public void telemetrizeKicker(double rpm, double currentDraw) {
         kickerRPM.set(rpm);
+        kickerCurrentDraw.set(currentDraw);
     }
 
-    public void telemetrizeIntake(double dist) {
+    public void telemetrizeIntake(double dist, double currentDrawRollers, double currentDrawFlip) {
         intakeDist.set(dist);
+        intakeRollersCurrentDraw.set(currentDrawRollers);
+        intakeFlipCurrentDraw.set(currentDrawFlip);
     }
     
     public void telemeterizeQuestNav(Pose3d robotPose) {

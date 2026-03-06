@@ -58,7 +58,7 @@ public class KickerSubsystem extends SubsystemBase {
 
   @Override
   public void periodic() {
-    telemetry.telemetrizeKicker(getCurrentVelocity());
+    telemetry.telemetrizeKicker(getCurrentVelocity(), kickerMotorController.getStatorCurrent().getValueAsDouble());
   }
 
   public double getCurrentVelocity() {

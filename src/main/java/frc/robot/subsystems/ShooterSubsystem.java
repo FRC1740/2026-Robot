@@ -98,7 +98,9 @@ public class ShooterSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    telemetry.telemetrizeShooter(getCurrentVelocity());
+    telemetry.telemetrizeShooter(getCurrentVelocity(), 
+      leftMotor.getStatorCurrent().getValueAsDouble(), 
+      rightMotor.getStatorCurrent().getValueAsDouble());
   }
 
   /**
