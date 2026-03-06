@@ -11,6 +11,7 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.TorqueCurrentFOC;
+import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
@@ -37,7 +38,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
   private final HoodSubsystem m_hoodSubsystem = HoodSubsystem.getInstance();
 
-  final VelocityVoltage VVShootRequest = new VelocityVoltage(0).withSlot(0);
+  final VelocityTorqueCurrentFOC VVShootRequest = new VelocityTorqueCurrentFOC(0).withSlot(0);
 
   Slot1Configs slot1Configs = new Slot1Configs();
   Slot0Configs slot0Configs = new Slot0Configs();
