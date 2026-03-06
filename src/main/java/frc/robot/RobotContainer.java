@@ -77,15 +77,16 @@ public class RobotContainer {
       new CommandXboxController(OperatorConstants.kCoDriverControllerPort);
 
 
-//   /* Path follower */de> autoChooser;
+    //   /* Path follower */ 
+    SendableChooser<Command> autoChooser;
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    // drivetrain.configureAutoBuilder();
+    drivetrain.configureAutoBuilder();
     // Configure the trigger bindings
-    // autoChooser = AutoBuilder.buildAutoChooser("Tests");
+    autoChooser = AutoBuilder.buildAutoChooser("Tests");
     
-    // SmartDashboard.putData("Auto Mode", autoChooser);
+    SmartDashboard.putData("Auto Mode", autoChooser);
 
     configureBindings();
 }
@@ -165,8 +166,8 @@ public class RobotContainer {
    *
    * @return the command to run in autonomous
    */
-    // public Command getAutonomousCommand() {
-    //     /* Run the path selected from the auto chooser */
-    //     return autoChooser.getSelected();
-    // }
+    public Command getAutonomousCommand() {
+        /* Run the path selected from the auto chooser */
+        return autoChooser.getSelected();
+    }
 }
