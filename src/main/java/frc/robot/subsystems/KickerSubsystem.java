@@ -33,7 +33,7 @@ public class KickerSubsystem extends SubsystemBase {
 
   private ShuffleboardTab tab = Shuffleboard.getTab("Kicker");
 
-  private GenericEntry kicker_velocity =
+  private GenericEntry kickerVelocity =
       tab.add("Kicker Speed", 1)
          .getEntry();
 
@@ -77,7 +77,7 @@ public class KickerSubsystem extends SubsystemBase {
 
   public void kick() {
     // Starts the Motor
-    kickerMotorController.setControl(VVKickerRequest.withVelocity(-kicker_velocity.getDouble(0) / 60.0));
+    kickerMotorController.setControl(VVKickerRequest.withVelocity(-kickerVelocity.getDouble(0) / 60.0));
 
   }
 
