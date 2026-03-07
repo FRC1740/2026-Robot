@@ -112,10 +112,10 @@ public class RobotContainer {
         new Feed(m_shooterSubsystem, m_kickerSubsystem, m_feederSubsystem)
     ));
     
-    m_coDriverController.axisGreaterThan(1, 0.1).whileTrue(new RunCommand(() -> m_intakeSubsystem.set(m_coDriverController.getRawAxis(1)), m_intakeSubsystem));
+    m_coDriverController.axisGreaterThan(1, 0.1).whileTrue(new RunCommand(() -> m_intakeSubsystem.flipDown(m_coDriverController.getRawAxis(1)), m_intakeSubsystem));
 
-    m_coDriverController.leftBumper().whileTrue(new InstantCommand(() -> {m_intakeSubsystem.intake();}))
-        .onFalse(new InstantCommand(() -> {m_intakeSubsystem.stop();}));
+    m_coDriverController.leftBumper().whileTrue(new InstantCommand(() -> {m_intakeSubsystem.spinIntake();}))
+        .onFalse(new InstantCommand(() -> {m_intakeSubsystem.stopIntake();}));
     // m_driverController.rightBumper().whileTrue(new InstantCommand(() -> {m_intakeSubsystem.retract();}))
     //     .onFalse(new InstantCommand(() -> {m_intakeSubsystem.stop();}));
 

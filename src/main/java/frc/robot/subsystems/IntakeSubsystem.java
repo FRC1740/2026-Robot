@@ -4,6 +4,11 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.configs.Slot0Configs;
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.configs.TalonFXConfigurator;
+import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.revrobotics.PersistMode;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.ResetMode;
@@ -20,10 +25,13 @@ import frc.robot.Constants;
 
 public class IntakeSubsystem extends SubsystemBase {
   
-  SparkMax extensionMotorController = new SparkMax(Constants.CanIDs.intakeExtensionMotor, MotorType.kBrushless); 
-  SparkMax motorController = new SparkMax(Constants.CanIDs.intakeMotor, MotorType.kBrushless); 
+  SparkMax flipMotorController = new SparkMax(Constants.CanIDs.intakeExtensionMotor, MotorType.kBrushless); 
+  TalonFX intakeMotorController = new TalonFX(Constants.CanIDs.intakeMotor,"*"); 
+
   private static IntakeSubsystem instance;
-  private RelativeEncoder motorEncoder;
+  private RelativeEncoder flipMotorEncoder;
+
+  Slot0Configs slot0Configs = new Slot0Configs();
 
   private final Telemetry telemetry = Telemetry.getInstance();
   /** Creates a new FeederSubsystem. */
@@ -37,46 +45,76 @@ public class IntakeSubsystem extends SubsystemBase {
 
   public IntakeSubsystem() {
     // set params here
-    SparkMaxConfig config = new SparkMaxConfig();
+    SparkMaxConfig flipMotorConfig = new SparkMaxConfig();
 
+    TalonFXConfigurator intakeMotorConfigurator = intakeMotorController.getConfigurator();
+    TalonFXConfiguration intakeMotorConfig = new TalonFXConfiguration();
+
+    //Talon Config
+    intakeMotorConfig.CurrentLimits.StatorCurrentLimit = 50;
+    intakeMotorConfig.CurrentLimits.StatorCurrentLimitEnable = true;
+    intakeMotorConfig.OpenLoopRamps.DutyCycleOpenLoopRampPeriod = 1;
+    intakeMotorConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
+
+    intakeMotorConfigurator.apply(intakeMotorConfig);
+    intakeMotorConfigurator.apply(slot0Configs);
+    
     // Incredibly important!!!!! 
     // Without this the motor draws as much power as it wants and will die if stalled
-    config.smartCurrentLimit(20);
-    config.softLimit.forwardSoftLimitEnabled(true);
-    config.softLimit.reverseSoftLimitEnabled(true);
-    config.encoder.positionConversionFactor(3);
-    config.softLimit.forwardSoftLimit(0);
-    config.softLimit.reverseSoftLimit(-130.33334);
-    config.idleMode(IdleMode.kBrake);
+
+    //SparksMax Config
+    flipMotorConfig.smartCurrentLimit(20);
+    flipMotorConfig.softLimit.forwardSoftLimitEnabled(true);
+    flipMotorConfig.softLimit.reverseSoftLimitEnabled(true);
+    flipMotorConfig.encoder.positionConversionFactor(3);
+    flipMotorConfig.softLimit.forwardSoftLimit(0);
+    flipMotorConfig.softLimit.reverseSoftLimit(-130.33334);
+    flipMotorConfig.idleMode(IdleMode.kBrake);
     
-    extensionMotorController.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
+    flipMotorController.configure(flipMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
 
-    motorEncoder = extensionMotorController.getEncoder();
+
+    flipMotorEncoder = flipMotorController.getEncoder();
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    telemetry.telemetrizeIntake(motorEncoder.getPosition(), 
-      motorController.getOutputCurrent(), 
-      extensionMotorController.getOutputCurrent());
+    telemetry.telemetrizeIntake(getCurrentVelocity(), 
+      intakeMotorController.getStatorCurrent().getValueAsDouble(),
+       flipMotorController.getOutputCurrent());
   }
 
-  public void set(double speed) {
-    extensionMotorController.set(speed);
-  }
-  public void intake() {
-    // extensionMotorController.set(-.4);
-    motorController.set(1);
+  public double getCurrentVelocity() {
+    return intakeMotorController.getVelocity().getValueAsDouble() * 60.0; // RPS -> RPM
   }
 
-  public void retract() {
-    // extensionMotorController.set(.4);
-    motorController.set(0);
+  public void flipDown(double targetPos) {
+    double currentPosition = flipMotorEncoder.getPosition();
+
+    if (currentPosition < targetPos) {
+      flipMotorController.set(-.1);
+    } else {
+      flipMotorController.set(0);
+    }
   }
-  public void stop() {
-    extensionMotorController.set(0);
-    motorController.set(0);
+
+  public void flipUp(double targetPos) {
+    double currentPosition = flipMotorEncoder.getPosition();
+
+    if (currentPosition > targetPos) {
+      flipMotorController.set(.1);
+    } else {
+      flipMotorController.set(0);
+    }
+  }
+
+  public void spinIntake() {
+    intakeMotorController.set(.6);
+  }
+
+  public void stopIntake() {
+    intakeMotorController.set(0);
   }
 }
