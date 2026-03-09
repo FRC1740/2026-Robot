@@ -52,7 +52,6 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
  */
 public class RobotContainer {
     // The robot's subsystems and commands are defined here...
-  private final IntakeSubsystem m_IntakeSubsystem = IntakeSubsystem.getInstance();
     private final ShooterSubsystem m_shooterSubsystem = ShooterSubsystem.getInstance();
     private final KickerSubsystem m_kickerSubsystem = KickerSubsystem.getInstance();
     private final FeederSubsystem m_feederSubsystem = FeederSubsystem.getInstance();
@@ -110,6 +109,7 @@ public class RobotContainer {
    * joysticks}.
    */
   private void configureBindings() {
+    //Shooter buttons
     m_coDriverController.leftTrigger().whileTrue(new Shoot(m_shooterSubsystem, m_kickerSubsystem, m_feederSubsystem));
     m_coDriverController.rightTrigger().onTrue(new InstantCommand(() -> {m_shooterSubsystem.toggle();}));
 
@@ -135,14 +135,14 @@ public class RobotContainer {
                     .withVelocityY(-Math.cos(time) / 3.0)), // Drive left with negative X (left)
         new Feed(m_shooterSubsystem, m_kickerSubsystem, m_feederSubsystem)
     ));
-    
-    m_coDriverController.axisGreaterThan(1, 0.1).whileTrue(new RunCommand(() -> m_intakeSubsystem.set(m_coDriverController.getRawAxis(1)), m_intakeSubsystem));
 
-    m_coDriverController.leftBumper().whileTrue(new InstantCommand(() -> {m_intakeSubsystem.intake();}))
-        .onFalse(new InstantCommand(() -> {m_intakeSubsystem.stop();}));
+    //Intake buttons
+    m_coDriverController.leftBumper().whileTrue(new InstantCommand(() -> {m_intakeSubsystem.spinIntake();}))
+        .onFalse(new InstantCommand(() -> {m_intakeSubsystem.stopIntake();}));
     // m_driverController.rightBumper().whileTrue(new InstantCommand(() -> {m_intakeSubsystem.retract();}))
     //     .onFalse(new InstantCommand(() -> {m_intakeSubsystem.stop();}));
 
+    m_coDriverController.a().whileTrue(new InstantCommand(() -> {m_intakeSubsystem.toggleFlip();}));
         // Note that X is defined as forward according to WPILib convention,
         // and Y is defined as to the left according to WPILib convention.
         drivetrain.setDefaultCommand(

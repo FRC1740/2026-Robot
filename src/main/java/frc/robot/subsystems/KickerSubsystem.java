@@ -7,9 +7,12 @@ package frc.robot.subsystems;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.hardware.TalonFXS;
 import com.ctre.phoenix6.signals.MotorArrangementValue;
+import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.configs.TalonFXSConfiguration;
 import com.ctre.phoenix6.controls.DutyCycleOut;
+import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
+import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.controls.VelocityVoltage;
 
 import edu.wpi.first.networktables.GenericEntry;
@@ -23,16 +26,17 @@ public class KickerSubsystem extends SubsystemBase {
   // Creates a new TalonFX object
   TalonFX kickerMotorController = new TalonFX(Constants.CanIDs.kickerMotor, "*");
   
-  //Create control request
-  VelocityVoltage kickerVelocityControl = new VelocityVoltage(0);
+  //
+  Slot0Configs slot0Configs = new Slot0Configs();
+
+  final VelocityTorqueCurrentFOC VVKickerRequest = new VelocityTorqueCurrentFOC(0).withSlot(0);
   
   private final Telemetry telemetry = Telemetry.getInstance();
-  private static Double motorVelocity;
   private static KickerSubsystem instance;
 
   private ShuffleboardTab tab = Shuffleboard.getTab("Kicker");
 
-  private GenericEntry kickerSpeed =
+  private GenericEntry kickerVelocity =
       tab.add("Kicker Speed", 1)
          .getEntry();
 
@@ -53,9 +57,15 @@ public class KickerSubsystem extends SubsystemBase {
     kickerMotorConfig.CurrentLimits.SupplyCurrentLimit = 40;
     kickerMotorConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
 
-    kickerMotorController.getConfigurator().apply(kickerMotorConfig);
+    //PID
+    slot0Configs.kP = 3.5; // An error of 1 rotation results in 2.4 V output
+    slot0Configs.kI = 0; // no output for integrated error
+    slot0Configs.kD = 0; // A velocity of 1 rps results in 0.1 V output
+    slot0Configs.kV = 0.12; 
 
-    motorVelocity = kickerMotorController.getVelocity().getValueAsDouble();
+    kickerMotorController.getConfigurator().apply(kickerMotorConfig);
+    kickerMotorController.getConfigurator().apply(slot0Configs);
+    
   }
 
   @Override
@@ -64,12 +74,12 @@ public class KickerSubsystem extends SubsystemBase {
   }
 
   public double getCurrentVelocity() {
-    return motorVelocity / 60.0;
+    return kickerMotorController.getVelocity().getValueAsDouble() / 60.0;
   }
 
   public void kick() {
     // Starts the Motor
-    kickerMotorController.setControl(kickerVelocityControl.withVelocity(kickerSpeed.getDouble(0)));
+    kickerMotorController.setControl(VVKickerRequest.withVelocity(-kickerVelocity.getDouble(0) / 60.0));
 
   }
 
