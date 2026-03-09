@@ -142,7 +142,7 @@ public class RobotContainer {
     // m_driverController.rightBumper().whileTrue(new InstantCommand(() -> {m_intakeSubsystem.retract();}))
     //     .onFalse(new InstantCommand(() -> {m_intakeSubsystem.stop();}));
 
-    m_coDriverController.a().whileTrue(new InstantCommand(() -> {m_intakeSubsystem.toggleFlip();}));
+    m_coDriverController.a().whileTrue(new InstantCommand(() -> {m_intakeSubsystem.flipDown();}));
         // Note that X is defined as forward according to WPILib convention,
         // and Y is defined as to the left according to WPILib convention.
         drivetrain.setDefaultCommand(

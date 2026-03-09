@@ -16,7 +16,10 @@ import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkBaseConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
+import com.revrobotics.spark.ClosedLoopSlot;
+import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkMax;
+import com.revrobotics.spark.SparkBase.ControlType;
 
 import edu.wpi.first.wpilibj.Servo;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -26,6 +29,7 @@ import frc.robot.Constants;
 public class IntakeSubsystem extends SubsystemBase {
   
   SparkMax flipMotorController = new SparkMax(Constants.CanIDs.intakeExtensionMotor, MotorType.kBrushless); 
+  SparkClosedLoopController flipMotorLoopController;
   TalonFX intakeMotorController = new TalonFX(Constants.CanIDs.intakeMotor,"*"); 
 
   private static IntakeSubsystem instance;
@@ -72,10 +76,21 @@ public class IntakeSubsystem extends SubsystemBase {
     flipMotorConfig.softLimit.forwardSoftLimit(0);
     flipMotorConfig.softLimit.reverseSoftLimit(-130.33334);
     flipMotorConfig.idleMode(IdleMode.kBrake);
+
+    flipMotorConfig.closedLoop
+      
+      .p(0.01, ClosedLoopSlot.kSlot0)
+      .i(0.0, ClosedLoopSlot.kSlot0)
+      .d(0.0, ClosedLoopSlot.kSlot0)
+      // Current Control
+      .p(0.01, ClosedLoopSlot.kSlot1)
+      .i(0.0, ClosedLoopSlot.kSlot1)
+      .d(0.0, ClosedLoopSlot.kSlot1);
     
     flipMotorController.configure(flipMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
-
+    flipMotorLoopController = flipMotorController.getClosedLoopController();
+    
 
     flipMotorEncoder = flipMotorController.getEncoder();
   }
@@ -93,7 +108,10 @@ public class IntakeSubsystem extends SubsystemBase {
   }
 
   public void spinIntake() {
-    if (isFlippedDown) {
+    if (flipMotorLoopController.isAtSetpoint() || 
+        // Slot 1 is latch so it's auto good
+        flipMotorLoopController.getSelectedSlot() == ClosedLoopSlot.kSlot1) {
+
       intakeMotorController.set(.6);
     }
   }
@@ -102,28 +120,16 @@ public class IntakeSubsystem extends SubsystemBase {
     intakeMotorController.set(0);
   }
 
-  public void toggleFlip() {
-    //lwky don't know
-    double currentPosition = flipMotorEncoder.getPosition();
-
-    if (isFlippedDown) {
-
-      if (currentPosition > targetPos) {
-        flipMotorController.set(.1);
-      } else {
-        flipMotorController.set(0);
-      }
-
-    } else {
-
-      if (currentPosition < targetPos) {
-        flipMotorController.set(-.1);
-      } else {
-        flipMotorController.set(0);
-      }
-
-    }
-
-    isFlippedDown = !isFlippedDown;
+  public void flipDown() {
+    flipMotorLoopController.setSetpoint(130, ControlType.kPosition, ClosedLoopSlot.kSlot0);
   }
+
+  public void flipUp() {
+    flipMotorLoopController.setSetpoint(0, ControlType.kPosition, ClosedLoopSlot.kSlot0);
+  }
+  
+  public void latch() {
+    flipMotorLoopController.setSetpoint(0.1, ControlType.kCurrent, ClosedLoopSlot.kSlot1);
+  }
+
 }
