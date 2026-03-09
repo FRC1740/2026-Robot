@@ -31,6 +31,8 @@ public class IntakeSubsystem extends SubsystemBase {
   private static IntakeSubsystem instance;
   private RelativeEncoder flipMotorEncoder;
 
+  private boolean isFlippedDown = false;
+
   Slot0Configs slot0Configs = new Slot0Configs();
 
   private final Telemetry telemetry = Telemetry.getInstance();
@@ -90,31 +92,38 @@ public class IntakeSubsystem extends SubsystemBase {
     return intakeMotorController.getVelocity().getValueAsDouble() * 60.0; // RPS -> RPM
   }
 
-  public void flipDown(double targetPos) {
-    double currentPosition = flipMotorEncoder.getPosition();
-
-    if (currentPosition < targetPos) {
-      flipMotorController.set(-.1);
-    } else {
-      flipMotorController.set(0);
-    }
-  }
-
-  public void flipUp(double targetPos) {
-    double currentPosition = flipMotorEncoder.getPosition();
-
-    if (currentPosition > targetPos) {
-      flipMotorController.set(.1);
-    } else {
-      flipMotorController.set(0);
-    }
-  }
-
   public void spinIntake() {
-    intakeMotorController.set(.6);
+    if (isFlippedDown) {
+      intakeMotorController.set(.6);
+    }
   }
 
   public void stopIntake() {
     intakeMotorController.set(0);
+  }
+
+  public void toggleFlip() {
+    //lwky don't know
+    double currentPosition = flipMotorEncoder.getPosition();
+
+    if (isFlippedDown) {
+
+      if (currentPosition > targetPos) {
+        flipMotorController.set(.1);
+      } else {
+        flipMotorController.set(0);
+      }
+
+    } else {
+
+      if (currentPosition < targetPos) {
+        flipMotorController.set(-.1);
+      } else {
+        flipMotorController.set(0);
+      }
+
+    }
+
+    isFlippedDown = !isFlippedDown;
   }
 }
