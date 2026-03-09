@@ -147,7 +147,7 @@ public class ShooterSubsystem extends SubsystemBase {
   public void toggle() {
     if (isToggled) {
 
-      //Slot1configs are disabled
+      //Slot1configs are disabled PID
       rightMotor.getConfigurator().apply(slot1Configs);
       rightMotor.set(0);
     } else {
