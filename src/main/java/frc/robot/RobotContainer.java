@@ -12,6 +12,7 @@ import frc.robot.commands.Shoot;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.FeederSubsystem;
+import frc.robot.subsystems.HoodSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.KickerSubsystem;
 import frc.robot.subsystems.PhotonVision;
@@ -136,6 +137,11 @@ public class RobotContainer {
         new Feed(m_shooterSubsystem, m_kickerSubsystem, m_feederSubsystem)
     ));
 
+    m_driverController.y()
+        .whileTrue(new RunCommand(() -> {IntakeSubsystem.getInstance().spinIntake();}))
+        .onFalse(new RunCommand(() -> {IntakeSubsystem.getInstance().stopIntake();}));
+    m_driverController.x().whileTrue(new RunCommand(() -> {HoodSubsystem.getInstance().setPercent(1);}));
+
     //Intake buttons
     m_coDriverController.leftBumper().whileTrue(new InstantCommand(() -> {m_intakeSubsystem.spinIntake();}))
         .onFalse(new InstantCommand(() -> {m_intakeSubsystem.stopIntake();}));
@@ -145,14 +151,14 @@ public class RobotContainer {
     m_coDriverController.a().whileTrue(new InstantCommand(() -> {m_intakeSubsystem.flipDown();}));
         // Note that X is defined as forward according to WPILib convention,
         // and Y is defined as to the left according to WPILib convention.
-        drivetrain.setDefaultCommand(
-            // Drivetrain will execute this command periodically
-            drivetrain.applyRequest(() ->
-                drive.withVelocityX(-m_driverController.getLeftY() * MaxSpeed) // Drive forward with negative Y (forward)
-                    .withVelocityY(-m_driverController.getLeftX() * MaxSpeed) // Drive left with negative X (left)
-                    .withRotationalRate(-m_driverController.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
-            )
-        );
+        // drivetrain.setDefaultCommand(
+        //     // Drivetrain will execute this command periodically
+        //     drivetrain.applyRequest(() ->
+        //         drive.withVelocityX(-m_driverController.getLeftY() * MaxSpeed) // Drive forward with negative Y (forward)
+        //             .withVelocityY(-m_driverController.getLeftX() * MaxSpeed) // Drive left with negative X (left)
+        //             .withRotationalRate(-m_driverController.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
+        //     )
+        // );
 
         // Idle while the robot is disabled. This ensures the configured
         // neutral mode is applied to the drive motors while disabled.

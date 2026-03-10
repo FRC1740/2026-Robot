@@ -21,9 +21,9 @@ public class HoodSubsystem extends SubsystemBase {
   private static HoodSubsystem instance;
 
   Servo servo = new Servo(0);
-  Servo servo2 = new Servo(1);
-  final double far_distance = .465; // out
-  final double close_distance = .55; // in
+  Servo servo2 = new Servo(2);
+  final double far_distance = 0; // out
+  final double close_distance = 1; // in
 
   public static HoodSubsystem getInstance() {
     if(instance == null) {
@@ -45,18 +45,18 @@ public class HoodSubsystem extends SubsystemBase {
   public void run() {}
 
   public void setFar() {
-    servo.set(.465);
-    servo2.set(.55);
+    servo.set(far_distance);
+    servo2.set(close_distance - .05);
   }
 
   public void setClose() {  // inwards 
-    servo.set(.55);
-    servo2.set(.465);
+    servo.set(close_distance);
+    servo2.set(far_distance - .05);
   }
 
   private void set(double angle, double angle2) {
     servo.set(angle);
-    servo2.set(angle2);
+    servo2.set(angle2 - .05);
   }
 
   private void setAngle(double degrees, Servo the_servo) {

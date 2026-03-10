@@ -108,12 +108,12 @@ public class IntakeSubsystem extends SubsystemBase {
   }
 
   public void spinIntake() {
-    if (flipMotorLoopController.isAtSetpoint() || 
-        // Slot 1 is latch so it's auto good
-        flipMotorLoopController.getSelectedSlot() == ClosedLoopSlot.kSlot1) {
+    // if (flipMotorLoopController.isAtSetpoint() || 
+    //     // Slot 1 is latch so it's auto good
+    //     flipMotorLoopController.getSelectedSlot() == ClosedLoopSlot.kSlot1) {
 
-      intakeMotorController.set(.6);
-    }
+      intakeMotorController.set(1);
+    // }
   }
 
   public void stopIntake() {
