@@ -8,6 +8,7 @@ import frc.Telemetry;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Align;
 import frc.robot.commands.Feed;
+import frc.robot.commands.Intake;
 import frc.robot.commands.Shoot;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
@@ -28,6 +29,7 @@ import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest.ForwardPerspectiveValue;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators.None;
 import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 import com.ctre.phoenix6.configs.ParentConfiguration;
 import com.ctre.phoenix6.mechanisms.swerve.LegacySwerveModule.SteerRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
@@ -92,6 +94,11 @@ public class RobotContainer {
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     drivetrain.configureAutoBuilder();
+
+    NamedCommands.registerCommand("Shoot", new Shoot(m_shooterSubsystem, m_kickerSubsystem, m_feederSubsystem));
+    NamedCommands.registerCommand("Feed", new Feed(m_shooterSubsystem, m_kickerSubsystem, m_feederSubsystem));
+    NamedCommands.registerCommand("Intake", new Intake(m_intakeSubsystem));
+
     // Configure the trigger bindings
     autoChooser = AutoBuilder.buildAutoChooser("Tests");
     
