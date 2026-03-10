@@ -138,8 +138,6 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         if (Utils.isSimulation()) {
             startSimThread();
         }
-
-        configureAutoBuilder();
     }
 
     private static CommandSwerveDrivetrain instance;
@@ -173,7 +171,6 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         if (Utils.isSimulation()) {
             startSimThread();
         }
-        configureAutoBuilder();
     }
 
 public void configureAutoBuilder() {
@@ -235,7 +232,6 @@ public void configureAutoBuilder() {
         if (Utils.isSimulation()) {
             startSimThread();
         }
-        configureAutoBuilder();
     }
 
     /**
