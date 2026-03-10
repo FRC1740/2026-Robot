@@ -12,6 +12,7 @@ import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.networktables.BooleanPublisher;
 import edu.wpi.first.networktables.DoubleArrayPublisher;
 import edu.wpi.first.networktables.DoublePublisher;
 import edu.wpi.first.networktables.DoubleTopic;
@@ -25,6 +26,7 @@ import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj.util.Color8Bit;
+import frc.robot.subsystems.CommandSwerveDrivetrain;
 
 /** Add your docs here. */
 public class Telemetry {
@@ -73,6 +75,7 @@ public class Telemetry {
     private final StructArrayPublisher<SwerveModulePosition> driveModulePositions = driveStateTable.getStructArrayTopic("ModulePositions", SwerveModulePosition.struct).publish();
     private final DoublePublisher driveTimestamp = driveStateTable.getDoubleTopic("Timestamp").publish();
     private final DoublePublisher driveOdometryFrequency = driveStateTable.getDoubleTopic("OdometryFrequency").publish();
+    private final BooleanPublisher driveFlipped = driveStateTable.getBooleanTopic("FlippedControl").publish();
 
     /* Robot pose for field positioning */
     private final NetworkTable table = inst.getTable("Pose");
@@ -156,6 +159,7 @@ public class Telemetry {
         flywheelRPM.set(rpm);
         flywheelCurrentDrawL.set(leftCurrentDraw);
         flywheelCurrentDrawR.set(rightCurrentDraw);
+        driveFlipped.set(CommandSwerveDrivetrain.getInstance().m_operatorPerspectiveFlipped);
     }
 
     public void telemetrizeFeeder(double currentDraw) {

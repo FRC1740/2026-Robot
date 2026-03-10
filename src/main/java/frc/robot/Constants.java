@@ -12,9 +12,12 @@ import java.util.List;
 
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.util.Units;
 
 /**
  * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
@@ -40,8 +43,9 @@ public final class Constants {
   }
   public static class Shooter {
     public static class CalibrationPoint {
+      // distance in inches
       CalibrationPoint (double distance, double angle, double rpm) {
-        this.distance = distance;
+        this.distance = Units.inchesToMeters(distance);
         this.angle = angle;
         this.rpm = rpm;
       }
@@ -116,6 +120,17 @@ public static final class VisionConstants {
             IOE.printStackTrace();
         }
     }
+
+    public static final Pose2d BlueHubPose = new Pose2d(
+      Units.inchesToMeters((325.61) - 143.5),
+      Units.inchesToMeters((317.69 / 2.0)),
+      new Rotation2d(0.0)
+    );
+    public static final Pose2d RedHubPose = new Pose2d(
+      Units.inchesToMeters(((325.61) - 143.5) + 240.0),
+      Units.inchesToMeters((317.69 / 2.0)),
+      new Rotation2d(0.0)
+    );
 
     public static final Transform3d RobotToCam1 = new Transform3d(cam12FrontBackOffset, -cam12Dist, 0.0, new Rotation3d(0.0, 0.0, -30.0));
     
