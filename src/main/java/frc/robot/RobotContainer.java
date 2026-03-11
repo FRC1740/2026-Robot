@@ -61,7 +61,7 @@ public class RobotContainer {
     private final IntakeSubsystem m_intakeSubsystem = IntakeSubsystem.getInstance();
     private final Telemetry m_telemetry = Telemetry.getInstance();
 
-    // public final PhotonVision photonvision = PhotonVision.getInstance();
+    public final PhotonVision photonvision = PhotonVision.getInstance();
 
     double time = 0.0;
 
@@ -136,12 +136,13 @@ public class RobotContainer {
         //     )
         // );
 
-    m_driverController.b().whileTrue(
+    m_driverController.leftTrigger().whileTrue(
     new ParallelCommandGroup(
-        // drivetrain.applyRequest(() ->
-        //         drive.withVelocityX(-Math.sin(time) / 3.0) // Drive forward with negative Y (forward)
-        //             .withVelocityY(-Math.cos(time) / 3.0)), // Drive left with negative X (left)
-        new Feed(m_shooterSubsystem, m_kickerSubsystem, m_feederSubsystem)
+        drivetrain.applyRequest(() ->
+                drive.withVelocityX(-Math.sin(time)) // Drive forward with negative Y (forward)
+                    .withVelocityY(-Math.cos(time))), // Drive left with negative X (left)
+        new Feed(m_shooterSubsystem, m_kickerSubsystem, m_feederSubsystem),
+        new Shoot(m_shooterSubsystem, m_kickerSubsystem, m_feederSubsystem)
     ));
 
     m_driverController.y()
