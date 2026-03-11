@@ -74,7 +74,7 @@ public class IntakeSubsystem extends SubsystemBase {
     flipMotorConfig.softLimit.reverseSoftLimitEnabled(true);
     flipMotorConfig.encoder.positionConversionFactor(3);
     flipMotorConfig.softLimit.forwardSoftLimit(0);
-    flipMotorConfig.softLimit.reverseSoftLimit(-15);
+    flipMotorConfig.softLimit.reverseSoftLimit(-15 * 3);
     flipMotorConfig.idleMode(IdleMode.kBrake);
 
     flipMotorConfig.closedLoop
@@ -125,11 +125,11 @@ public class IntakeSubsystem extends SubsystemBase {
   }
 
   public void stopFlip() {
-    flipMotorLoopController.setSetpoint(-13, ControlType.kPosition, ClosedLoopSlot.kSlot2);
+    flipMotorLoopController.setSetpoint(-13 * 3, ControlType.kPosition, ClosedLoopSlot.kSlot2);
   }
 
   public void flipDown() {
-    flipMotorLoopController.setSetpoint(-15, ControlType.kPosition, ClosedLoopSlot.kSlot0);
+    flipMotorLoopController.setSetpoint(-15 * 3, ControlType.kPosition, ClosedLoopSlot.kSlot0);
   }
 
   public void flipUp() {
