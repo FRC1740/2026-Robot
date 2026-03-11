@@ -107,8 +107,8 @@ public static final class VisionConstants {
     public static final String cam2Name = "Cam2"; // white
     public static final Double AprilTagMinimumArea = 0.0;
 
-    public static final Double cam12Dist = 0.22; // dist from cam1 to cam2 in meters
-    public static final Double cam12FrontBackOffset = 0.2; // dist of the two cameras from middle of the robot
+    public static final Double cam12Dist = 0.58/2; // dist from cam1 to cam2 in meters
+    public static final Double cam12FrontBackOffset = -0.2; // dist of the two cameras from middle of the robot
 
     public static AprilTagFieldLayout aprilTagFieldLayout = null;
 
@@ -133,9 +133,9 @@ public static final class VisionConstants {
       new Rotation2d(0.0)
     );
 
-    public static final Transform3d RobotToCam1 = new Transform3d(cam12FrontBackOffset, -cam12Dist, 0.0, new Rotation3d(0.0, 0.0, -30.0));
+    public static final Transform3d RobotToCam1 = new Transform3d(cam12FrontBackOffset, cam12Dist, 0.0, new Rotation3d(0.0, 0.0, 60));
     
-    public static final Transform3d RobotToCam2 = new Transform3d(cam12FrontBackOffset, cam12Dist, 0.0, new Rotation3d(0.0, 0.0, 30.0));
+    public static final Transform3d RobotToCam2 = new Transform3d(cam12FrontBackOffset, -cam12Dist, 0.0, new Rotation3d(0.0, 0.0, (210)));
 
     public static final Transform2d QuestToRobot = new Transform2d( /*TODO: Put x, y, rotational offsets here!*/ );
 

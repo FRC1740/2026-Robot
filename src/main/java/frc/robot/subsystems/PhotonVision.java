@@ -55,12 +55,12 @@ public class PhotonVision extends SubsystemBase {
     }
 
     public PhotonVision() {
-        m_drive = CommandSwerveDrivetrain.getInstance();
         m_quest = QuestNavSubsystem.getInstance();
         cam = new PhotonCamera(VisionConstants.camName);
         cam2 = new PhotonCamera(VisionConstants.cam2Name);
         cam.setDriverMode(false);
         cam2.setDriverMode(false);
+        m_drive = CommandSwerveDrivetrain.getInstance();
 
         Cam1PoseEstimator = new PhotonPoseEstimator(
             VisionConstants.aprilTagFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR,
@@ -107,6 +107,8 @@ public class PhotonVision extends SubsystemBase {
                     } else {
                         Cam2Publisher.set(new Pose2d[] { pose });
                     }
+
+                    // CommandSwerveDrivetrain.getInstance().addVisionMeasurement(pose, );
                 }
             }
         }
@@ -120,8 +122,10 @@ public class PhotonVision extends SubsystemBase {
             result = resultList.get(resultList.size() - 1);
             if (result.hasTargets()) {
                 bestTarget = result.getBestTarget();
-                lastCamName = VisionConstants.camName;
-                return result;
+                if (bestTarget.area > 0.1) {
+                    lastCamName = VisionConstants.camName;
+                    return result;
+                }
             }
         }
 
@@ -130,8 +134,10 @@ public class PhotonVision extends SubsystemBase {
             result = resultList.get(resultList.size() - 1);
             if (result.hasTargets()) {
                 bestTarget = result.getBestTarget();
-                lastCamName = VisionConstants.cam2Name;
-                return result;
+                if (bestTarget.area > 0.1) {
+                    lastCamName = VisionConstants.cam2Name;
+                    return result;
+                }
             }
         }
 
