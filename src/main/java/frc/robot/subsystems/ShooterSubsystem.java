@@ -33,8 +33,10 @@ public class ShooterSubsystem extends SubsystemBase {
   boolean isToggled = false;
   boolean isTestToggled = false;
 
-  private double currentSpeed = 0;
+  private double currentSpeed = -2600;
+  private double currentAngle = 0;
   private final double speedIncrease = 100; // should be in rpm
+  private final double angleIncrease = 0.05; // should be in rpm
   
   private final Telemetry telemetry = Telemetry.getInstance();
   
@@ -50,7 +52,7 @@ public class ShooterSubsystem extends SubsystemBase {
   private ShuffleboardTab tab = Shuffleboard.getTab("Drive");
   
   private GenericEntry shooter_velocity =
-      tab.add("Shooter Velocity", -200)
+      tab.add("Shooter Velocity", -2600)
          .getEntry();
   private GenericEntry shooter_angle =
       tab.add("Shooter Angle", 0)
@@ -83,7 +85,7 @@ public class ShooterSubsystem extends SubsystemBase {
   
     // PID
     
-    slot0Configs.kP = 7; // An error of 1 rotation results in 2.4 V output
+    slot0Configs.kP = 10; // An error of 1 rotation results in 2.4 V output
     slot0Configs.kI = 0; // no output for integrated error
     slot0Configs.kD = 0; // A velocity of 1 rps results in 0.1 V output
     slot0Configs.kS = 5;
@@ -145,11 +147,40 @@ public class ShooterSubsystem extends SubsystemBase {
   }
   public void increaseSpeed() {
     //increases the speed by 100
+    currentSpeed -= speedIncrease;
+
+
+    //sets shuffleboard to currentspeed
+    shooter_velocity.setDouble(currentSpeed);
+  }
+  public void decreaseSpeed() {
+    //increases the speed by 100
     currentSpeed += speedIncrease;
 
 
     //sets shuffleboard to currentspeed
-    testShooter_speed.setDouble(currentSpeed);
+    shooter_velocity.setDouble(currentSpeed);
+  }
+
+  public void increaseAngle() {
+    //increases the speed by 100
+    currentAngle -= angleIncrease;
+    currentAngle = Math.max(currentAngle, 0.0);
+    currentAngle = Math.min(currentAngle, 1.0);
+
+
+    //sets shuffleboard to currentspeed
+    shooter_angle.setDouble(currentAngle);
+  }
+  public void decreaseAngle() {
+    //increases the speed by 100
+    currentAngle += angleIncrease;
+    currentAngle = Math.max(currentAngle, 0.0);
+    currentAngle = Math.min(currentAngle, 1.0);
+
+
+    //sets shuffleboard to currentspeed
+    shooter_angle.setDouble(currentAngle);
   }
 
   public void shootTest() {

@@ -10,6 +10,7 @@ import frc.robot.commands.Align;
 import frc.robot.commands.Feed;
 import frc.robot.commands.Intake;
 import frc.robot.commands.Shoot;
+import frc.robot.commands.ShootOn;
 import frc.robot.commands.TestShoot;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
@@ -120,8 +121,12 @@ public class RobotContainer {
    */
   private void configureBindings() {
     //Shooter buttons
-    m_coDriverController.leftTrigger().whileTrue(new Shoot(m_shooterSubsystem, m_kickerSubsystem, m_feederSubsystem));
+    m_coDriverController.leftTrigger().whileTrue(new ShootOn(m_shooterSubsystem, m_kickerSubsystem, m_feederSubsystem));
     m_coDriverController.rightTrigger().onTrue(new InstantCommand(() -> {m_shooterSubsystem.toggle();}));
+    m_coDriverController.povUp().onTrue(new InstantCommand(() -> {m_shooterSubsystem.increaseSpeed();}));
+    m_coDriverController.povDown().onTrue(new InstantCommand(() -> {m_shooterSubsystem.decreaseSpeed();}));
+    m_coDriverController.povRight().onTrue(new InstantCommand(() -> {m_shooterSubsystem.increaseAngle();}));
+    m_coDriverController.povLeft().onTrue(new InstantCommand(() -> {m_shooterSubsystem.decreaseAngle();}));
 
     //Left trigger activates the flywheel of the shooter
     m_testController.leftTrigger().whileTrue(new TestShoot(m_shooterSubsystem));
@@ -133,9 +138,9 @@ public class RobotContainer {
     m_testController.x().onTrue(new InstantCommand(() -> {m_shooterSubsystem.increaseSpeed();}));
     
 
-    m_driverController.a().whileTrue(
-        new Align(drivetrain, drive, m_driverController)
-    );
+    // m_driverController.a().whileTrue(
+    //     new Align(drivetrain, drive, m_driverController)
+    // );
         // new RunCommand(
         //     () -> {
         //         drivetrain.applyRequest(() ->
@@ -150,11 +155,14 @@ public class RobotContainer {
 
     m_driverController.leftTrigger().whileTrue(
     new ParallelCommandGroup(
+        new Feed(m_shooterSubsystem, m_kickerSubsystem, m_feederSubsystem)
+        // new Shoot(m_shooterSubsystem, m_kickerSubsystem, m_feederSubsystem)
+    ));
+    m_driverController.a().whileTrue(
+    new ParallelCommandGroup(
         drivetrain.applyRequest(() ->
-                drive.withVelocityX(-Math.sin(time)) // Drive forward with negative Y (forward)
-                    .withVelocityY(-Math.cos(time))), // Drive left with negative X (left)
-        new Feed(m_shooterSubsystem, m_kickerSubsystem, m_feederSubsystem),
-        new Shoot(m_shooterSubsystem, m_kickerSubsystem, m_feederSubsystem)
+                drive.withVelocityX(-Math.sin(time) / 2.0) // Drive forward with negative Y (forward)
+                    .withVelocityY(-Math.cos(time) / 2.0)) // Drive left with negative X (left)
     ));
 
     m_driverController.y()
@@ -204,7 +212,7 @@ public class RobotContainer {
     }
 
     public void periodic() {
-        time += 1;
+        time += 2;
     }
 
  

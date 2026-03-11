@@ -55,7 +55,8 @@ public final class Constants {
       public double rpm;
     }
     // edge hub center flywheel
-    // 15.3ft, .5
+    // 30in, 0
+    // 105in, .45
 
     // MUST BE IN ORDER CLOSEST TO FARTHEST
     public static final CalibrationPoint[] shooterCalibration = {
