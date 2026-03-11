@@ -46,7 +46,7 @@ public class ShooterSubsystem extends SubsystemBase {
   private ShuffleboardTab tab = Shuffleboard.getTab("Drive");
 
   private GenericEntry shooter_velocity =
-      tab.add("Shooter Velocity", 0)
+      tab.add("Shooter Velocity", -200)
          .getEntry();
   private GenericEntry shooter_angle =
       tab.add("Shooter Angle", 0)

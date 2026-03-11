@@ -69,23 +69,27 @@ public class IntakeSubsystem extends SubsystemBase {
     // Without this the motor draws as much power as it wants and will die if stalled
 
     //SparksMax Config
-    flipMotorConfig.smartCurrentLimit(20);
+    flipMotorConfig.smartCurrentLimit(50);
     flipMotorConfig.softLimit.forwardSoftLimitEnabled(true);
     flipMotorConfig.softLimit.reverseSoftLimitEnabled(true);
     flipMotorConfig.encoder.positionConversionFactor(3);
     flipMotorConfig.softLimit.forwardSoftLimit(0);
-    flipMotorConfig.softLimit.reverseSoftLimit(-130.33334);
+    flipMotorConfig.softLimit.reverseSoftLimit(-15);
     flipMotorConfig.idleMode(IdleMode.kBrake);
 
     flipMotorConfig.closedLoop
       
-      .p(0.01, ClosedLoopSlot.kSlot0)
+      .p(0.02, ClosedLoopSlot.kSlot0)
       .i(0.0, ClosedLoopSlot.kSlot0)
       .d(0.0, ClosedLoopSlot.kSlot0)
       // Current Control
       .p(0.01, ClosedLoopSlot.kSlot1)
       .i(0.0, ClosedLoopSlot.kSlot1)
-      .d(0.0, ClosedLoopSlot.kSlot1);
+      .d(0.0, ClosedLoopSlot.kSlot1)
+
+      .p(0.0, ClosedLoopSlot.kSlot2)
+      .i(0.0, ClosedLoopSlot.kSlot2)
+      .d(0.0, ClosedLoopSlot.kSlot2);
     
     flipMotorController.configure(flipMotorConfig, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
@@ -98,7 +102,7 @@ public class IntakeSubsystem extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    telemetry.telemetrizeIntake(getCurrentVelocity(), 
+    telemetry.telemetrizeIntake(flipMotorEncoder.getPosition(), 
       intakeMotorController.getStatorCurrent().getValueAsDouble(),
        flipMotorController.getOutputCurrent());
   }
@@ -120,8 +124,12 @@ public class IntakeSubsystem extends SubsystemBase {
     intakeMotorController.set(0);
   }
 
+  public void stopFlip() {
+    flipMotorLoopController.setSetpoint(-13, ControlType.kPosition, ClosedLoopSlot.kSlot2);
+  }
+
   public void flipDown() {
-    flipMotorLoopController.setSetpoint(130, ControlType.kPosition, ClosedLoopSlot.kSlot0);
+    flipMotorLoopController.setSetpoint(-15, ControlType.kPosition, ClosedLoopSlot.kSlot0);
   }
 
   public void flipUp() {

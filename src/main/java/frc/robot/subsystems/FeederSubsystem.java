@@ -31,7 +31,7 @@ public class FeederSubsystem extends SubsystemBase {
   private ShuffleboardTab tab = Shuffleboard.getTab("Feeder");
 
   private GenericEntry feederSpeed =
-      tab.add("Feeder Speed", .4)
+      tab.add("Feeder Speed", 1)
          .getEntry();
 
   private static FeederSubsystem instance;
@@ -50,7 +50,7 @@ public class FeederSubsystem extends SubsystemBase {
 
     // Incredibly important!!!!! 
     // Without this the motor draws as much power as it wants and will die if stalled
-    config.smartCurrentLimit(20);
+    config.smartCurrentLimit(40);
     
     motorController.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
