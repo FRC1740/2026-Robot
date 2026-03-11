@@ -10,6 +10,7 @@ import frc.robot.commands.Align;
 import frc.robot.commands.Feed;
 import frc.robot.commands.Intake;
 import frc.robot.commands.Shoot;
+import frc.robot.commands.TestShoot;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.FeederSubsystem;
@@ -86,7 +87,8 @@ public class RobotContainer {
       new CommandXboxController(OperatorConstants.kDriverControllerPort);
   private final CommandXboxController m_coDriverController =
       new CommandXboxController(OperatorConstants.kCoDriverControllerPort);
-
+  private final CommandXboxController m_testController =
+      new CommandXboxController(OperatorConstants.kTestDriverControllerPort);
 
     //   /* Path follower */ 
     SendableChooser<Command> autoChooser;
@@ -120,6 +122,16 @@ public class RobotContainer {
     //Shooter buttons
     m_coDriverController.leftTrigger().whileTrue(new Shoot(m_shooterSubsystem, m_kickerSubsystem, m_feederSubsystem));
     m_coDriverController.rightTrigger().onTrue(new InstantCommand(() -> {m_shooterSubsystem.toggle();}));
+
+    //Left trigger activates the flywheel of the shooter
+    m_testController.leftTrigger().whileTrue(new TestShoot(m_shooterSubsystem));
+
+    //A button toggles it on/off
+    m_testController.a().onTrue(new InstantCommand(() -> {m_shooterSubsystem.toggle();}));
+
+    //X button increases the speed by 100 RPM
+    m_testController.x().onTrue(new InstantCommand(() -> {m_shooterSubsystem.increaseSpeed();}));
+    
 
     m_driverController.a().whileTrue(
         new Align(drivetrain, drive, m_driverController)
