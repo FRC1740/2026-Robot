@@ -66,8 +66,8 @@ public class RobotContainer {
 
     double time = 0.0;
 
-    public static double MaxSpeed = 0.5 * TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
-    private double MaxAngularRate = 0.5 * RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
+    public static double MaxSpeed = 1.0 * TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
+    private double MaxAngularRate = 1.0 * RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
 
     /* Setting up bindings for necessary control of the swerve drive platform */
     private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
@@ -150,9 +150,9 @@ public class RobotContainer {
 
     m_driverController.b().whileTrue(
     new ParallelCommandGroup(
-        drivetrain.applyRequest(() ->
-                drive.withVelocityX(-Math.sin(time) / 3.0) // Drive forward with negative Y (forward)
-                    .withVelocityY(-Math.cos(time) / 3.0)), // Drive left with negative X (left)
+        // drivetrain.applyRequest(() ->
+        //         drive.withVelocityX(-Math.sin(time) / 3.0) // Drive forward with negative Y (forward)
+        //             .withVelocityY(-Math.cos(time) / 3.0)), // Drive left with negative X (left)
         new Feed(m_shooterSubsystem, m_kickerSubsystem, m_feederSubsystem)
     ));
 
@@ -167,7 +167,10 @@ public class RobotContainer {
     // m_driverController.rightBumper().whileTrue(new InstantCommand(() -> {m_intakeSubsystem.retract();}))
     //     .onFalse(new InstantCommand(() -> {m_intakeSubsystem.stop();}));
 
-    m_coDriverController.a().whileTrue(new InstantCommand(() -> {m_intakeSubsystem.flipDown();}));
+    m_coDriverController.a().whileTrue(new InstantCommand(() -> {m_intakeSubsystem.flipDown();}))
+    .onFalse(new InstantCommand(() -> {m_intakeSubsystem.stopFlip();} ));
+    m_coDriverController.x().whileTrue(new InstantCommand(() -> {m_intakeSubsystem.flipUp();}))
+    .onFalse(new InstantCommand(() -> {m_intakeSubsystem.stopFlip();} ));
         // Note that X is defined as forward according to WPILib convention,
         // and Y is defined as to the left according to WPILib convention.
         drivetrain.setDefaultCommand(

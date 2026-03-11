@@ -37,7 +37,7 @@ public class KickerSubsystem extends SubsystemBase {
   private ShuffleboardTab tab = Shuffleboard.getTab("Kicker");
 
   private GenericEntry kickerVelocity =
-      tab.add("Kicker Speed", 1)
+      tab.add("Kicker Speed", 2500)
          .getEntry();
 
   public static KickerSubsystem getInstance() {
@@ -54,7 +54,7 @@ public class KickerSubsystem extends SubsystemBase {
     TalonFXConfiguration kickerMotorConfig = new TalonFXConfiguration();
 
     // Set the current limit of the Talon
-    kickerMotorConfig.CurrentLimits.SupplyCurrentLimit = 40;
+    kickerMotorConfig.CurrentLimits.SupplyCurrentLimit = 60;
     kickerMotorConfig.CurrentLimits.SupplyCurrentLimitEnable = true;
 
     //PID
@@ -79,7 +79,7 @@ public class KickerSubsystem extends SubsystemBase {
 
   public void kick() {
     // Starts the Motor
-    kickerMotorController.setControl(VVKickerRequest.withVelocity(-kickerVelocity.getDouble(0) / 60.0));
+    kickerMotorController.setControl(VVKickerRequest.withVelocity(-kickerVelocity.getDouble(2500) / 60.0));
 
   }
 
