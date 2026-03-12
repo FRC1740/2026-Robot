@@ -17,9 +17,7 @@ import org.photonvision.targeting.PhotonTrackedTarget;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Transform3d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructArrayPublisher;
@@ -39,7 +37,7 @@ public class PhotonVision extends SubsystemBase {
     public PhotonPipelineResult lastResult;
     String lastCamName;
     CommandSwerveDrivetrain m_drive;
-    QuestNavSubsystem m_quest;
+    // QuestNavSubsystem m_quest;
     Pose2d pose = new Pose2d();
 
     NetworkTable VisionTable = NetworkTableInstance.getDefault().getTable("Vision");
@@ -62,7 +60,7 @@ public class PhotonVision extends SubsystemBase {
     }
 
     public PhotonVision() {
-        m_quest = QuestNavSubsystem.getInstance();
+        // m_quest = QuestNavSubsystem.getInstance();
         cam = new PhotonCamera(VisionConstants.camName);
         cam2 = new PhotonCamera(VisionConstants.cam2Name);
         cam.setDriverMode(false);
@@ -126,8 +124,6 @@ public class PhotonVision extends SubsystemBase {
                     } else {
                         Cam2Publisher.set(new Pose2d[] { pose });
                     }
-
-                    // CommandSwerveDrivetrain.getInstance().addVisionMeasurement(pose, );
                 }
             }
         }

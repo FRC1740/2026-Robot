@@ -173,7 +173,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         }
     }
 
-public void configureAutoBuilder() {
+    public void configureAutoBuilder() {
         try {
             var config = RobotConfig.fromGUISettings();
             AutoBuilder.configure(
@@ -335,6 +335,12 @@ public void configureAutoBuilder() {
         Matrix<N3, N1> visionMeasurementStdDevs
     ) {
         super.addVisionMeasurement(visionRobotPoseMeters, Utils.fpgaToCurrentTime(timestampSeconds), visionMeasurementStdDevs);
+    }
+
+    public void addVisionMeasurementSimple(
+        Pose2d visionRobotPoseMeters
+    ) {
+        super.addVisionMeasurement(visionRobotPoseMeters, Utils.getCurrentTimeSeconds());
     }
 
     /**
