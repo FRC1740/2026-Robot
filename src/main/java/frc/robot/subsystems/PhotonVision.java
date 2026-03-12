@@ -16,7 +16,10 @@ import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructArrayPublisher;
@@ -44,6 +47,10 @@ public class PhotonVision extends SubsystemBase {
             .getStructArrayTopic("Cam1", Pose2d.struct).publish();
     StructArrayPublisher<Pose2d> Cam2Publisher = VisionTable
             .getStructArrayTopic("Cam2", Pose2d.struct).publish();
+    StructArrayPublisher<Pose2d> Cam1PublisherPos = VisionTable
+            .getStructArrayTopic("Cam1RobotPosition", Pose2d.struct).publish();
+    StructArrayPublisher<Pose2d> Cam2PublisherPos = VisionTable
+            .getStructArrayTopic("Cam2RobotPosition", Pose2d.struct).publish();
 
     private static PhotonVision instance;
 
@@ -73,6 +80,18 @@ public class PhotonVision extends SubsystemBase {
 
     @Override
     public void periodic() {
+        Cam1PublisherPos.set(new Pose2d[] {
+                new Pose2d(
+                    VisionConstants.RobotToCam1.getX() + m_drive.getState().Pose.getX(),
+                    VisionConstants.RobotToCam1.getY() + m_drive.getState().Pose.getY(), 
+                    new Rotation2d(VisionConstants.RobotToCam1.getRotation().getMeasureAngle()).rotateBy(m_drive.getState().Pose.getRotation()))
+            });
+        Cam2PublisherPos.set(new Pose2d[] {
+                new Pose2d(
+                    VisionConstants.RobotToCam2.getX() + m_drive.getState().Pose.getX(),
+                    VisionConstants.RobotToCam2.getY() + m_drive.getState().Pose.getY(), 
+                    new Rotation2d(VisionConstants.RobotToCam2.getRotation().getMeasureAngle()).rotateBy(m_drive.getState().Pose.getRotation()))
+            });
         // This method will be called once per scheduler run
         // Get latest result
         PhotonPipelineResult result = getLatestResult();
