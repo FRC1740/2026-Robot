@@ -71,6 +71,10 @@ public class FeederSubsystem extends SubsystemBase {
   public void feed() {
     motorController.set(-feederSpeed.getDouble(0));
   }
+  public void spit() {
+    motorController.set(0.4);
+  }
+
 
   public void stop() {
     motorController.set(0); // motorController.stopMotor(); also works

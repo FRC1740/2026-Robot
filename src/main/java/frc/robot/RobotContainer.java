@@ -11,6 +11,7 @@ import frc.robot.commands.Feed;
 import frc.robot.commands.Intake;
 import frc.robot.commands.Shoot;
 import frc.robot.commands.ShootOn;
+import frc.robot.commands.ShootOnDistance;
 import frc.robot.commands.TestShoot;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
@@ -43,6 +44,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
@@ -98,7 +100,7 @@ public class RobotContainer {
   public RobotContainer() {
     drivetrain.configureAutoBuilder();
 
-    NamedCommands.registerCommand("Shoot", new Shoot(m_shooterSubsystem, m_kickerSubsystem, m_feederSubsystem));
+    NamedCommands.registerCommand("Shoot", new ShootOnDistance(m_shooterSubsystem, m_kickerSubsystem, m_feederSubsystem));
     NamedCommands.registerCommand("Feed", new Feed(m_shooterSubsystem, m_kickerSubsystem, m_feederSubsystem));
     NamedCommands.registerCommand("Intake", new Intake(m_intakeSubsystem));
 
@@ -122,11 +124,12 @@ public class RobotContainer {
   private void configureBindings() {
     //Shooter buttons
     m_coDriverController.leftTrigger().whileTrue(new ShootOn(m_shooterSubsystem, m_kickerSubsystem, m_feederSubsystem));
+    m_coDriverController.leftBumper().whileTrue(new ShootOnDistance(m_shooterSubsystem, m_kickerSubsystem, m_feederSubsystem));
     m_coDriverController.rightTrigger().onTrue(new InstantCommand(() -> {m_shooterSubsystem.toggle();}));
     m_coDriverController.povUp().onTrue(new InstantCommand(() -> {m_shooterSubsystem.increaseSpeed();}));
     m_coDriverController.povDown().onTrue(new InstantCommand(() -> {m_shooterSubsystem.decreaseSpeed();}));
-    m_coDriverController.povRight().onTrue(new InstantCommand(() -> {m_shooterSubsystem.increaseAngle();}));
-    m_coDriverController.povLeft().onTrue(new InstantCommand(() -> {m_shooterSubsystem.decreaseAngle();}));
+    m_coDriverController.povLeft().onTrue(new InstantCommand(() -> {m_shooterSubsystem.increaseAngle();}));
+    m_coDriverController.povRight().onTrue(new InstantCommand(() -> {m_shooterSubsystem.decreaseAngle();}));
 
     //Left trigger activates the flywheel of the shooter
     m_testController.leftTrigger().whileTrue(new TestShoot(m_shooterSubsystem));
@@ -168,10 +171,10 @@ public class RobotContainer {
     m_driverController.y()
         .whileTrue(new RunCommand(() -> {IntakeSubsystem.getInstance().spinIntake();}))
         .onFalse(new RunCommand(() -> {IntakeSubsystem.getInstance().stopIntake();}));
-    m_driverController.x().whileTrue(new RunCommand(() -> {HoodSubsystem.getInstance().setPercent(1);}));
+    m_driverController.x().whileTrue(new Align(drivetrain, drive, m_driverController));
 
     //Intake buttons
-    m_coDriverController.leftBumper().whileTrue(new InstantCommand(() -> {m_intakeSubsystem.spinIntake();}))
+    m_coDriverController.rightBumper().whileTrue(new InstantCommand(() -> {m_intakeSubsystem.spinIntake();}))
         .onFalse(new InstantCommand(() -> {m_intakeSubsystem.stopIntake();}));
     // m_driverController.rightBumper().whileTrue(new InstantCommand(() -> {m_intakeSubsystem.retract();}))
     //     .onFalse(new InstantCommand(() -> {m_intakeSubsystem.stop();}));
@@ -180,6 +183,24 @@ public class RobotContainer {
     .onFalse(new InstantCommand(() -> {m_intakeSubsystem.stopFlip();} ));
     m_coDriverController.x().whileTrue(new InstantCommand(() -> {m_intakeSubsystem.flipUp();}))
     .onFalse(new InstantCommand(() -> {m_intakeSubsystem.stopFlip();} ));
+
+    m_coDriverController.y().whileTrue(new ParallelCommandGroup(
+        new RunCommand(()->{m_kickerSubsystem.spit();}),
+        new RunCommand(()->{m_feederSubsystem.spit();})
+
+        
+        )).onFalse(
+            new ParallelCommandGroup(
+                    new RunCommand(()->{m_kickerSubsystem.stop();}),
+                    new RunCommand(()->{m_feederSubsystem.stop();})
+
+                    
+                    )
+
+        );
+
+
+    m_coDriverController.button(8).onTrue(new InstantCommand(() -> {photonvision.toggleVision();}));
         // Note that X is defined as forward according to WPILib convention,
         // and Y is defined as to the left according to WPILib convention.
         drivetrain.setDefaultCommand(

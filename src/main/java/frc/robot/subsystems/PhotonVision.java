@@ -37,6 +37,9 @@ public class PhotonVision extends SubsystemBase {
     public PhotonPipelineResult lastResult;
     String lastCamName;
     CommandSwerveDrivetrain m_drive;
+
+    Boolean enableCamera = true;
+
     // QuestNavSubsystem m_quest;
     Pose2d pose = new Pose2d();
 
@@ -78,6 +81,9 @@ public class PhotonVision extends SubsystemBase {
 
     @Override
     public void periodic() {
+        if (enableCamera) {
+        
+        
         Cam1PublisherPos.set(new Pose2d[] {
                 new Pose2d(
                     VisionConstants.RobotToCam1.getX() + m_drive.getState().Pose.getX(),
@@ -127,6 +133,7 @@ public class PhotonVision extends SubsystemBase {
                 }
             }
         }
+    }
     }
 
     public PhotonPipelineResult getLatestResult() {
@@ -218,5 +225,11 @@ public class PhotonVision extends SubsystemBase {
     // Returns true if an the ID is being tracked
     public boolean containsID(Integer ID) {
         return getAprilTagIDs().contains(ID);
+    }
+    /** 
+     * Does not account for camera offset
+     */
+    public void toggleVision() {
+        enableCamera = !enableCamera;
     }
 }

@@ -60,8 +60,8 @@ public final class Constants {
 
     // MUST BE IN ORDER CLOSEST TO FARTHEST
     public static final CalibrationPoint[] shooterCalibration = {
-      new CalibrationPoint(1.0, 0.0, 2000.0),
-      new CalibrationPoint(3.0, 0.1, 2400.0),
+      new CalibrationPoint(30, 0.0, 2600.0),
+      new CalibrationPoint(105, 0.45, 3200.0),
     };
 
     public static double lerp(double a, double b, double t) {

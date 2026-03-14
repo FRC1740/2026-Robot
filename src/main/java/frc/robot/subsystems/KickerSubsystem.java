@@ -83,6 +83,13 @@ public class KickerSubsystem extends SubsystemBase {
 
   }
 
+
+  public void spit() {
+    // Starts the Motor
+    kickerMotorController.setControl(VVKickerRequest.withVelocity(700));
+
+  }
+
   public void stop() {
     kickerMotorController.stopMotor();
   }
