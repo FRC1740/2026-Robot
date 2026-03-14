@@ -21,6 +21,7 @@ public class ShootOnRPM extends Command {
     m_shooterSubsystem = shooterSubsystem;
     m_kickerSubsystem = kickerSubsystem;
     m_feederSubsystem = feederSubsystem;
+    m_rpm = rpm;
     
 
     // Use addRequirements() here to declare subsystem dependencies.
@@ -35,7 +36,7 @@ public class ShootOnRPM extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_shooterSubsystem.shootRPM(2600);
+    m_shooterSubsystem.shootRPM(m_rpm);
     
     // m_shooterSubsystem.setTorque(0); setting torque???
   }

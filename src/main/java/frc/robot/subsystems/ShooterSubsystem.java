@@ -128,7 +128,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
   public void shootClose() {
     m_hoodSubsystem.setPercent(0);
-    rightMotor.setControl(VVShootRequest.withVelocity(2200));
+    rightMotor.setControl(VVShootRequest.withVelocity((2500 - (currentSpeed + 2600)) / 60.0));
   }
   public void shootFar() {
     m_hoodSubsystem.setPercent(0.45);
@@ -153,7 +153,7 @@ public class ShooterSubsystem extends SubsystemBase {
     rightMotor.setControl(VVShootRequest.withVelocity(-2000));
   }
   public void shootRPM(double rpm) {
-    rightMotor.setControl(VVShootRequest.withVelocity(rpm));
+    rightMotor.setControl(VVShootRequest.withVelocity(rpm / 60.0));
   }
   public void shootSB() {
     rightMotor.setControl(VVShootRequest.withVelocity(-shooter_velocity.getDouble(0) / 60.0));

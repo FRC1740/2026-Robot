@@ -103,6 +103,7 @@ public class RobotContainer {
 
     NamedCommands.registerCommand("Shoot", new ShootOnDistance(m_shooterSubsystem, m_kickerSubsystem, m_feederSubsystem));
     NamedCommands.registerCommand("ShootMid", new ShootOnRPM(m_shooterSubsystem, m_kickerSubsystem, m_feederSubsystem, 2600));
+    NamedCommands.registerCommand("ShootClose", new ShootOnRPM(m_shooterSubsystem, m_kickerSubsystem, m_feederSubsystem, 2500));
     NamedCommands.registerCommand("Feed", new Feed(m_shooterSubsystem, m_kickerSubsystem, m_feederSubsystem));
     NamedCommands.registerCommand("Intake", new Intake(m_intakeSubsystem));
 
@@ -132,7 +133,7 @@ public class RobotContainer {
     m_coDriverController.povDown().onTrue(new InstantCommand(() -> {m_shooterSubsystem.decreaseSpeed();}));
     m_coDriverController.povLeft().onTrue(new InstantCommand(() -> {m_shooterSubsystem.increaseAngle();}));
     m_coDriverController.povRight().onTrue(new InstantCommand(() -> {m_shooterSubsystem.decreaseAngle();}));
-    m_coDriverController.b().onTrue(new InstantCommand(() -> {m_shooterSubsystem.shootClose();}));
+    m_coDriverController.b().whileTrue(new RunCommand(() -> {m_shooterSubsystem.shootClose();}));
 
 
     //Left trigger activates the flywheel of the shooter
