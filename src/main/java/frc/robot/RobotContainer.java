@@ -115,6 +115,24 @@ public class RobotContainer {
     configureBindings();
 }
 
+    double driveCurve(double input) {
+        double minInput = .03;
+        return (((input * input) + minInput) - (input * minInput));
+    }
+
+
+    double turnCurve(double input) {
+        double minInput = .1;
+        return (((input * input) + minInput) - (input * minInput));
+    }
+
+    int inputLessThanDeadband(double input, double deadband) {
+        if (Math.abs(input) < deadband) {
+            return 0;
+        }
+        return (int)Math.signum(input);
+    }
+
   /**
    * Use this method to define your trigger->command mappings. Triggers can be created via the
    * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with an arbitrary
@@ -203,12 +221,26 @@ public class RobotContainer {
     m_coDriverController.button(8).onTrue(new InstantCommand(() -> {photonvision.toggleVision();}));
         // Note that X is defined as forward according to WPILib convention,
         // and Y is defined as to the left according to WPILib convention.
+
         drivetrain.setDefaultCommand(
             // Drivetrain will execute this command periodically
             drivetrain.applyRequest(() ->
-                drive.withVelocityX(-m_driverController.getLeftY() * MaxSpeed) // Drive forward with negative Y (forward)
-                    .withVelocityY(-m_driverController.getLeftX() * MaxSpeed) // Drive left with negative X (left)
-                    .withRotationalRate(-m_driverController.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
+                drive
+                    .withVelocityX(
+                        -driveCurve(Math.abs(m_driverController.getLeftY())) * 
+                            inputLessThanDeadband(m_driverController.getLeftY(), 0.03) * 
+                            MaxSpeed
+                    ) // Drive forward with negative Y (forward)
+                    .withVelocityY(
+                        -driveCurve(Math.abs(m_driverController.getLeftX())) * 
+                        inputLessThanDeadband(m_driverController.getLeftX(), 0.03) * 
+                        MaxSpeed
+                    ) // Drive left with negative X (left)
+                    .withRotationalRate(
+                        -turnCurve(Math.abs(m_driverController.getRightX())) * 
+                        inputLessThanDeadband(m_driverController.getRightX(), 0.03) * 
+                        MaxAngularRate
+                    ) // Drive counterclockwise with negative X (left)
             )
         );
 
