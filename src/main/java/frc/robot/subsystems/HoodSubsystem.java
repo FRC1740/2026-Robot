@@ -56,7 +56,7 @@ public class HoodSubsystem extends SubsystemBase {
 
   private void set(double angle, double angle2) {
     servo.set(angle);
-    servo2.set((angle2 - .05) - 0.3);
+    servo2.set((angle2 - .05));
   }
 
   private void setAngle(double degrees, Servo the_servo) {

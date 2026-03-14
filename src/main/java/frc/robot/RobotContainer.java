@@ -12,6 +12,7 @@ import frc.robot.commands.Intake;
 import frc.robot.commands.Shoot;
 import frc.robot.commands.ShootOn;
 import frc.robot.commands.ShootOnDistance;
+import frc.robot.commands.ShootOnRPM;
 import frc.robot.commands.TestShoot;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
@@ -101,6 +102,7 @@ public class RobotContainer {
     drivetrain.configureAutoBuilder();
 
     NamedCommands.registerCommand("Shoot", new ShootOnDistance(m_shooterSubsystem, m_kickerSubsystem, m_feederSubsystem));
+    NamedCommands.registerCommand("ShootMid", new ShootOnRPM(m_shooterSubsystem, m_kickerSubsystem, m_feederSubsystem, 2600));
     NamedCommands.registerCommand("Feed", new Feed(m_shooterSubsystem, m_kickerSubsystem, m_feederSubsystem));
     NamedCommands.registerCommand("Intake", new Intake(m_intakeSubsystem));
 
@@ -130,6 +132,8 @@ public class RobotContainer {
     m_coDriverController.povDown().onTrue(new InstantCommand(() -> {m_shooterSubsystem.decreaseSpeed();}));
     m_coDriverController.povLeft().onTrue(new InstantCommand(() -> {m_shooterSubsystem.increaseAngle();}));
     m_coDriverController.povRight().onTrue(new InstantCommand(() -> {m_shooterSubsystem.decreaseAngle();}));
+    m_coDriverController.b().onTrue(new InstantCommand(() -> {m_shooterSubsystem.shootClose();}));
+
 
     //Left trigger activates the flywheel of the shooter
     m_testController.leftTrigger().whileTrue(new TestShoot(m_shooterSubsystem));
@@ -186,18 +190,13 @@ public class RobotContainer {
 
     m_coDriverController.y().whileTrue(new ParallelCommandGroup(
         new RunCommand(()->{m_kickerSubsystem.spit();}),
-        new RunCommand(()->{m_feederSubsystem.spit();})
-
-        
-        )).onFalse(
-            new ParallelCommandGroup(
-                    new RunCommand(()->{m_kickerSubsystem.stop();}),
-                    new RunCommand(()->{m_feederSubsystem.stop();})
-
-                    
-                    )
-
-        );
+        new RunCommand(()->{m_feederSubsystem.spit();}),
+        new RunCommand(()->{m_intakeSubsystem.spit();})
+    )).onFalse(new ParallelCommandGroup(
+        new RunCommand(()->{m_kickerSubsystem.stop();}),
+        new RunCommand(()->{m_feederSubsystem.stop();}),
+        new RunCommand(()->{m_intakeSubsystem.stopIntake();})
+    ));
 
 
     m_coDriverController.button(8).onTrue(new InstantCommand(() -> {photonvision.toggleVision();}));

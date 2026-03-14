@@ -1,0 +1,54 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 2.157722800925926,
+        "y": 6.273368923611112
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 1.7078920717512953,
+        "y": 6.2726527777788
+      },
+      "isLocked": false,
+      "linkedName": "non-intake-fire"
+    },
+    {
+      "anchor": {
+        "x": 0.48865646701388943,
+        "y": 6.919829499421296
+      },
+      "prevControl": {
+        "x": 0.9614459635337025,
+        "y": 6.989573495371392
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "depit L"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -90.44986701946067
+  },
+  "reversed": false,
+  "folder": null,
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": -42.329733189238155
+  },
+  "useDefaultConstraints": true
+}

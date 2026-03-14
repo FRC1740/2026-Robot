@@ -125,12 +125,21 @@ public class ShooterSubsystem extends SubsystemBase {
   public void setTorque(double Torque) {
     rightMotor.setControl(m_torqueRequest.withOutput(Torque));
   }
+
+  public void shootClose() {
+    m_hoodSubsystem.setPercent(0);
+    rightMotor.setControl(VVShootRequest.withVelocity(2200));
+  }
+  public void shootFar() {
+    m_hoodSubsystem.setPercent(0.45);
+    rightMotor.setControl(VVShootRequest.withVelocity(3200 + (currentSpeed + 2600)));
+  }
   
   public void shootByCalibration(double distance) {
     Constants.Shooter.CalibrationPoint point = Constants.Shooter.getPoint(distance);
     m_hoodSubsystem.setPercent(point.angle);
     // currentspeed is dpad
-    rightMotor.setControl(VVShootRequest.withVelocity(point.rpm + (currentSpeed + 2600)));
+    rightMotor.setControl(VVShootRequest.withVelocity(point.rpm));
   }
   
   public void aimForDistance(double distance) {
@@ -142,6 +151,9 @@ public class ShooterSubsystem extends SubsystemBase {
   }
   public void shoot() {
     rightMotor.setControl(VVShootRequest.withVelocity(-2000));
+  }
+  public void shootRPM(double rpm) {
+    rightMotor.setControl(VVShootRequest.withVelocity(rpm));
   }
   public void shootSB() {
     rightMotor.setControl(VVShootRequest.withVelocity(-shooter_velocity.getDouble(0) / 60.0));

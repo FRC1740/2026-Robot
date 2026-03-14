@@ -120,6 +120,10 @@ public class IntakeSubsystem extends SubsystemBase {
     // }
   }
 
+  public void spit() {
+      intakeMotorController.set(-1);
+  }
+
   public void stopIntake() {
     intakeMotorController.set(0);
   }
