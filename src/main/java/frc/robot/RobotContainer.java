@@ -197,10 +197,29 @@ public class RobotContainer {
     m_driverController.x().whileTrue(new Align(drivetrain, drive, m_driverController));
 
     //Intake buttons
-    m_coDriverController.rightBumper().whileTrue(new InstantCommand(() -> {m_intakeSubsystem.spinIntake();}))
+    m_coDriverController.rightBumper().whileTrue(new RunCommand(() -> {m_intakeSubsystem.spinIntake();}))
         .onFalse(new InstantCommand(() -> {m_intakeSubsystem.stopIntake();}));
-    // m_driverController.rightBumper().whileTrue(new InstantCommand(() -> {m_intakeSubsystem.retract();}))
-    //     .onFalse(new InstantCommand(() -> {m_intakeSubsystem.stop();}));
+    
+    m_driverController.rightBumper().whileTrue(
+        new ParallelCommandGroup(
+            drivetrain.applyRequest(() ->
+                drive                    
+                .withVelocityX(
+                        -driveCurve(Math.abs(m_driverController.getLeftY())) * 
+                            inputLessThanDeadband(m_driverController.getLeftY(), 0.03) * 
+                            MaxSpeed
+                    ) // Drive forward with negative Y (forward)
+                    .withVelocityY(
+                        -driveCurve(Math.abs(m_driverController.getLeftX())) * 
+                        inputLessThanDeadband(m_driverController.getLeftX(), 0.03) * 
+                        MaxSpeed
+                    ) // Drive left with negative X (left)
+                    .withRotationalRate(
+                        -turnCurve(Math.abs(m_driverController.getRightX())) * 
+                        inputLessThanDeadband(m_driverController.getRightX(), 0.03) * 
+                        MaxAngularRate
+                    ) // Drive counterclockwise with negative X (left)
+    )));
 
     m_coDriverController.a().whileTrue(new InstantCommand(() -> {m_intakeSubsystem.flipDown();}))
     .onFalse(new InstantCommand(() -> {m_intakeSubsystem.stopFlip();} ));
@@ -229,12 +248,12 @@ public class RobotContainer {
                     .withVelocityX(
                         -driveCurve(Math.abs(m_driverController.getLeftY())) * 
                             inputLessThanDeadband(m_driverController.getLeftY(), 0.03) * 
-                            MaxSpeed
+                            MaxSpeed * 0.8
                     ) // Drive forward with negative Y (forward)
                     .withVelocityY(
                         -driveCurve(Math.abs(m_driverController.getLeftX())) * 
                         inputLessThanDeadband(m_driverController.getLeftX(), 0.03) * 
-                        MaxSpeed
+                        MaxSpeed * 0.8
                     ) // Drive left with negative X (left)
                     .withRotationalRate(
                         -turnCurve(Math.abs(m_driverController.getRightX())) * 

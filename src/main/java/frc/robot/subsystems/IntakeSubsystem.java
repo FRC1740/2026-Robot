@@ -82,8 +82,8 @@ public class IntakeSubsystem extends SubsystemBase {
       .p(0.02, ClosedLoopSlot.kSlot0)
       .i(0.0, ClosedLoopSlot.kSlot0)
       .d(0.0, ClosedLoopSlot.kSlot0)
-      // Current Control
-      .p(0.01, ClosedLoopSlot.kSlot1)
+      // intake in
+      .p(0.04, ClosedLoopSlot.kSlot1)
       .i(0.0, ClosedLoopSlot.kSlot1)
       .d(0.0, ClosedLoopSlot.kSlot1)
 
@@ -137,11 +137,10 @@ public class IntakeSubsystem extends SubsystemBase {
   }
 
   public void flipUp() {
-    flipMotorLoopController.setSetpoint(0, ControlType.kPosition, ClosedLoopSlot.kSlot0);
+    flipMotorLoopController.setSetpoint(0, ControlType.kPosition, ClosedLoopSlot.kSlot1);
   }
   
   public void latch() {
-    flipMotorLoopController.setSetpoint(0.1, ControlType.kCurrent, ClosedLoopSlot.kSlot1);
+    // flipMotorLoopController.setSetpoint(0.1, ControlType.kCurrent, ClosedLoopSlot.kSlot1);
   }
-
 }
