@@ -105,6 +105,8 @@ public class RobotContainer {
     NamedCommands.registerCommand("ShootMid", new ShootOnRPM(m_shooterSubsystem, m_kickerSubsystem, m_feederSubsystem, 2600));
     NamedCommands.registerCommand("ShootClose", new ShootOnRPM(m_shooterSubsystem, m_kickerSubsystem, m_feederSubsystem, 2500));
     NamedCommands.registerCommand("Feed", new Feed(m_shooterSubsystem, m_kickerSubsystem, m_feederSubsystem));
+    NamedCommands.registerCommand("IntakeFlip", new InstantCommand(() -> {m_intakeSubsystem.flipDown();}));
+    NamedCommands.registerCommand("IntakeFlipUp", new InstantCommand(() -> {m_intakeSubsystem.flipUp();}));
     NamedCommands.registerCommand("Intake", new Intake(m_intakeSubsystem));
 
     // Configure the trigger bindings
@@ -145,7 +147,8 @@ public class RobotContainer {
   private void configureBindings() {
     //Shooter buttons
     m_coDriverController.leftTrigger().whileTrue(new ShootOn(m_shooterSubsystem, m_kickerSubsystem, m_feederSubsystem));
-    m_coDriverController.leftBumper().whileTrue(new ShootOnDistance(m_shooterSubsystem, m_kickerSubsystem, m_feederSubsystem));
+    // m_coDriverController.leftBumper().whileTrue(new ShootOnDistance(m_shooterSubsystem, m_kickerSubsystem, m_feederSubsystem));
+    m_coDriverController.leftBumper().whileTrue(new RunCommand(() -> {m_shooterSubsystem.shootFar();}));
     m_coDriverController.rightTrigger().onTrue(new InstantCommand(() -> {m_shooterSubsystem.toggle();}));
     m_coDriverController.povUp().onTrue(new InstantCommand(() -> {m_shooterSubsystem.increaseSpeed();}));
     m_coDriverController.povDown().onTrue(new InstantCommand(() -> {m_shooterSubsystem.decreaseSpeed();}));
