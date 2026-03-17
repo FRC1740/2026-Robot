@@ -42,6 +42,7 @@ public class Telemetry {
 
     DoublePublisher intakeDist = intakeTable.getDoubleTopic("intake dist").publish();
     DoublePublisher intakeRollersCurrentDraw = intakeTable.getDoubleTopic("intake rollers current draw").publish();
+    DoublePublisher intakeRollersSpeed = intakeTable.getDoubleTopic("intake rollers speed").publish();
     DoublePublisher intakeFlipCurrentDraw = intakeTable.getDoubleTopic("intake flip current draw").publish();
     DoublePublisher kickerRPM = intakeTable.getDoubleTopic("kicker rpm").publish();
     DoublePublisher kickerCurrentDraw = intakeTable.getDoubleTopic("kicker current draw").publish();
@@ -171,10 +172,11 @@ public class Telemetry {
         kickerCurrentDraw.set(currentDraw);
     }
 
-    public void telemetrizeIntake(double dist, double currentDrawRollers, double currentDrawFlip) {
+    public void telemetrizeIntake(double dist, double currentDrawRollers, double currentDrawFlip, double rollerSpeed) {
         intakeDist.set(dist);
         intakeRollersCurrentDraw.set(currentDrawRollers);
         intakeFlipCurrentDraw.set(currentDrawFlip);
+        intakeRollersSpeed.set(rollerSpeed);
     }
     
     public void telemeterizeQuestNav(Pose3d robotPose) {

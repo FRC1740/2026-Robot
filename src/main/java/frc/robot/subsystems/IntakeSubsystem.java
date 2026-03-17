@@ -7,6 +7,8 @@ package frc.robot.subsystems;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
+import com.ctre.phoenix6.controls.DutyCycleOut;
+import com.ctre.phoenix6.controls.TorqueCurrentFOC;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.revrobotics.PersistMode;
@@ -57,7 +59,7 @@ public class IntakeSubsystem extends SubsystemBase {
     TalonFXConfiguration intakeMotorConfig = new TalonFXConfiguration();
 
     //Talon Config
-    intakeMotorConfig.CurrentLimits.StatorCurrentLimit = 50;
+    intakeMotorConfig.CurrentLimits.StatorCurrentLimit = 70;
     intakeMotorConfig.CurrentLimits.StatorCurrentLimitEnable = true;
     intakeMotorConfig.OpenLoopRamps.DutyCycleOpenLoopRampPeriod = 1;
     intakeMotorConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
@@ -105,7 +107,8 @@ public class IntakeSubsystem extends SubsystemBase {
     // This method will be called once per scheduler run
     telemetry.telemetrizeIntake(flipMotorEncoder.getPosition(), 
       intakeMotorController.getStatorCurrent().getValueAsDouble(),
-       flipMotorController.getOutputCurrent());
+       flipMotorController.getOutputCurrent(),
+       intakeMotorController.getVelocity().getValueAsDouble());
   }
 
   public double getCurrentVelocity() {
@@ -117,16 +120,16 @@ public class IntakeSubsystem extends SubsystemBase {
     //     // Slot 1 is latch so it's auto good
     //     flipMotorLoopController.getSelectedSlot() == ClosedLoopSlot.kSlot1) {
 
-      intakeMotorController.set(1);
+      intakeMotorController.setControl(new DutyCycleOut(1).withEnableFOC(true));
     // }
   }
 
   public void spit() {
-      intakeMotorController.set(-1);
+      intakeMotorController.setControl(new DutyCycleOut(-1).withEnableFOC(true));
   }
 
   public void stopIntake() {
-    intakeMotorController.set(0);
+    intakeMotorController.setControl(new DutyCycleOut(0).withEnableFOC(true));
   }
 
   public void stopFlip() {
