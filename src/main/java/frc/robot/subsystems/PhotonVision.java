@@ -67,10 +67,10 @@ public class PhotonVision extends SubsystemBase {
             .getStructArrayTopic("Cam2RobotPosition", Pose2d.struct).publish();
 
     StructArrayPublisher<Pose2d> Cam3PublisherPos = VisionTable
-            .getStructArrayTopic("Cam2RobotPosition", Pose2d.struct).publish();
+            .getStructArrayTopic("Cam3RobotPosition", Pose2d.struct).publish();
 
     StructArrayPublisher<Pose2d> Cam4PublisherPos = VisionTable
-            .getStructArrayTopic("Cam2RobotPosition", Pose2d.struct).publish();
+            .getStructArrayTopic("Cam4RobotPosition", Pose2d.struct).publish();
 
     private static PhotonVision instance;
 

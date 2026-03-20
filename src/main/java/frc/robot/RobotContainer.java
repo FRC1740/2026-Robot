@@ -66,7 +66,7 @@ public class RobotContainer {
     private final IntakeSubsystem m_intakeSubsystem = IntakeSubsystem.getInstance();
     private final Telemetry m_telemetry = Telemetry.getInstance();
 
-    // public final PhotonVision photonvision = PhotonVision.getInstance();
+    public final PhotonVision photonvision = PhotonVision.getInstance();
 
     double time = 0.0;
 
