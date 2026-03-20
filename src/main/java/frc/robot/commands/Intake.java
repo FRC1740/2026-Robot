@@ -23,6 +23,7 @@ public class Intake extends Command {
   @Override
   public void execute() {
     m_intake.spinIntake();
+    m_intake.seekPosition();
   }
 
   // Called once the command ends or is interrupted.

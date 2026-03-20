@@ -105,10 +105,15 @@ public static final class VisionConstants {
     // http://photonvision.local:5800/#/dashboard
     public static final String camName = "Cam1"; // grey
     public static final String cam2Name = "Cam2"; // white
+    public static final String cam3Name = "Cam3"; // left front
+    public static final String cam4Name = "Cam4"; // right front
     public static final Double AprilTagMinimumArea = 0.0;
 
     public static final Double cam12Dist = 0.58/2; // dist from cam1 to cam2 in meters
     public static final Double cam12FrontBackOffset = -0.2; // dist of the two cameras from middle of the robot
+
+    public static final Double cam34Dist = .35; // dist from cam3 to cam4 in meters
+    public static final Double cam34FrontBackOffset = 0.0; // dist of the two cameras from middle of the robot
 
     public static AprilTagFieldLayout aprilTagFieldLayout = null;
 
@@ -136,6 +141,11 @@ public static final class VisionConstants {
     public static final Transform3d RobotToCam1 = new Transform3d(cam12FrontBackOffset, cam12Dist, 0.0, new Rotation3d(0.0, 0.0, 2.62));
     
     public static final Transform3d RobotToCam2 = new Transform3d(cam12FrontBackOffset, -cam12Dist, 0.0, new Rotation3d(0.0, 0.0, 3.67));
+
+    public static final Transform3d RobotToCam3 = new Transform3d(cam34FrontBackOffset, cam34Dist, 0.0, new Rotation3d(0.0, .52, 1.57 - .52));
+    
+    public static final Transform3d RobotToCam4 = new Transform3d(cam34FrontBackOffset, -cam34Dist, 0.0, new Rotation3d(0.0, .52, -1.57 + .52));
+
 
     public static final Transform2d QuestToRobot = new Transform2d( /*TODO: Put x, y, rotational offsets here!*/ );
 

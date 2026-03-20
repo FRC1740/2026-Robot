@@ -66,7 +66,7 @@ public class RobotContainer {
     private final IntakeSubsystem m_intakeSubsystem = IntakeSubsystem.getInstance();
     private final Telemetry m_telemetry = Telemetry.getInstance();
 
-    public final PhotonVision photonvision = PhotonVision.getInstance();
+    // public final PhotonVision photonvision = PhotonVision.getInstance();
 
     double time = 0.0;
 
@@ -240,9 +240,13 @@ public class RobotContainer {
     ));
 
 
-    m_coDriverController.button(8).onTrue(new InstantCommand(() -> {photonvision.toggleVision();}));
+    // m_coDriverController.button(8).onTrue(new InstantCommand(() -> {photonvision.toggleVision();}));
         // Note that X is defined as forward according to WPILib convention,
         // and Y is defined as to the left according to WPILib convention.
+
+        m_intakeSubsystem.setDefaultCommand(new RunCommand(() -> {
+            m_intakeSubsystem.seekPosition();
+        }, m_intakeSubsystem));
 
         drivetrain.setDefaultCommand(
             // Drivetrain will execute this command periodically

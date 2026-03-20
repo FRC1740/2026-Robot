@@ -15,7 +15,6 @@ import com.revrobotics.PersistMode;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.ResetMode;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
-import com.revrobotics.spark.config.SparkBaseConfig;
 import com.revrobotics.spark.config.SparkMaxConfig;
 import com.revrobotics.spark.config.SparkBaseConfig.IdleMode;
 import com.revrobotics.spark.ClosedLoopSlot;
@@ -23,7 +22,8 @@ import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkMax;
 import com.revrobotics.spark.SparkBase.ControlType;
 
-import edu.wpi.first.wpilibj.Servo;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.Telemetry;
 import frc.robot.Constants;
@@ -33,6 +33,10 @@ public class IntakeSubsystem extends SubsystemBase {
   SparkMax flipMotorController = new SparkMax(Constants.CanIDs.intakeExtensionMotor, MotorType.kBrushless); 
   SparkClosedLoopController flipMotorLoopController;
   TalonFX intakeMotorController = new TalonFX(Constants.CanIDs.intakeMotor,"*"); 
+    private final TrapezoidProfile m_profile =
+        new TrapezoidProfile(new TrapezoidProfile.Constraints(120.0, 30));
+    private TrapezoidProfile.State m_goal = new TrapezoidProfile.State();
+    private TrapezoidProfile.State m_setpoint = new TrapezoidProfile.State();
 
   private static IntakeSubsystem instance;
   private RelativeEncoder flipMotorEncoder;
@@ -40,6 +44,10 @@ public class IntakeSubsystem extends SubsystemBase {
   private boolean isFlippedDown = false;
 
   Slot0Configs slot0Configs = new Slot0Configs();
+
+  Timer intakeRollersStallTimer = new Timer();
+
+  boolean ejecting = false;
 
   private final Telemetry telemetry = Telemetry.getInstance();
   /** Creates a new FeederSubsystem. */
@@ -109,6 +117,35 @@ public class IntakeSubsystem extends SubsystemBase {
       intakeMotorController.getStatorCurrent().getValueAsDouble(),
        flipMotorController.getOutputCurrent(),
        intakeMotorController.getVelocity().getValueAsDouble());
+
+    // output > 50A
+    if (!ejecting) {
+      if (intakeMotorController.getStatorCurrent().getValueAsDouble() > 50.0) {
+        intakeRollersStallTimer.start();
+      }else {
+        intakeRollersStallTimer.reset();
+        intakeRollersStallTimer.stop();
+      }
+
+      // stalled for .3s, so eject
+      if (intakeRollersStallTimer.hasElapsed(0.3)) {
+        ejecting = true;
+        intakeRollersStallTimer.reset();
+        intakeRollersStallTimer.start();
+      }
+    }else { // ejecting == true
+      // eject for 1s
+      if (intakeRollersStallTimer.hasElapsed(1)) {
+        ejecting = false;
+        intakeRollersStallTimer.reset();
+        intakeRollersStallTimer.stop();
+      }
+    }
+  }
+
+  public void seekPosition() {
+    m_setpoint = m_profile.calculate(0.02, m_setpoint, m_goal);
+    flipMotorLoopController.setSetpoint(m_setpoint.position, ControlType.kPosition, ClosedLoopSlot.kSlot0);
   }
 
   public double getCurrentVelocity() {
@@ -116,12 +153,12 @@ public class IntakeSubsystem extends SubsystemBase {
   }
 
   public void spinIntake() {
-    // if (flipMotorLoopController.isAtSetpoint() || 
-    //     // Slot 1 is latch so it's auto good
-    //     flipMotorLoopController.getSelectedSlot() == ClosedLoopSlot.kSlot1) {
-
-      intakeMotorController.setControl(new DutyCycleOut(1).withEnableFOC(true));
-    // }
+    // override if ejecting
+    if (ejecting) {
+      spit();
+      return;
+    }
+    intakeMotorController.setControl(new DutyCycleOut(1).withEnableFOC(true));
   }
 
   public void spit() {
@@ -137,11 +174,11 @@ public class IntakeSubsystem extends SubsystemBase {
   }
 
   public void flipDown() {
-    flipMotorLoopController.setSetpoint(-15 * 3, ControlType.kPosition, ClosedLoopSlot.kSlot0);
+    m_goal = new TrapezoidProfile.State(-15 * 3, 0);
   }
 
   public void flipUp() {
-    flipMotorLoopController.setSetpoint(0, ControlType.kPosition, ClosedLoopSlot.kSlot1);
+    m_goal = new TrapezoidProfile.State(0, 0);
   }
   
   public void latch() {
