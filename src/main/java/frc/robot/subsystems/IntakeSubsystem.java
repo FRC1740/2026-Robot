@@ -69,7 +69,7 @@ public class IntakeSubsystem extends SubsystemBase {
     //Talon Config
     intakeMotorConfig.CurrentLimits.StatorCurrentLimit = 70;
     intakeMotorConfig.CurrentLimits.StatorCurrentLimitEnable = true;
-    intakeMotorConfig.OpenLoopRamps.DutyCycleOpenLoopRampPeriod = 1;
+    intakeMotorConfig.OpenLoopRamps.DutyCycleOpenLoopRampPeriod = .25;
     intakeMotorConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
 
     intakeMotorConfigurator.apply(intakeMotorConfig);
@@ -116,7 +116,7 @@ public class IntakeSubsystem extends SubsystemBase {
     telemetry.telemetrizeIntake(flipMotorEncoder.getPosition(), 
       intakeMotorController.getStatorCurrent().getValueAsDouble(),
        flipMotorController.getOutputCurrent(),
-       intakeMotorController.getVelocity().getValueAsDouble());
+       intakeMotorController.getVelocity().getValueAsDouble(), ejecting, intakeRollersStallTimer.get());
 
     // output > 50A
     if (!ejecting) {
@@ -128,14 +128,14 @@ public class IntakeSubsystem extends SubsystemBase {
       }
 
       // stalled for .3s, so eject
-      if (intakeRollersStallTimer.hasElapsed(0.3)) {
+      if (intakeRollersStallTimer.hasElapsed(0.7)) {
         ejecting = true;
         intakeRollersStallTimer.reset();
         intakeRollersStallTimer.start();
       }
     }else { // ejecting == true
       // eject for 1s
-      if (intakeRollersStallTimer.hasElapsed(1)) {
+      if (intakeRollersStallTimer.hasElapsed(.5)) {
         ejecting = false;
         intakeRollersStallTimer.reset();
         intakeRollersStallTimer.stop();
