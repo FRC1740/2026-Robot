@@ -139,7 +139,7 @@ public class ShooterSubsystem extends SubsystemBase {
     Constants.Shooter.CalibrationPoint point = Constants.Shooter.getPoint(distance);
     m_hoodSubsystem.setPercent(point.angle);
     // currentspeed is dpad
-    rightMotor.setControl(VVShootRequest.withVelocity(point.rpm));
+    rightMotor.setControl(VVShootRequest.withVelocity(point.rpm / 60.0));
   }
   
   public void aimForDistance(double distance) {
