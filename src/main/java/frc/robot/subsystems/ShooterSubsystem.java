@@ -78,7 +78,7 @@ public class ShooterSubsystem extends SubsystemBase {
   
     // Incredibly important!!!!! 
     // Without this the motor draws as much power as it wants and will die if stalled
-    motorConfig.CurrentLimits.StatorCurrentLimit = 50;
+    motorConfig.CurrentLimits.StatorCurrentLimit = 70;
     motorConfig.CurrentLimits.StatorCurrentLimitEnable = true;
     motorConfig.OpenLoopRamps.DutyCycleOpenLoopRampPeriod = .5;
     motorConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
@@ -88,7 +88,7 @@ public class ShooterSubsystem extends SubsystemBase {
     slot0Configs.kP = 10; // An error of 1 rotation results in 2.4 V output
     slot0Configs.kI = 0; // no output for integrated error
     slot0Configs.kD = 0; // A velocity of 1 rps results in 0.1 V output
-    slot0Configs.kS = 5;
+    slot0Configs.kS = .5;
 
     slot1Configs.kP = 0;
     slot1Configs.kI = 0;
