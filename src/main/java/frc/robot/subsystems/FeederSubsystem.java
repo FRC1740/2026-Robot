@@ -51,6 +51,7 @@ public class FeederSubsystem extends SubsystemBase {
     // Incredibly important!!!!! 
     // Without this the motor draws as much power as it wants and will die if stalled
     config.smartCurrentLimit(40);
+    config.openLoopRampRate(0.1);
     
     motorController.configure(config, ResetMode.kResetSafeParameters, PersistMode.kPersistParameters);
 
