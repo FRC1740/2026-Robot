@@ -4,6 +4,8 @@
 
 package frc;
 
+import java.util.List;
+
 import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.swerve.SwerveDrivetrain.SwerveDriveState;
 
@@ -21,6 +23,7 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StringPublisher;
 import edu.wpi.first.networktables.StructArrayPublisher;
 import edu.wpi.first.networktables.StructPublisher;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.Mechanism2d;
 import edu.wpi.first.wpilibj.smartdashboard.MechanismLigament2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -80,10 +83,18 @@ public class Telemetry {
     private final DoublePublisher driveOdometryFrequency = driveStateTable.getDoubleTopic("OdometryFrequency").publish();
     private final BooleanPublisher driveFlipped = driveStateTable.getBooleanTopic("FlippedControl").publish();
 
+
+    private final NetworkTable matchStateTable = inst.getTable("MatchState");
+    private final DoublePublisher matchTime = matchStateTable.getDoubleTopic("time remaining").publish();
+    private final DoublePublisher shiftTime = matchStateTable.getDoubleTopic("time remaining in shift").publish();
+
     /* Robot pose for field positioning */
     private final NetworkTable table = inst.getTable("Pose");
     private final DoubleArrayPublisher fieldPub = table.getDoubleArrayTopic("robotPose").publish();
     private final StringPublisher fieldTypePub = table.getStringTopic(".type").publish();
+
+    private final StructArrayPublisher<Pose2d> autoFieldPub = table.getStructArrayTopic("robotAutoPose", Pose2d.struct).publish();
+
 
     /* Mechanisms to represent the swerve module states */
     private final Mechanism2d[] m_moduleMechanisms = new Mechanism2d[] {
@@ -150,13 +161,35 @@ public class Telemetry {
             m_moduleSpeeds[i].setLength(state.ModuleStates[i].speedMetersPerSecond / (2 * MaxSpeed));
         }
     }
+
+    public void setMatchTime() {
+        matchTime.set(DriverStation.getMatchTime());
+        double time = DriverStation.getMatchTime();
+        if (time > (2*60) + 10) {
+            shiftTime.set(time - ((2*60) + 10));
+        }else if (time > 60 + 45) {
+            shiftTime.set(time - (60 + 45));
+        }else if (time > 60 + 20) {
+            shiftTime.set(time - (60 + 20));
+        }else if (time > 55) {
+            shiftTime.set(time - (55));
+        }else if (time > 30) {
+            shiftTime.set(time - (30));
+        }else {
+            shiftTime.set(time);
+        }
+    }
+
+    public void setAutoPath(Pose2d[] poses) {
+        autoFieldPub.set(poses);
+    }
     
     public static Telemetry getInstance() {
-    if(instance == null) {
-        instance = new Telemetry();
+        if(instance == null) {
+            instance = new Telemetry();
+        }
+        return instance;
     }
-    return instance;
-  }
 
     public void telemetrizeShooter(double rpm, double leftCurrentDraw, double rightCurrentDraw) {
         flywheelRPM.set(rpm);
