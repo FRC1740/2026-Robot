@@ -82,7 +82,7 @@
                       }
                     },
                     {
-                      "type": "race",
+                      "type": "deadline",
                       "data": {
                         "commands": [
                           {

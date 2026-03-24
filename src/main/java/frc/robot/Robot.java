@@ -4,11 +4,27 @@
 
 package frc.robot;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.json.simple.parser.ParseException;
+
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.commands.PathPlannerAuto;
+import com.pathplanner.lib.path.PathPlannerPath;
+
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.net.WebServer;
 import edu.wpi.first.wpilibj.DataLogManager;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.Telemetry;
 
 /**
  * The methods in this class are called automatically corresponding to each mode, as described in
@@ -19,6 +35,7 @@ public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
 
   private final RobotContainer m_robotContainer;
+  private String autoName, newAutoName;
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -30,6 +47,8 @@ public class Robot extends TimedRobot {
     DataLogManager.start();
     DriverStation.startDataLog(DataLogManager.getLog());
     m_robotContainer = new RobotContainer();
+
+    WebServer.start(5800, Filesystem.getDeployDirectory().getPath()); // elastic
   }
 
   /**
@@ -54,7 +73,35 @@ public class Robot extends TimedRobot {
   public void disabledInit() {}
 
   @Override
-  public void disabledPeriodic() {}
+  public void disabledPeriodic() {
+    // update elastic path
+    newAutoName = m_robotContainer.getAutonomousCommand().getName();
+    if (autoName != newAutoName) {
+    autoName = newAutoName;
+    if (AutoBuilder.getAllAutoNames().contains(autoName)) {
+        System.out.println("Displaying " + autoName);
+        List<PathPlannerPath> pathPlannerPaths = null;
+        try {
+          pathPlannerPaths = PathPlannerAuto.getPathGroupFromAutoFile(autoName);
+        } catch (IOException e) {
+          // TODO Auto-generated catch block
+          // e.printStackTrace();
+        } catch (ParseException e) {
+          // TODO Auto-generated catch block
+          // e.printStackTrace();
+        }
+        if (pathPlannerPaths != null) {
+          List<Pose2d> poses = new ArrayList<Pose2d>();
+          for (PathPlannerPath path : pathPlannerPaths) {
+              poses.addAll(path.getAllPathPoints().stream().map(
+                point -> new Pose2d(point.position.getX(), point.position.getY(), new Rotation2d()))
+                .collect(Collectors.toList()));
+          }
+          Telemetry.getInstance().setAutoPath(poses.toArray(new Pose2d[0]));
+        }
+      }
+    }
+  }
 
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
@@ -69,7 +116,9 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during autonomous. */
   @Override
-  public void autonomousPeriodic() {}
+  public void autonomousPeriodic() {
+    Telemetry.getInstance().setMatchTime();
+  }
 
   @Override
   public void teleopInit() {
@@ -84,7 +133,9 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+    Telemetry.getInstance().setMatchTime();
+  }
 
   @Override
   public void testInit() {
