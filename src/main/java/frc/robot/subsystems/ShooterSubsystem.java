@@ -85,10 +85,10 @@ public class ShooterSubsystem extends SubsystemBase {
   
     // PID
     
-    slot0Configs.kP = 13.5; // An error of 1 rotation results in 2.4 V output
+    slot0Configs.kP = 10; // An error of 1 rotation results in 2.4 V output
     slot0Configs.kI = 0; // no output for integrated error
     slot0Configs.kD = 0; // A velocity of 1 rps results in 0.1 V output
-    slot0Configs.kS = .5;
+    slot0Configs.kS = 5;
 
     slot1Configs.kP = 0;
     slot1Configs.kI = 0;
