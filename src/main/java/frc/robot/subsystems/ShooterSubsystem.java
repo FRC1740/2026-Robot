@@ -5,6 +5,8 @@
 package frc.robot.subsystems;
 
 
+import org.opencv.photo.Photo;
+
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.Slot1Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
@@ -110,7 +112,10 @@ public class ShooterSubsystem extends SubsystemBase {
     // This method will be called once per scheduler run
     telemetry.telemetrizeShooter(getCurrentVelocity(), 
       leftMotor.getStatorCurrent().getValueAsDouble(), 
-      rightMotor.getStatorCurrent().getValueAsDouble());
+      rightMotor.getStatorCurrent().getValueAsDouble(),
+      getCalibratedRPM(PhotonVision.getInstance().hubDistance),
+      getCalibratedAngle(PhotonVision.getInstance().hubDistance)
+    );
   }
   
   /**
@@ -133,6 +138,16 @@ public class ShooterSubsystem extends SubsystemBase {
   public void shootFar() {
     m_hoodSubsystem.setPercent(0.4);
     rightMotor.setControl(VVShootRequest.withVelocity((3200 - (currentSpeed + 2600)) / 60.0));
+  }
+
+  public double getCalibratedRPM(double distance) {
+    Constants.Shooter.CalibrationPoint point = Constants.Shooter.getPoint(distance);
+    return point.rpm;
+  }
+
+  public double getCalibratedAngle(double distance) {
+    Constants.Shooter.CalibrationPoint point = Constants.Shooter.getPoint(distance);
+    return point.angle;
   }
   
   public void shootByCalibration(double distance) {

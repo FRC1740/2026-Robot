@@ -17,11 +17,15 @@ import org.photonvision.targeting.PhotonTrackedTarget;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Transform3d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructArrayPublisher;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.Telemetry;
+import frc.robot.Constants;
 import frc.robot.Constants.VisionConstants;
 
 /**
@@ -43,6 +47,10 @@ public class PhotonVision extends SubsystemBase {
     CommandSwerveDrivetrain m_drive;
 
     Boolean enableCamera = true;
+
+    double hubDistance = 0.0;
+
+    Telemetry telemetry;
 
     // QuestNavSubsystem m_quest;
     Pose2d pose = new Pose2d();
@@ -92,6 +100,7 @@ public class PhotonVision extends SubsystemBase {
     };
 
     public PhotonVision() {
+        telemetry = Telemetry.getInstance();
         // m_quest = QuestNavSubsystem.getInstance();
         cam = new PhotonCamera(VisionConstants.camName);
         cam2 = new PhotonCamera(VisionConstants.cam2Name);
@@ -121,6 +130,21 @@ public class PhotonVision extends SubsystemBase {
 
     @Override
     public void periodic() {
+        
+        Transform2d delta;
+        if (CommandSwerveDrivetrain.getInstance().m_operatorPerspectiveFlipped) { // Red
+            delta = CommandSwerveDrivetrain.getInstance().getState().Pose.minus(Constants.VisionConstants.RedHubPose);
+        }else {
+            delta = CommandSwerveDrivetrain.getInstance().getState().Pose.minus(Constants.VisionConstants.BlueHubPose);
+        }
+        hubDistance = Units.metersToInches(
+            Math.sqrt(Math.pow(delta.getX(), 2) + Math.pow(delta.getY(), 2))
+        ) - (47.0 / 2.0); // center of hub to the outer edge offset (0in is from edge)
+
+        telemetry.telemeterizePhotonvision(
+            hubDistance
+        );
+        
         if (enableCamera) {
         
         
@@ -286,6 +310,10 @@ public class PhotonVision extends SubsystemBase {
 
     public Transform3d getCamToTarget() {
         return bestTarget.getBestCameraToTarget();
+    }
+
+    public double getHubDistance() {
+        return hubDistance;
     }
 
     // Returns list of IDs currently being tracked

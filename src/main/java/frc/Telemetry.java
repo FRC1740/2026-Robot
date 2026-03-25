@@ -38,10 +38,15 @@ public class Telemetry {
     NetworkTable shooterTable = ins.getTable("Shooter table");
     NetworkTable intakeTable = ins.getTable("Intake table");
     NetworkTable kickerTable = ins.getTable("Kicker table");
+    NetworkTable visionTable = NetworkTableInstance.getDefault().getTable("Vision");
+
+    DoublePublisher hubDistance = visionTable.getDoubleTopic("hub distance").publish();
 
     DoublePublisher flywheelRPM = shooterTable.getDoubleTopic("Flywheel rpm").publish();
     DoublePublisher flywheelCurrentDrawL = shooterTable.getDoubleTopic("Flywheel Current Draw L").publish();
     DoublePublisher flywheelCurrentDrawR = shooterTable.getDoubleTopic("Flywheel Current Draw R").publish();
+    DoublePublisher flywheelAutoRPM = shooterTable.getDoubleTopic("Flywheel Auto RPM").publish();
+    DoublePublisher flywheelAutoAngle = shooterTable.getDoubleTopic("Flywheel Auto Angle").publish();
 
     DoublePublisher intakeDist = intakeTable.getDoubleTopic("intake dist").publish();
     BooleanPublisher intakeEjecting = intakeTable.getBooleanTopic("intake ejecting").publish();
@@ -191,11 +196,13 @@ public class Telemetry {
         return instance;
     }
 
-    public void telemetrizeShooter(double rpm, double leftCurrentDraw, double rightCurrentDraw) {
+    public void telemetrizeShooter(double rpm, double leftCurrentDraw, double rightCurrentDraw, double autoRPM, double autoAngle) {
         flywheelRPM.set(rpm);
         flywheelCurrentDrawL.set(leftCurrentDraw);
         flywheelCurrentDrawR.set(rightCurrentDraw);
         driveFlipped.set(CommandSwerveDrivetrain.getInstance().m_operatorPerspectiveFlipped);
+        flywheelAutoRPM.set(autoRPM);
+        flywheelAutoAngle.set(autoAngle);
     }
 
     public void telemetrizeFeeder(double currentDraw) {
@@ -214,6 +221,11 @@ public class Telemetry {
         intakeRollersSpeed.set(rollerSpeed);
         intakeEjecting.set(ejecting);
         intakeStallTime.set(stallTime);
+    }
+
+    
+    public void telemeterizePhotonvision(double hubDistance) {
+        this.hubDistance.set(hubDistance);
     }
     
     public void telemeterizeQuestNav(Pose3d robotPose) {
