@@ -139,7 +139,9 @@ public class PhotonVision extends SubsystemBase {
         }
         hubDistance = Units.metersToInches(
             Math.sqrt(Math.pow(delta.getX(), 2) + Math.pow(delta.getY(), 2))
-        ) - (47.0 / 2.0); // center of hub to the outer edge offset (0in is from edge)
+        ) - (47.0 / 2.0)// center of hub to the outer edge offset (0in is from edge)
+          - (27.5 / 2) // robot has width
+        ; 
 
         telemetry.telemeterizePhotonvision(
             hubDistance

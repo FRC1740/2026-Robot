@@ -45,7 +45,7 @@ public final class Constants {
     public static class CalibrationPoint {
       // distance in inches
       CalibrationPoint (double distance, double angle, double rpm) {
-        this.distance = Units.inchesToMeters(distance);
+        this.distance = distance;
         this.angle = angle;
         this.rpm = rpm;
       }
@@ -133,7 +133,7 @@ public static final class VisionConstants {
       new Rotation2d(0.0)
     );
     public static final Pose2d RedHubPose = new Pose2d(
-      Units.inchesToMeters(((325.61) - 143.5) + 240.0),
+      Units.inchesToMeters(((325.61) - 143.5) + 240.0 + 47.0), // 240 = dist between + 47 is width
       Units.inchesToMeters((317.69 / 2.0)),
       new Rotation2d(0.0)
     );
