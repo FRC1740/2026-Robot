@@ -7,6 +7,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.FeederSubsystem;
 import frc.robot.subsystems.KickerSubsystem;
+import frc.robot.subsystems.PhotonVision;
 import frc.robot.subsystems.ShooterSubsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
@@ -34,8 +35,7 @@ public class ShootOn extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_shooterSubsystem.shootSB();
-    m_shooterSubsystem.aimForDistance(10.0);
+    m_shooterSubsystem.shootByCalibration(PhotonVision.getInstance().hubDistance);
     
     // m_shooterSubsystem.setTorque(0); setting torque???
   }

@@ -48,7 +48,7 @@ public class PhotonVision extends SubsystemBase {
 
     Boolean enableCamera = true;
 
-    double hubDistance = 0.0;
+    public double hubDistance = 0.0;
 
     Telemetry telemetry;
 
@@ -206,9 +206,9 @@ public class PhotonVision extends SubsystemBase {
                     } else if(result.name == VisionConstants.cam2Name) {
                         Cam2Publisher.set(new Pose2d[] { pose });
                     } else if(result.name == VisionConstants.cam3Name) {
-                        Cam2Publisher.set(new Pose2d[] { pose });
+                        Cam3Publisher.set(new Pose2d[] { pose });
                     } else if(result.name == VisionConstants.cam4Name) {
-                        Cam2Publisher.set(new Pose2d[] { pose });
+                        Cam4Publisher.set(new Pose2d[] { pose });
                     }
                 }
             }
