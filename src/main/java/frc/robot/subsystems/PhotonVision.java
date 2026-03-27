@@ -89,6 +89,7 @@ public class PhotonVision extends SubsystemBase {
         return instance;
     }
 
+    // Associates a photonresult with a camera
     class NamedPhotonResult {
         public NamedPhotonResult(PhotonPipelineResult result, String name) {
             this.result = result;
@@ -104,11 +105,11 @@ public class PhotonVision extends SubsystemBase {
         // m_quest = QuestNavSubsystem.getInstance();
         cam = new PhotonCamera(VisionConstants.camName);
         cam2 = new PhotonCamera(VisionConstants.cam2Name);
-        cam3 = new PhotonCamera(VisionConstants.cam3Name);
+        // cam3 = new PhotonCamera(VisionConstants.cam3Name);
         cam4 = new PhotonCamera(VisionConstants.cam4Name);
         cam.setDriverMode(false);
         cam2.setDriverMode(false);
-        cam3.setDriverMode(false);
+        // cam3.setDriverMode(false);
         cam4.setDriverMode(false);
         m_drive = CommandSwerveDrivetrain.getInstance();
 
@@ -248,13 +249,13 @@ public class PhotonVision extends SubsystemBase {
             );
         }
 
-        camData = getLatestCameraResult(cam3.getAllUnreadResults());
+        // camData = getLatestCameraResult(cam3.getAllUnreadResults());
 
-        if (camData != null) {
-            result.add(
-                new NamedPhotonResult(camData, VisionConstants.cam3Name)
-            );
-        }
+        // if (camData != null) {
+        //     result.add(
+        //         new NamedPhotonResult(camData, VisionConstants.cam3Name)
+        //     );
+        // }
 
         camData = getLatestCameraResult(cam4.getAllUnreadResults());
 

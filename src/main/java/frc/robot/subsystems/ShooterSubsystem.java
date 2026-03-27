@@ -83,6 +83,7 @@ public class ShooterSubsystem extends SubsystemBase {
     motorConfig.CurrentLimits.StatorCurrentLimit = 70;
     motorConfig.CurrentLimits.StatorCurrentLimitEnable = true;
     motorConfig.OpenLoopRamps.DutyCycleOpenLoopRampPeriod = .5;
+    motorConfig.ClosedLoopRamps.VoltageClosedLoopRampPeriod = .1;
     motorConfig.MotorOutput.NeutralMode = NeutralModeValue.Coast;
   
     // PID
