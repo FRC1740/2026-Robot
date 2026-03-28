@@ -283,8 +283,12 @@ public class PhotonVision extends SubsystemBase {
             if (lastResult.hasTargets()) {
                 if (lastCamName == "Cam1") {
                     return Cam1PoseEstimator.update(lastResult);
-                } else {
+                } else if (lastCamName == "Cam2") {
                     return Cam2PoseEstimator.update(lastResult);
+                } else if (lastCamName == "Cam3") {
+                    return Cam3PoseEstimator.update(lastResult);
+                } else {
+                    return Cam4PoseEstimator.update(lastResult);
                 }
             }
         }
