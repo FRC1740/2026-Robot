@@ -85,7 +85,7 @@ public class Align extends Command {
       m_drive
         .withVelocityX(-m_driverController.getLeftY() * RobotContainer.MaxSpeed) // Drive forward with negative Y (forward)
         .withVelocityY(-m_driverController.getLeftX() * RobotContainer.MaxSpeed)
-        .withRotationalRate(delta * 10.0));
+        .withRotationalRate((delta * 2) + Math.signum(delta) * .02));
   }
 
   // Called once the command ends or is interrupted.

@@ -17,12 +17,16 @@ import org.photonvision.targeting.PhotonTrackedTarget;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Rotation3d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructArrayPublisher;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.Telemetry;
 import frc.robot.Constants;
@@ -45,6 +49,11 @@ public class PhotonVision extends SubsystemBase {
     public PhotonPipelineResult lastResult;
     String lastCamName;
     CommandSwerveDrivetrain m_drive;
+    private ShuffleboardTab tab = Shuffleboard.getTab("Vision");
+
+    private GenericEntry cam_4_rot =
+        tab.add("delta", 0)
+            .getEntry();
 
     Boolean enableCamera = true;
 
@@ -131,7 +140,8 @@ public class PhotonVision extends SubsystemBase {
 
     @Override
     public void periodic() {
-        
+        Cam4PoseEstimator.setRobotToCameraTransform(new Transform3d(VisionConstants.cam34FrontBackOffset, VisionConstants.cam34Dist, 0.0, new Rotation3d(0.0, 0.0, (1.57 - .52) + cam_4_rot.getDouble(0.0))));
+
         Transform2d delta;
         if (CommandSwerveDrivetrain.getInstance().m_operatorPerspectiveFlipped) { // Red
             delta = CommandSwerveDrivetrain.getInstance().getState().Pose.minus(Constants.VisionConstants.RedHubPose);

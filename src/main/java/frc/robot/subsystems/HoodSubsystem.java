@@ -73,6 +73,7 @@ public class HoodSubsystem extends SubsystemBase {
    * Takes in a 0-1 float representing the hood angle from 0 (least angled), to 1, most angled and flat
    */
   public void setPercent(double percent) {
+    percent = Math.min(Math.max(percent, 0.0), 1.0);
     set(
       ((close_distance - far_distance) * percent) + far_distance,
       ((close_distance - far_distance) * (1.0 - percent)) + far_distance

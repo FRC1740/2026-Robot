@@ -145,9 +145,9 @@ public static final class VisionConstants {
     
     public static final Transform3d RobotToCam2 = new Transform3d(cam12FrontBackOffset, -cam12Dist, 0.0, new Rotation3d(0.0, 0.0, 3.67));
 
-    public static final Transform3d RobotToCam3 = new Transform3d(cam34FrontBackOffset, cam34Dist, 0.0, new Rotation3d(0.0, .52, 7.3304));
+    public static final Transform3d RobotToCam3 = new Transform3d(cam34FrontBackOffset, -cam34Dist, 0.0, new Rotation3d(0.0, .52, 7.3304));
     
-    public static final Transform3d RobotToCam4 = new Transform3d(cam34FrontBackOffset, -cam34Dist, 0.0, new Rotation3d(0.0, .52, (1.57 - .52)));
+    public static final Transform3d RobotToCam4 = new Transform3d(cam34FrontBackOffset, cam34Dist, 0.0, new Rotation3d(0.0, .52, (1.57 - .52)));
 
 
     public static final Transform2d QuestToRobot = new Transform2d( /*TODO: Put x, y, rotational offsets here!*/ );
