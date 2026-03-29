@@ -140,7 +140,7 @@ public class PhotonVision extends SubsystemBase {
 
     @Override
     public void periodic() {
-        Cam4PoseEstimator.setRobotToCameraTransform(new Transform3d(VisionConstants.cam34FrontBackOffset, VisionConstants.cam34Dist, 0.0, new Rotation3d(0.0, 0.0, (1.57 - .52) + cam_4_rot.getDouble(0.0))));
+        Cam4PoseEstimator.setRobotToCameraTransform(new Transform3d(VisionConstants.cam34FrontBackOffset, VisionConstants.cam34Dist, 0.0, new Rotation3d(0.0, .52, (1.57 - .52) + cam_4_rot.getDouble(0.0))));
 
         Transform2d delta;
         if (CommandSwerveDrivetrain.getInstance().m_operatorPerspectiveFlipped) { // Red
@@ -202,8 +202,8 @@ public class PhotonVision extends SubsystemBase {
                         new Pose2d(
                             pose.getX(),
                             pose.getY(),
-                            pose.getRotation()),
-                            // m_drive.getState().Pose.getRotation()), // ignore vision rot
+                            // pose.getRotation()),
+                            m_drive.getState().Pose.getRotation()), // ignore vision rot
                         result.result.getTimestampSeconds());
 
                     // // TODO! if disabled, should constantly set pose
