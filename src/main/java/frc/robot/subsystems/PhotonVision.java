@@ -140,7 +140,6 @@ public class PhotonVision extends SubsystemBase {
 
     @Override
     public void periodic() {
-        Cam4PoseEstimator.setRobotToCameraTransform(new Transform3d(VisionConstants.cam34FrontBackOffset, VisionConstants.cam34Dist, 0.0, new Rotation3d(0.0, .52, (1.57 - .52) + cam_4_rot.getDouble(0.0))));
 
         Transform2d delta;
         if (CommandSwerveDrivetrain.getInstance().m_operatorPerspectiveFlipped) { // Red
@@ -152,6 +151,7 @@ public class PhotonVision extends SubsystemBase {
             Math.sqrt(Math.pow(delta.getX(), 2) + Math.pow(delta.getY(), 2))
         ) - (47.0 / 2.0)// center of hub to the outer edge offset (0in is from edge)
           - (27.5 / 2) // robot has width
+          - (12) // intake
         ; 
 
         telemetry.telemeterizePhotonvision(
@@ -197,13 +197,13 @@ public class PhotonVision extends SubsystemBase {
                         estimatedPose.estimatedPose.getX(),
                         estimatedPose.estimatedPose.getY(),
                         estimatedPose.estimatedPose.getRotation().toRotation2d());
-
+                    
                     m_drive.addVisionMeasurement(
                         new Pose2d(
                             pose.getX(),
                             pose.getY(),
-                            // pose.getRotation()),
-                            m_drive.getState().Pose.getRotation()), // ignore vision rot
+                            pose.getRotation()),
+                            // m_drive.getState().Pose.getRotation()), // ignore vision rot
                         result.result.getTimestampSeconds());
 
                     // // TODO! if disabled, should constantly set pose

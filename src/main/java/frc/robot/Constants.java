@@ -73,7 +73,7 @@ public final class Constants {
 
 
     public static CalibrationPoint getPoint(double distance) {
-      distance = Math.max(distance, 0.0);
+      distance = Math.max(distance, 0.00001);
       CalibrationPoint previousPoint = new CalibrationPoint(0.0, 0.0, 0.0);
       CalibrationPoint calibrationPoint = new CalibrationPoint(0.0, 0.0, 0.0);
       // loop over all points
@@ -114,9 +114,9 @@ public static final class VisionConstants {
     public static final Double AprilTagMinimumArea = 0.0;
 
     public static final Double cam12Dist = 0.58/2; // dist from cam1 to cam2 in meters
-    public static final Double cam12FrontBackOffset = -0.2; // dist of the two cameras from middle of the robot
+    public static final Double cam12FrontBackOffset = -0.3; // dist of the two cameras from middle of the robot
 
-    public static final Double cam34Dist = .35; // dist from cam3 to cam4 in meters
+    public static final Double cam34Dist = .33; // dist from cam3 to cam4 in meters
     public static final Double cam34FrontBackOffset = 0.0; // dist of the two cameras from middle of the robot
 
     public static AprilTagFieldLayout aprilTagFieldLayout = null;
@@ -148,7 +148,7 @@ public static final class VisionConstants {
 
     public static final Transform3d RobotToCam3 = new Transform3d(cam34FrontBackOffset, -cam34Dist, 7.5, new Rotation3d(0.0, .52, 7.3304));
     
-    public static final Transform3d RobotToCam4 = new Transform3d(cam34FrontBackOffset, cam34Dist, 7.5, new Rotation3d(0.0, -.52, (1.57 + .52)));
+    public static final Transform3d RobotToCam4 = new Transform3d(cam34FrontBackOffset, cam34Dist, 7.5, new Rotation3d(0.0, -.52, .52));
 
 
     public static final Transform2d QuestToRobot = new Transform2d( /*TODO: Put x, y, rotational offsets here!*/ );
