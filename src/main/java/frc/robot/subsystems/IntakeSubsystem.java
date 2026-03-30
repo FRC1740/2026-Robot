@@ -85,7 +85,7 @@ public class IntakeSubsystem extends SubsystemBase {
     flipMotorConfig.encoder.positionConversionFactor(3);
     flipMotorConfig.openLoopRampRate(0.5);
     flipMotorConfig.softLimit.forwardSoftLimit(0);
-    flipMotorConfig.softLimit.reverseSoftLimit(-15 * 3);
+    flipMotorConfig.softLimit.reverseSoftLimit(-47);
     flipMotorConfig.idleMode(IdleMode.kBrake);
 
     flipMotorConfig.closedLoop
