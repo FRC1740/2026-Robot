@@ -133,8 +133,9 @@ public class ShooterSubsystem extends SubsystemBase {
   }
 
   public void shootClose() {
-    m_hoodSubsystem.setPercent(0);
-    rightMotor.setControl(VVShootRequest.withVelocity((2500 - (currentSpeed + 2600)) / 60.0));
+    Constants.Shooter.CalibrationPoint point = Constants.Shooter.getPoint(0.0001);
+    m_hoodSubsystem.setPercent(point.angle);
+    rightMotor.setControl(VVShootRequest.withVelocity((point.rpm - (currentSpeed + point.rpm)) / 60.0));
   }
   public void shootFar() {
     m_hoodSubsystem.setPercent(0.4);
