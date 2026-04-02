@@ -240,7 +240,7 @@ public class RobotContainer {
     ));
 
 
-    m_coDriverController.button(8).onTrue(new InstantCommand(() -> {photonvision.toggleVision();}));
+    // m_coDriverController.button(8).onTrue(new InstantCommand(() -> {photonvision.toggleVision();}));
         // Note that X is defined as forward according to WPILib convention,
         // and Y is defined as to the left according to WPILib convention.
 

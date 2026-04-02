@@ -5,8 +5,6 @@
 package frc.robot.subsystems;
 
 
-import org.opencv.photo.Photo;
-
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.Slot1Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
@@ -14,13 +12,9 @@ import com.ctre.phoenix6.configs.TalonFXConfigurator;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.TorqueCurrentFOC;
 import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
-import com.ctre.phoenix6.controls.VelocityVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
-import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-import com.revrobotics.RelativeEncoder;
-
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
@@ -114,8 +108,8 @@ public class ShooterSubsystem extends SubsystemBase {
     telemetry.telemetrizeShooter(getCurrentVelocity(), 
       leftMotor.getStatorCurrent().getValueAsDouble(), 
       rightMotor.getStatorCurrent().getValueAsDouble(),
-      getCalibratedRPM(PhotonVision.getInstance().hubDistance),
-      getCalibratedAngle(PhotonVision.getInstance().hubDistance)
+      getCalibratedRPM(PhotonVision.getInstance().getHubDistance()),
+      getCalibratedAngle(PhotonVision.getInstance().getHubDistance())
     );
   }
   

@@ -35,7 +35,7 @@ public class ShootOn extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_shooterSubsystem.shootByCalibration(PhotonVision.getInstance().hubDistance);
+    m_shooterSubsystem.shootByCalibration(PhotonVision.getInstance().getHubDistance());
     
     // m_shooterSubsystem.setTorque(0); setting torque???
   }

@@ -8,7 +8,6 @@ import com.revrobotics.spark.SparkMax;
 import com.revrobotics.PersistMode;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.ResetMode;
-import com.revrobotics.spark.SparkClosedLoopController;
 import com.revrobotics.spark.SparkLowLevel.MotorType;
 import com.revrobotics.spark.config.SparkMaxConfig;
 
@@ -24,7 +23,6 @@ public class FeederSubsystem extends SubsystemBase {
   // Use id 0 to adress the motor via canbus, this is a neo so brushless.
   // Ideally we configure via a constants file but this is example code.
   SparkMax motorController = new SparkMax(Constants.CanIDs.feederMotor, MotorType.kBrushless); 
-  private final Telemetry telemetry = Telemetry.getInstance();
 
   private RelativeEncoder motorEncoder;
 

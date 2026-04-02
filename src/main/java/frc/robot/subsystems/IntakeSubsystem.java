@@ -8,7 +8,6 @@ import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfigurator;
 import com.ctre.phoenix6.controls.DutyCycleOut;
-import com.ctre.phoenix6.controls.TorqueCurrentFOC;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.revrobotics.PersistMode;
@@ -40,8 +39,6 @@ public class IntakeSubsystem extends SubsystemBase {
 
   private static IntakeSubsystem instance;
   private RelativeEncoder flipMotorEncoder;
-
-  private boolean isFlippedDown = false;
 
   Slot0Configs slot0Configs = new Slot0Configs();
 
