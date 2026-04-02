@@ -34,7 +34,7 @@ public class IntakeSubsystem extends SubsystemBase {
   SparkClosedLoopController flipMotorLoopController;
   TalonFX intakeMotorController = new TalonFX(Constants.CanIDs.intakeMotor,"*"); 
     private final TrapezoidProfile m_profile =
-        new TrapezoidProfile(new TrapezoidProfile.Constraints(120.0, 30));
+        new TrapezoidProfile(new TrapezoidProfile.Constraints(120.0, 120.0));
     private TrapezoidProfile.State m_goal = new TrapezoidProfile.State();
     private TrapezoidProfile.State m_setpoint = new TrapezoidProfile.State();
 
@@ -90,7 +90,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
     flipMotorConfig.closedLoop
       
-      .p(0.02, ClosedLoopSlot.kSlot0)
+      .p(0.04, ClosedLoopSlot.kSlot0)
       .i(0.0, ClosedLoopSlot.kSlot0)
       .d(0.0, ClosedLoopSlot.kSlot0)
       // intake in
@@ -174,7 +174,7 @@ public class IntakeSubsystem extends SubsystemBase {
   }
 
   public void flipDown() {
-    m_goal = new TrapezoidProfile.State(-15 * 3, 0);
+    m_goal = new TrapezoidProfile.State(-47, 0);
   }
 
   public void flipUp() {

@@ -101,13 +101,13 @@ public class RobotContainer {
   public RobotContainer() {
     drivetrain.configureAutoBuilder();
 
-    NamedCommands.registerCommand("Shoot", new ShootOnDistance(m_shooterSubsystem, m_kickerSubsystem, m_feederSubsystem));
-    NamedCommands.registerCommand("ShootMid", new ShootOnRPM(m_shooterSubsystem, m_kickerSubsystem, m_feederSubsystem, 2600));
-    NamedCommands.registerCommand("ShootClose", new ShootOnRPM(m_shooterSubsystem, m_kickerSubsystem, m_feederSubsystem, 2500));
-    NamedCommands.registerCommand("Feed", new Feed(m_shooterSubsystem, m_kickerSubsystem, m_feederSubsystem));
+    NamedCommands.registerCommand("Shoot", new ShootOnDistance(m_shooterSubsystem, m_kickerSubsystem, m_feederSubsystem).withTimeout(0.1));
+    NamedCommands.registerCommand("ShootMid", new ShootOnRPM(m_shooterSubsystem, m_kickerSubsystem, m_feederSubsystem, 2600).withTimeout(0.1));
+    NamedCommands.registerCommand("ShootClose", new ShootOnRPM(m_shooterSubsystem, m_kickerSubsystem, m_feederSubsystem, 2500).withTimeout(0.1));
+    NamedCommands.registerCommand("Feed", new Feed(m_shooterSubsystem, m_kickerSubsystem, m_feederSubsystem).withTimeout(4));
     NamedCommands.registerCommand("IntakeFlip", new InstantCommand(() -> {m_intakeSubsystem.flipDown();}));
     NamedCommands.registerCommand("IntakeFlipUp", new InstantCommand(() -> {m_intakeSubsystem.flipUp();}));
-    NamedCommands.registerCommand("Intake", new Intake(m_intakeSubsystem));
+    NamedCommands.registerCommand("Intake", new Intake(m_intakeSubsystem).withTimeout(4));
 
     // Configure the trigger bindings
     autoChooser = AutoBuilder.buildAutoChooser("Tests");
@@ -240,7 +240,7 @@ public class RobotContainer {
     ));
 
 
-    // m_coDriverController.button(8).onTrue(new InstantCommand(() -> {photonvision.toggleVision();}));
+    m_coDriverController.button(8).onTrue(new InstantCommand(() -> {photonvision.toggleVision();}));
         // Note that X is defined as forward according to WPILib convention,
         // and Y is defined as to the left according to WPILib convention.
 

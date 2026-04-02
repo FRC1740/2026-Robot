@@ -61,7 +61,7 @@ public final class Constants {
 
     // MUST BE IN ORDER CLOSEST TO FARTHEST
     public static final CalibrationPoint[] shooterCalibration = {
-      new CalibrationPoint(0, 0.0, 3900.0),
+      new CalibrationPoint(0, 0.0, 4000.0),
       new CalibrationPoint(24, 0.0, 4600.0),
       new CalibrationPoint(48, 0.2, 4600.0),
       new CalibrationPoint(48+24, 0.3, 5400),
@@ -142,11 +142,11 @@ public static final class VisionConstants {
       new Rotation2d(0.0)
     );
 
-    public static final Transform3d RobotToCam1 = new Transform3d(cam12FrontBackOffset, cam12Dist, 19.5, new Rotation3d(0.0, 0.0, 2.62));
+    public static final Transform3d RobotToCam1 = new Transform3d(cam12FrontBackOffset, cam12Dist, 19.5, new Rotation3d(0.0, 0.0, 0.0));
     
-    public static final Transform3d RobotToCam2 = new Transform3d(cam12FrontBackOffset, -cam12Dist, 19.5, new Rotation3d(0.0, 0.0, 3.67));
+    public static final Transform3d RobotToCam2 = new Transform3d(cam12FrontBackOffset, -cam12Dist, 19.5, new Rotation3d(0.0, 0.0, 0.0));
 
-    public static final Transform3d RobotToCam3 = new Transform3d(cam34FrontBackOffset, -cam34Dist, 7.5, new Rotation3d(0.0, .52, 7.3304));
+    public static final Transform3d RobotToCam3 = new Transform3d(cam34FrontBackOffset, -cam34Dist, 7.5, new Rotation3d(0.0, -.52, -.52));
     
     public static final Transform3d RobotToCam4 = new Transform3d(cam34FrontBackOffset, cam34Dist, 7.5, new Rotation3d(0.0, -.52, .52));
 

@@ -114,11 +114,11 @@ public class PhotonVision extends SubsystemBase {
         // m_quest = QuestNavSubsystem.getInstance();
         cam = new PhotonCamera(VisionConstants.camName);
         cam2 = new PhotonCamera(VisionConstants.cam2Name);
-        // cam3 = new PhotonCamera(VisionConstants.cam3Name);
+        cam3 = new PhotonCamera(VisionConstants.cam3Name);
         cam4 = new PhotonCamera(VisionConstants.cam4Name);
         cam.setDriverMode(false);
         cam2.setDriverMode(false);
-        // cam3.setDriverMode(false);
+        cam3.setDriverMode(false);
         cam4.setDriverMode(false);
         m_drive = CommandSwerveDrivetrain.getInstance();
 
@@ -198,13 +198,13 @@ public class PhotonVision extends SubsystemBase {
                         estimatedPose.estimatedPose.getY(),
                         estimatedPose.estimatedPose.getRotation().toRotation2d());
                     
-                    m_drive.addVisionMeasurement(
-                        new Pose2d(
-                            pose.getX(),
-                            pose.getY(),
-                            pose.getRotation()),
-                            // m_drive.getState().Pose.getRotation()), // ignore vision rot
-                        result.result.getTimestampSeconds());
+                    // m_drive.addVisionMeasurement(
+                    //     new Pose2d(
+                    //         pose.getX(),
+                    //         pose.getY(),
+                    //         pose.getRotation()),
+                    //         // m_drive.getState().Pose.getRotation()), // ignore vision rot
+                    //     result.result.getTimestampSeconds());
 
                     // // TODO! if disabled, should constantly set pose
                     // if (result.getBestTarget().poseAmbiguity < VisionConstants.questVisionUpdateThreshold) {
@@ -259,13 +259,13 @@ public class PhotonVision extends SubsystemBase {
             );
         }
 
-        // camData = getLatestCameraResult(cam3.getAllUnreadResults());
+        camData = getLatestCameraResult(cam3.getAllUnreadResults());
 
-        // if (camData != null) {
-        //     result.add(
-        //         new NamedPhotonResult(camData, VisionConstants.cam3Name)
-        //     );
-        // }
+        if (camData != null) {
+            result.add(
+                new NamedPhotonResult(camData, VisionConstants.cam3Name)
+            );
+        }
 
         camData = getLatestCameraResult(cam4.getAllUnreadResults());
 
