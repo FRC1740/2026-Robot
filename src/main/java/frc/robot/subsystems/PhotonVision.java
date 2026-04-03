@@ -13,6 +13,11 @@ import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.targeting.PhotonPipelineResult;
 
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.VisionConstants;
 
@@ -23,14 +28,31 @@ public class PhotonVision extends SubsystemBase {
     private static PhotonVision instance;
 
     private double hubDistance; // used by the shooter subsystem
+  
+    private ShuffleboardTab tab = Shuffleboard.getTab("Kicker");
 
-    // PhotonCamera backLeftCamera = new PhotonCamera("BackLeft");
+    private final double[] m_poseArray = new double[3];
+
+    private GenericEntry BLCamPose =
+        tab.add("BL Cam Pose", m_poseArray)
+            .getEntry();
+    private GenericEntry FLCamPose =
+    tab.add("FL Cam Pose", m_poseArray)
+        .getEntry();
+    private GenericEntry BRCamPose =
+    tab.add("BR Cam Pose", m_poseArray)
+        .getEntry();
+    private GenericEntry FRCamPose =
+    tab.add("FR Cam Pose", m_poseArray)
+        .getEntry();
+    
+    PhotonCamera backLeftCamera = new PhotonCamera("BackLeft");
     PhotonCamera frontLeftCamera = new PhotonCamera("FrontLeft");
     PhotonCamera backRightCamera = new PhotonCamera("BackRight");
     PhotonCamera frontRightCamera = new PhotonCamera("FrontRight");
 
-    // PhotonPoseEstimator backLeftCameraEstimator = 
-    //     new PhotonPoseEstimator(VisionConstants.aprilTagFieldLayout, VisionConstants.RobotToBackLeftCamera);
+    PhotonPoseEstimator backLeftCameraEstimator = 
+        new PhotonPoseEstimator(VisionConstants.aprilTagFieldLayout, VisionConstants.RobotToBackLeftCamera);
     PhotonPoseEstimator frontLeftCameraEstimator = 
         new PhotonPoseEstimator(VisionConstants.aprilTagFieldLayout, VisionConstants.RobotToFrontLeftCamera);
     PhotonPoseEstimator backRightCameraEstimator = 
@@ -43,9 +65,12 @@ public class PhotonVision extends SubsystemBase {
         
         PhotonPoseEstimator estimator;
 
-        Camera(PhotonCamera camera, PhotonPoseEstimator estimator) {
+        GenericEntry CamPose;
+
+        Camera(PhotonCamera camera, PhotonPoseEstimator estimator, GenericEntry CamPose) {
             this.camera = camera;
             this.estimator = estimator;
+            this.CamPose = CamPose;
         }
     }
 
@@ -59,10 +84,10 @@ public class PhotonVision extends SubsystemBase {
     }
 
     public PhotonVision() {
-        // cameras.add(new Camera(backLeftCamera, backLeftCameraEstimator));
-        cameras.add(new Camera(frontLeftCamera, frontLeftCameraEstimator));
-        cameras.add(new Camera(backRightCamera, backRightCameraEstimator));
-        cameras.add(new Camera(frontRightCamera, frontRightCameraEstimator));
+        cameras.add(new Camera(backLeftCamera, backLeftCameraEstimator, BLCamPose));
+        cameras.add(new Camera(frontLeftCamera, frontLeftCameraEstimator, FLCamPose));
+        cameras.add(new Camera(backRightCamera, backRightCameraEstimator, BRCamPose));
+        cameras.add(new Camera(frontRightCamera, frontRightCameraEstimator, FRCamPose));
     }
 
     @Override
@@ -82,7 +107,14 @@ public class PhotonVision extends SubsystemBase {
             }
 
             if (!visionEst.isEmpty()) {
-                CommandSwerveDrivetrain.getInstance().addVisionMeasurement(visionEst.get().estimatedPose.toPose2d(), visionEst.get().timestampSeconds);
+                Pose2d pose = visionEst.get().estimatedPose.toPose2d();
+
+                m_poseArray[0] = pose.getX();
+                m_poseArray[1] = pose.getY();
+                m_poseArray[2] = pose.getRotation().getDegrees();
+
+                camera.CamPose.setDoubleArray(m_poseArray);
+                CommandSwerveDrivetrain.getInstance().addVisionMeasurement(pose, visionEst.get().timestampSeconds);
             }
         }
     }
