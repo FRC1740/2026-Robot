@@ -14,6 +14,8 @@ import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.targeting.PhotonPipelineResult;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Transform2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
@@ -28,6 +30,8 @@ public class PhotonVision extends SubsystemBase {
     private static PhotonVision instance;
 
     private double hubDistance; // used by the shooter subsystem
+
+    public boolean is_teleop;
   
     private ShuffleboardTab tab = Shuffleboard.getTab("Kicker");
 
@@ -46,7 +50,7 @@ public class PhotonVision extends SubsystemBase {
     tab.add("FR Cam Pose", m_poseArray)
         .getEntry();
     
-    PhotonCamera backLeftCamera = new PhotonCamera("BackLeft");
+    // PhotonCamera backLeftCamera = new PhotonCamera("BackLeft");
     PhotonCamera frontLeftCamera = new PhotonCamera("FrontLeft");
     PhotonCamera backRightCamera = new PhotonCamera("BackRight");
     PhotonCamera frontRightCamera = new PhotonCamera("FrontRight");
@@ -84,7 +88,8 @@ public class PhotonVision extends SubsystemBase {
     }
 
     public PhotonVision() {
-        cameras.add(new Camera(backLeftCamera, backLeftCameraEstimator, BLCamPose));
+        is_teleop = false;
+        // cameras.add(new Camera(backLeftCamera, backLeftCameraEstimator, BLCamPose));
         cameras.add(new Camera(frontLeftCamera, frontLeftCameraEstimator, FLCamPose));
         cameras.add(new Camera(backRightCamera, backRightCameraEstimator, BRCamPose));
         cameras.add(new Camera(frontRightCamera, frontRightCameraEstimator, FRCamPose));
@@ -109,17 +114,36 @@ public class PhotonVision extends SubsystemBase {
             if (!visionEst.isEmpty()) {
                 Pose2d pose = visionEst.get().estimatedPose.toPose2d();
 
+                if (is_teleop) {
+                    pose = new Pose2d(pose.getTranslation(), CommandSwerveDrivetrain.getInstance().getState().Pose.getRotation());
+                }
+
                 m_poseArray[0] = pose.getX();
                 m_poseArray[1] = pose.getY();
                 m_poseArray[2] = pose.getRotation().getDegrees();
 
                 camera.CamPose.setDoubleArray(m_poseArray);
+                
                 CommandSwerveDrivetrain.getInstance().addVisionMeasurement(pose, visionEst.get().timestampSeconds);
             }
         }
     }
 
     public double getHubDistance() {
+        Transform2d delta;
+        if (CommandSwerveDrivetrain.getInstance().m_operatorPerspectiveFlipped) { // Red
+            delta = CommandSwerveDrivetrain.getInstance().getState().Pose.minus(VisionConstants.RedHubPose);
+        }else {
+            delta = CommandSwerveDrivetrain.getInstance().getState().Pose.minus(VisionConstants.BlueHubPose);
+        }
+        
+        hubDistance = Units.metersToInches(
+            Math.sqrt(Math.pow(delta.getX(), 2) + Math.pow(delta.getY(), 2))
+        ) - (47.0 / 2.0)// center of hub to the outer edge offset (0in is from edge)
+          - (27.5 / 2) // robot has width
+          - (12) // intake
+        ; 
+
         return hubDistance;
     }
 }

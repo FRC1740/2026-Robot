@@ -131,13 +131,13 @@ public static final class VisionConstants {
       new Rotation2d(0.0)
     );
 
-    public static final Transform3d RobotToBackLeftCamera = new Transform3d(0.0, 0.0, 19.5, new Rotation3d(0.0, 0.0, 0.0));
+    public static final Transform3d RobotToBackLeftCamera = new Transform3d(-.3, .58/2, 19.5, new Rotation3d(0.0, 0.0, Math.PI - .52));
     
-    public static final Transform3d RobotToBackRightCamera = new Transform3d(0.0, -0.0, 19.5, new Rotation3d(0.0, 0.0, 0.0));
+    public static final Transform3d RobotToBackRightCamera = new Transform3d(-.3, -.58/2, 19.5, new Rotation3d(0.0, 0.0, Math.PI + .52));
 
-    public static final Transform3d RobotToFrontLeftCamera = new Transform3d(0.0, -0.33, Units.inchesToMeters(7.5), new Rotation3d(0.0, .52, .52));
+    public static final Transform3d RobotToFrontLeftCamera = new Transform3d(0.0, 0.33, Units.inchesToMeters(7.5), new Rotation3d(0.0, .52, .52));
     
-    public static final Transform3d RobotToFrontRightCamera = new Transform3d(0.0, 0.33, Units.inchesToMeters(7.5), new Rotation3d(0.0, .52, -.52));
+    public static final Transform3d RobotToFrontRightCamera = new Transform3d(0.0, -0.33, Units.inchesToMeters(7.5), new Rotation3d(0.0, .52, -.52));
 
 
     public static final Transform2d QuestToRobot = new Transform2d( /*TODO: Put x, y, rotational offsets here!*/ );

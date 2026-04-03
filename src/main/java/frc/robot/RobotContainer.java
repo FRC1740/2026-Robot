@@ -148,7 +148,7 @@ public class RobotContainer {
     //Shooter buttons
     m_coDriverController.leftTrigger().whileTrue(new ShootOn(m_shooterSubsystem, m_kickerSubsystem, m_feederSubsystem));
     // m_coDriverController.leftBumper().whileTrue(new ShootOnDistance(m_shooterSubsystem, m_kickerSubsystem, m_feederSubsystem));
-    m_coDriverController.leftBumper().whileTrue(new RunCommand(() -> {m_shooterSubsystem.shootFar();}));
+    m_coDriverController.leftBumper().whileTrue(new RunCommand(() -> {m_shooterSubsystem.shootClose();}));
     m_coDriverController.rightTrigger().onTrue(new InstantCommand(() -> {m_shooterSubsystem.toggle();}));
     m_coDriverController.povUp().onTrue(new InstantCommand(() -> {m_shooterSubsystem.increaseSpeed();}));
     m_coDriverController.povDown().onTrue(new InstantCommand(() -> {m_shooterSubsystem.decreaseSpeed();}));

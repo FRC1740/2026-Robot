@@ -33,6 +33,7 @@ public class ShooterSubsystem extends SubsystemBase {
   private double currentAngle = 0;
   private final double speedIncrease = 100; // should be in rpm
   private final double angleIncrease = 0.05; // should be in rpm
+  double angle_adjustment = 0.0;
   
   private final Telemetry telemetry = Telemetry.getInstance();
   
@@ -128,12 +129,12 @@ public class ShooterSubsystem extends SubsystemBase {
 
   public void shootClose() {
     Constants.Shooter.CalibrationPoint point = Constants.Shooter.getPoint(0.0001);
-    m_hoodSubsystem.setPercent(point.angle);
+    m_hoodSubsystem.setPercent(point.angle + angle_adjustment);
     rightMotor.setControl(VVShootRequest.withVelocity((point.rpm - (currentSpeed + 2600)) / 60.0));
   }
   
   public void shootFar() {
-    m_hoodSubsystem.setPercent(0.4);
+    m_hoodSubsystem.setPercent(0.4 + angle_adjustment);
     rightMotor.setControl(VVShootRequest.withVelocity((3200 - (currentSpeed + 2600)) / 60.0));
   }
 
@@ -149,7 +150,7 @@ public class ShooterSubsystem extends SubsystemBase {
   
   public void shootByCalibration(double distance) {
     Constants.Shooter.CalibrationPoint point = Constants.Shooter.getPoint(distance);
-    m_hoodSubsystem.setPercent(point.angle);
+    m_hoodSubsystem.setPercent(point.angle + angle_adjustment);
     // currentspeed is dpad
     rightMotor.setControl(VVShootRequest.withVelocity(point.rpm / 60.0));
   }
@@ -190,6 +191,7 @@ public class ShooterSubsystem extends SubsystemBase {
   public void increaseAngle() {
     //increases the speed by 100
     currentAngle -= angleIncrease;
+    angle_adjustment -= angleIncrease;
     currentAngle = Math.max(currentAngle, 0.0);
     currentAngle = Math.min(currentAngle, 1.0);
 
@@ -200,6 +202,7 @@ public class ShooterSubsystem extends SubsystemBase {
   public void decreaseAngle() {
     //increases the speed by 100
     currentAngle += angleIncrease;
+    angle_adjustment += angleIncrease;
     currentAngle = Math.max(currentAngle, 0.0);
     currentAngle = Math.min(currentAngle, 1.0);
 
