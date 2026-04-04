@@ -101,7 +101,7 @@ public class RobotContainer {
   public RobotContainer() {
     drivetrain.configureAutoBuilder();
 
-    NamedCommands.registerCommand("Shoot", new ShootOnDistance(m_shooterSubsystem, m_kickerSubsystem, m_feederSubsystem).withTimeout(0.1));
+    NamedCommands.registerCommand("Shoot", new ShootOn(m_shooterSubsystem, m_kickerSubsystem, m_feederSubsystem).withTimeout(0.1));
     NamedCommands.registerCommand("ShootMid", new ShootOnRPM(m_shooterSubsystem, m_kickerSubsystem, m_feederSubsystem, 4500).withTimeout(0.1));
     NamedCommands.registerCommand("ShootClose", new ShootOnRPM(m_shooterSubsystem, m_kickerSubsystem, m_feederSubsystem, 4000).withTimeout(0.1));
     NamedCommands.registerCommand("Feed", new Feed(m_shooterSubsystem, m_kickerSubsystem, m_feederSubsystem).withTimeout(4));

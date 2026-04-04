@@ -4,50 +4,50 @@
     {
       "anchor": {
         "x": 3.336,
-        "y": 5.282781105317842
+        "y": 2.755
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.419128544566231,
-        "y": 5.774794487847223
+        "x": 3.247251302083334,
+        "y": 2.2765721209490746
       },
       "isLocked": false,
-      "linkedName": "Center End"
+      "linkedName": "non-intake-fire"
     },
     {
       "anchor": {
-        "x": 6.118368200231482,
-        "y": 5.77512254050926
+        "x": 6.137526475694444,
+        "y": 2.345331958912037
       },
       "prevControl": {
-        "x": 6.159702835648148,
-        "y": 5.39700904224537
+        "x": 5.494543258101852,
+        "y": 2.834130425347222
       },
       "nextControl": {
-        "x": 6.01978552135232,
-        "y": 6.676919331589617
+        "x": 6.912281517051095,
+        "y": 1.756360014207236
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 7.686459924768519,
-        "y": 7.177810112847222
+        "x": 7.780348596643519,
+        "y": 0.8490181568287039
       },
       "prevControl": {
-        "x": 7.255398726851853,
-        "y": 7.484473741319444
+        "x": 6.903463831018518,
+        "y": 1.0153408564814825
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Center Sweep"
+      "linkedName": "R Center Sweep"
     }
   ],
   "rotationTargets": [
     {
       "waypointRelativePos": 0.7772820723684212,
-      "rotationDegrees": -45.0
+      "rotationDegrees": 45.0
     }
   ],
   "constraintZones": [],
@@ -63,13 +63,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -88.65619109220563
+    "rotation": 88.95283142371423
   },
   "reversed": false,
   "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -48.39173065738293
+    "rotation": 46.39560053307859
   },
   "useDefaultConstraints": false
 }

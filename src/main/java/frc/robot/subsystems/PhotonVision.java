@@ -15,12 +15,17 @@ import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.networktables.GenericEntry;
+import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.StructArrayPublisher;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.VisionConstants;
 
@@ -96,8 +101,30 @@ public class PhotonVision extends SubsystemBase {
         cameras.add(new Camera(frontRightCamera, frontRightCameraEstimator, FRCamPose));
     }
 
+    NetworkTable VisionTable = NetworkTableInstance.getDefault().getTable("Vision");
+
+    StructArrayPublisher<Pose2d> FLPublisherPos = VisionTable
+            .getStructArrayTopic("FLPublisherPos", Pose2d.struct).publish();
+            
+    StructArrayPublisher<Pose2d> FRPublisherPos = VisionTable
+            .getStructArrayTopic("FRPublisherPos", Pose2d.struct).publish();
+
     @Override
     public void periodic() {
+
+        FLPublisherPos.set(new Pose2d[] {
+                new Pose2d(
+                    VisionConstants.RobotToFrontLeftCamera.getX() + CommandSwerveDrivetrain.getInstance().getState().Pose.getX(),
+                    VisionConstants.RobotToFrontLeftCamera.getY() + CommandSwerveDrivetrain.getInstance().getState().Pose.getY(), 
+                    new Rotation2d(VisionConstants.RobotToFrontLeftCamera.getRotation().getMeasureZ()).rotateBy(CommandSwerveDrivetrain.getInstance().getState().Pose.getRotation()))
+            });
+        FRPublisherPos.set(new Pose2d[] {
+                new Pose2d(
+                    VisionConstants.RobotToFrontRightCamera.getX() + CommandSwerveDrivetrain.getInstance().getState().Pose.getX(),
+                    VisionConstants.RobotToFrontRightCamera.getY() + CommandSwerveDrivetrain.getInstance().getState().Pose.getY(), 
+                    new Rotation2d(VisionConstants.RobotToFrontRightCamera.getRotation().getMeasureZ()).rotateBy(CommandSwerveDrivetrain.getInstance().getState().Pose.getRotation()))
+            });
+
         for (Camera camera : cameras) {
             List<PhotonPipelineResult> res = camera.camera.getAllUnreadResults();
 
@@ -110,7 +137,7 @@ public class PhotonVision extends SubsystemBase {
             if (result != null) {
                 PhotonTrackedTarget target = result.getBestTarget();
                 if (target != null) {
-                    if (target.area < 0.1) {
+                    if (target.area < 0.1 || Math.abs(target.getYaw()) < 70.0) {
                         continue;
                     }
                 }

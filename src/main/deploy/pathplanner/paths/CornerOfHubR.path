@@ -3,43 +3,38 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.697941767939815,
-        "y": 5.377850766782408
+        "x": 3.5354127604166674,
+        "y": 3.046380497685185
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.781195674189815,
-        "y": 5.797233289930556
+        "x": 3.3770556341419087,
+        "y": 2.852930192547147
       },
       "isLocked": false,
-      "linkedName": "Center Sweep End"
+      "linkedName": null
     },
     {
       "anchor": {
-        "x": 3.335956741892103,
-        "y": 5.282781105317842
+        "x": 3.336,
+        "y": 2.755
       },
       "prevControl": {
-        "x": 3.341336805555556,
-        "y": 5.7401521267361115
+        "x": 3.4606532896010327,
+        "y": 2.9717061544849175
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "Center End"
+      "linkedName": "non-intake-fire"
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 0.317526726973684,
-      "rotationDegrees": -46.55891855399935
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
     "maxVelocity": 3.0,
-    "maxAcceleration": 2.0,
+    "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0,
     "nominalVoltage": 12.0,
@@ -47,13 +42,13 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -48.39173065738293
+    "rotation": 46.39560053307859
   },
   "reversed": false,
   "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -88.91513799957296
+    "rotation": 46.05484718731013
   },
-  "useDefaultConstraints": false
+  "useDefaultConstraints": true
 }

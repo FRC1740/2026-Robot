@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.700369357638889,
-        "y": 7.096518663194445
+        "x": 7.686459924768519,
+        "y": 7.177810112847222
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.697941767939815,
-        "y": 6.172853587962964
+        "x": 7.684032335069444,
+        "y": 6.254145037615741
       },
       "isLocked": false,
       "linkedName": "Center Sweep"
     },
     {
       "anchor": {
-        "x": 7.751873625578703,
-        "y": 5.377850766782408
+        "x": 7.697941767939815,
+        "y": 5.378
       },
       "prevControl": {
-        "x": 7.68390111400463,
-        "y": 5.823411892361111
+        "x": 7.629969256365742,
+        "y": 5.823561125578704
       },
       "nextControl": null,
       "isLocked": false,
@@ -48,7 +48,7 @@
   "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -89.42574630528476
+    "rotation": -88.65619109220563
   },
   "useDefaultConstraints": true
 }
