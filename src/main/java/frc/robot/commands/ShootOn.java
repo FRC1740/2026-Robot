@@ -25,7 +25,7 @@ public class ShootOn extends Command {
 
     // Use addRequirements() here to declare subsystem dependencies.
     // Prevents double accesses
-    addRequirements(m_shooterSubsystem);
+    // addRequirements(m_shooterSubsystem);
   }
 
   // Called when the command is initially scheduled.

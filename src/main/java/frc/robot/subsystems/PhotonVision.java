@@ -137,7 +137,7 @@ public class PhotonVision extends SubsystemBase {
             if (result != null) {
                 PhotonTrackedTarget target = result.getBestTarget();
                 if (target != null) {
-                    if (target.area < 0.1 || Math.abs(target.getYaw()) < 70.0) {
+                    if (target.area < 0.1) {
                         continue;
                     }
                 }
@@ -161,8 +161,9 @@ public class PhotonVision extends SubsystemBase {
                 m_poseArray[2] = pose.getRotation().getDegrees();
 
                 camera.CamPose.setDoubleArray(m_poseArray);
-
-                CommandSwerveDrivetrain.getInstance().addVisionMeasurement(pose, visionEst.get().timestampSeconds);
+                if (backRightCamera.getName() != "BackRight") {
+                    CommandSwerveDrivetrain.getInstance().addVisionMeasurement(pose, visionEst.get().timestampSeconds);
+                }
             }
         }
     }
