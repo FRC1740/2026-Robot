@@ -5,27 +5,40 @@
     "data": {
       "commands": [
         {
-          "type": "path",
-          "data": {
-            "pathName": "CornerOfHubR"
-          }
-        },
-        {
           "type": "named",
           "data": {
             "name": "Shoot"
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "R Center Over Hub"
-          }
-        },
-        {
           "type": "named",
           "data": {
             "name": "IntakeFlip"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.3
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "R Center Over Hub"
+                }
+              }
+            ]
           }
         },
         {

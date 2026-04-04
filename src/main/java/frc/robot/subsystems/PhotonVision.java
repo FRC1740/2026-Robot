@@ -152,18 +152,18 @@ public class PhotonVision extends SubsystemBase {
             if (!visionEst.isEmpty()) {
                 Pose2d pose = visionEst.get().estimatedPose.toPose2d();
 
-                if (is_teleop) {
-                    pose = new Pose2d(pose.getTranslation(), CommandSwerveDrivetrain.getInstance().getState().Pose.getRotation());
-                }
+                // if (is_teleop) {
+                pose = new Pose2d(pose.getTranslation(), CommandSwerveDrivetrain.getInstance().getState().Pose.getRotation());
+                // }
 
                 m_poseArray[0] = pose.getX();
                 m_poseArray[1] = pose.getY();
                 m_poseArray[2] = pose.getRotation().getDegrees();
 
                 camera.CamPose.setDoubleArray(m_poseArray);
-                if (backRightCamera.getName() != "BackRight") {
+                // if (backRightCamera.getName() != "BackRight") {
                     CommandSwerveDrivetrain.getInstance().addVisionMeasurement(pose, visionEst.get().timestampSeconds);
-                }
+                // }
             }
         }
     }

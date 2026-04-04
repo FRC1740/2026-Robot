@@ -8,30 +8,30 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.7496370081018515,
-        "y": 2.4767498553240737
+        "x": 7.607453488080928,
+        "y": 2.237340807792468
       },
       "isLocked": false,
       "linkedName": "R Center End"
     },
     {
       "anchor": {
-        "x": 3.336,
-        "y": 2.755
+        "x": 3.517027932191506,
+        "y": 2.6521633989383018
       },
       "prevControl": {
-        "x": 3.7356561053240744,
-        "y": 2.7828885995370376
+        "x": 4.203478127504006,
+        "y": 2.3578244566306092
       },
       "nextControl": null,
       "isLocked": false,
-      "linkedName": "non-intake-fire"
+      "linkedName": "R Hub Fire"
     }
   ],
   "rotationTargets": [
     {
       "waypointRelativePos": 0.31820518092105277,
-      "rotationDegrees": 46.559
+      "rotationDegrees": 0.0
     }
   ],
   "constraintZones": [],
@@ -47,7 +47,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 46.39560053307859
+    "rotation": 53.198519731166
   },
   "reversed": false,
   "folder": null,

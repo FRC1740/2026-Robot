@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.336,
-        "y": 2.755
+        "x": 3.56693609775641,
+        "y": 2.6460313376402245
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.886169270825369,
-        "y": 2.7542838541676886
+        "x": 3.1171053685817793,
+        "y": 2.645315191807913
       },
       "isLocked": false,
       "linkedName": "non-intake-fire"
@@ -48,7 +48,7 @@
   "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 46.39560053307859
+    "rotation": -35.54283106249085
   },
   "useDefaultConstraints": true
 }
