@@ -12,6 +12,7 @@ import org.photonvision.EstimatedRobotPose;
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.targeting.PhotonPipelineResult;
+import org.photonvision.targeting.PhotonTrackedTarget;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Transform2d;
@@ -105,8 +106,18 @@ public class PhotonVision extends SubsystemBase {
             }
 
             PhotonPipelineResult result = res.get(res.size() - 1);
-            
+
+            if (result != null) {
+                PhotonTrackedTarget target = result.getBestTarget();
+                if (target != null) {
+                    if (target.area < 0.1) {
+                        continue;
+                    }
+                }
+            }
+
             Optional<EstimatedRobotPose> visionEst = camera.estimator.estimateCoprocMultiTagPose(result);
+            
             if (visionEst.isEmpty()) {
                 visionEst = camera.estimator.estimateLowestAmbiguityPose(result);
             }
@@ -123,7 +134,7 @@ public class PhotonVision extends SubsystemBase {
                 m_poseArray[2] = pose.getRotation().getDegrees();
 
                 camera.CamPose.setDoubleArray(m_poseArray);
-                
+
                 CommandSwerveDrivetrain.getInstance().addVisionMeasurement(pose, visionEst.get().timestampSeconds);
             }
         }

@@ -7,7 +7,7 @@
         {
           "type": "named",
           "data": {
-            "name": "ShootClose"
+            "name": "Shoot"
           }
         },
         {
@@ -20,6 +20,12 @@
           "type": "path",
           "data": {
             "pathName": "CornerOfHub"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
           }
         },
         {
