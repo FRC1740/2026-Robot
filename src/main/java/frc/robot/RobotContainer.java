@@ -187,7 +187,7 @@ public class RobotContainer {
         new Feed(m_shooterSubsystem, m_kickerSubsystem, m_feederSubsystem)
         // new Shoot(m_shooterSubsystem, m_kickerSubsystem, m_feederSubsystem)
     ));
-    m_driverController.a().whileTrue(
+    m_driverController.x().whileTrue(
     new ParallelCommandGroup(
         drivetrain.applyRequest(() ->
                 drive.withVelocityX(-Math.sin(time) / 2.0) // Drive forward with negative Y (forward)
@@ -197,7 +197,7 @@ public class RobotContainer {
     m_driverController.y()
         .whileTrue(new RunCommand(() -> {IntakeSubsystem.getInstance().spinIntake();}))
         .onFalse(new RunCommand(() -> {IntakeSubsystem.getInstance().stopIntake();}));
-    m_driverController.x().whileTrue(new Align(drivetrain, drive, m_driverController));
+    m_driverController.a().whileTrue(new Align(drivetrain, drive, m_driverController));
 
     //Intake buttons
     m_coDriverController.rightBumper().whileTrue(new RunCommand(() -> {m_intakeSubsystem.spinIntake();}))
