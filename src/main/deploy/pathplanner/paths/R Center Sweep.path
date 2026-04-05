@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 7.694551469851763,
-        "y": 3.112522223056891
+        "x": 8.866071686921297,
+        "y": 3.218345703125
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.687170284955929,
-        "y": 3.433774101061699
+        "x": 8.858690502025462,
+        "y": 3.539597581129808
       },
       "isLocked": false,
-      "linkedName": "R Center Sweep"
+      "linkedName": "R Center End"
     },
     {
       "anchor": {
-        "x": 7.710998263888889,
-        "y": 3.223528935185185
+        "x": 8.866071686921297,
+        "y": 3.218345703125
       },
       "prevControl": {
-        "x": 7.618854448235198,
-        "y": 2.991129457481859
+        "x": 8.773927871267606,
+        "y": 2.985946225421674
       },
       "nextControl": null,
       "isLocked": false,
@@ -48,7 +48,7 @@
   "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": 88.95283142371423
+    "rotation": 89.28551800247959
   },
   "useDefaultConstraints": false
 }

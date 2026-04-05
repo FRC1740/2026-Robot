@@ -109,6 +109,8 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
+    PhotonVision.getInstance().is_teleop = false;
+
     // schedule the autonomous command (example)
     if (m_autonomousCommand != null) {
       CommandScheduler.getInstance().schedule(m_autonomousCommand);
@@ -135,7 +137,7 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    PhotonVision.getInstance().is_teleop = false;
+    PhotonVision.getInstance().is_teleop = true;
     
     Telemetry.getInstance().setMatchTime();
   }

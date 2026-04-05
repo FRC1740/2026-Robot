@@ -46,6 +46,37 @@
           "data": {
             "commands": [
               {
+                "type": "path",
+                "data": {
+                  "pathName": "R Center Sweep to fire"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Feed"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "IntakeFlip"
+          }
+        },
+        {
+          "type": "race",
+          "data": {
+            "commands": [
+              {
                 "type": "named",
                 "data": {
                   "name": "Intake"
@@ -54,7 +85,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "R Center Sweep"
+                  "pathName": "R Center Over Hub"
                 }
               }
             ]

@@ -111,7 +111,6 @@ public class PhotonVision extends SubsystemBase {
 
     @Override
     public void periodic() {
-
         FLPublisherPos.set(new Pose2d[] {
                 new Pose2d(
                     VisionConstants.RobotToFrontLeftCamera.getX() + CommandSwerveDrivetrain.getInstance().getState().Pose.getX(),
@@ -126,6 +125,11 @@ public class PhotonVision extends SubsystemBase {
             });
 
         for (Camera camera : cameras) {
+            
+            if (!is_teleop) {
+                continue;
+            }
+
             List<PhotonPipelineResult> res = camera.camera.getAllUnreadResults();
 
             if (res.isEmpty()) {
