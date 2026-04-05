@@ -160,11 +160,11 @@ public class PhotonVision extends SubsystemBase {
                 
                 if (camera.camera.getName() != "BackRight" && camera.camera.getName() != "BackLeft") {
                     pose = new Pose2d(pose.getTranslation(), CommandSwerveDrivetrain.getInstance().getState().Pose.getRotation());
+                }else {
+                    continue;
+                    // pose = new Pose2d(CommandSwerveDrivetrain.getInstance().getState().Pose.getTranslation(), pose.getRotation());
                 }
-
-                if (camera.camera.getName() != "BackRight" && camera.camera.getName() != "BackLeft") {
-                    CommandSwerveDrivetrain.getInstance().addVisionMeasurement(pose, visionEst.get().timestampSeconds);
-                }
+                CommandSwerveDrivetrain.getInstance().addVisionMeasurement(pose, visionEst.get().timestampSeconds);
             }
         }
     }

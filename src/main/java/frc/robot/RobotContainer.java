@@ -154,7 +154,7 @@ public class RobotContainer {
     m_coDriverController.povDown().onTrue(new InstantCommand(() -> {m_shooterSubsystem.decreaseSpeed();}));
     m_coDriverController.povLeft().onTrue(new InstantCommand(() -> {m_shooterSubsystem.increaseAngle();}));
     m_coDriverController.povRight().onTrue(new InstantCommand(() -> {m_shooterSubsystem.decreaseAngle();}));
-    m_coDriverController.b().whileTrue(new RunCommand(() -> {m_shooterSubsystem.shootClose();}));
+    m_coDriverController.b().whileTrue(new RunCommand(() -> {m_shooterSubsystem.feed();}));
 
 
     //Left trigger activates the flywheel of the shooter
