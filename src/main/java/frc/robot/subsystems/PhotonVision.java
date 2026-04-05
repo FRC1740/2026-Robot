@@ -56,7 +56,7 @@ public class PhotonVision extends SubsystemBase {
     tab.add("FR Cam Pose", m_poseArray)
         .getEntry();
     
-    // PhotonCamera backLeftCamera = new PhotonCamera("BackLeft");
+    PhotonCamera backLeftCamera = new PhotonCamera("BackLeft");
     PhotonCamera frontLeftCamera = new PhotonCamera("FrontLeft");
     PhotonCamera backRightCamera = new PhotonCamera("BackRight");
     PhotonCamera frontRightCamera = new PhotonCamera("FrontRight");
@@ -95,7 +95,7 @@ public class PhotonVision extends SubsystemBase {
 
     public PhotonVision() {
         is_teleop = false;
-        // cameras.add(new Camera(backLeftCamera, backLeftCameraEstimator, BLCamPose));
+        cameras.add(new Camera(backLeftCamera, backLeftCameraEstimator, BLCamPose));
         cameras.add(new Camera(frontLeftCamera, frontLeftCameraEstimator, FLCamPose));
         cameras.add(new Camera(backRightCamera, backRightCameraEstimator, BRCamPose));
         cameras.add(new Camera(frontRightCamera, frontRightCameraEstimator, FRCamPose));
@@ -152,18 +152,19 @@ public class PhotonVision extends SubsystemBase {
             if (!visionEst.isEmpty()) {
                 Pose2d pose = visionEst.get().estimatedPose.toPose2d();
 
-                // if (is_teleop) {
-                pose = new Pose2d(pose.getTranslation(), CommandSwerveDrivetrain.getInstance().getState().Pose.getRotation());
-                // }
-
                 m_poseArray[0] = pose.getX();
                 m_poseArray[1] = pose.getY();
                 m_poseArray[2] = pose.getRotation().getDegrees();
 
                 camera.CamPose.setDoubleArray(m_poseArray);
-                // if (backRightCamera.getName() != "BackRight") {
+                
+                if (camera.camera.getName() != "BackRight" && camera.camera.getName() != "BackLeft") {
+                    pose = new Pose2d(pose.getTranslation(), CommandSwerveDrivetrain.getInstance().getState().Pose.getRotation());
+                }
+
+                if (camera.camera.getName() != "BackRight" && camera.camera.getName() != "BackLeft") {
                     CommandSwerveDrivetrain.getInstance().addVisionMeasurement(pose, visionEst.get().timestampSeconds);
-                // }
+                }
             }
         }
     }

@@ -125,14 +125,14 @@ public class IntakeSubsystem extends SubsystemBase {
       }
 
       // stalled for .3s, so eject
-      if (intakeRollersStallTimer.hasElapsed(0.7)) {
+      if (intakeRollersStallTimer.hasElapsed(2.5)) {
         ejecting = true;
         intakeRollersStallTimer.reset();
         intakeRollersStallTimer.start();
       }
     }else { // ejecting == true
       // eject for 1s
-      if (intakeRollersStallTimer.hasElapsed(.5)) {
+      if (intakeRollersStallTimer.hasElapsed(.4)) {
         ejecting = false;
         intakeRollersStallTimer.reset();
         intakeRollersStallTimer.stop();
