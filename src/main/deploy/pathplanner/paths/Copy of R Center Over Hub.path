@@ -3,16 +3,16 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.56693609775641,
-        "y": 2.6460313376402245
+        "x": 4.017059678819445,
+        "y": 2.5886158130787043
       },
       "prevControl": null,
       "nextControl": {
-        "x": 4.7357869170551385,
-        "y": 2.6460313376402245
+        "x": 5.185910498118173,
+        "y": 2.5886158130787043
       },
       "isLocked": false,
-      "linkedName": "non-intake-fire"
+      "linkedName": "R Hub Fire"
     },
     {
       "anchor": {
@@ -69,7 +69,7 @@
   "folder": null,
   "idealStartingState": {
     "velocity": 0.0,
-    "rotation": -35.543
+    "rotation": 53.198519731166
   },
   "useDefaultConstraints": false
 }
