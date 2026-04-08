@@ -33,7 +33,7 @@ public class IntakeSubsystem extends SubsystemBase {
   SparkClosedLoopController flipMotorLoopController;
   TalonFX intakeMotorController = new TalonFX(Constants.CanIDs.intakeMotor,"*"); 
     private final TrapezoidProfile m_profile =
-        new TrapezoidProfile(new TrapezoidProfile.Constraints(120.0, 160.0));
+        new TrapezoidProfile(new TrapezoidProfile.Constraints(160.0, 160.0*3));
     private TrapezoidProfile.State m_goal = new TrapezoidProfile.State();
     private TrapezoidProfile.State m_setpoint = new TrapezoidProfile.State();
 
@@ -45,7 +45,7 @@ public class IntakeSubsystem extends SubsystemBase {
   Timer intakeRollersStallTimer = new Timer();
 
   boolean ejecting = false;
-
+  
   private final Telemetry telemetry = Telemetry.getInstance();
   /** Creates a new FeederSubsystem. */
 
@@ -87,11 +87,11 @@ public class IntakeSubsystem extends SubsystemBase {
 
     flipMotorConfig.closedLoop
       
-      .p(0.06, ClosedLoopSlot.kSlot0)
+      .p(0.02, ClosedLoopSlot.kSlot0)
       .i(0.0, ClosedLoopSlot.kSlot0)
       .d(0.0, ClosedLoopSlot.kSlot0)
       // intake in
-      .p(0.04, ClosedLoopSlot.kSlot1)
+      .p(0.02, ClosedLoopSlot.kSlot1)
       .i(0.0, ClosedLoopSlot.kSlot1)
       .d(0.0, ClosedLoopSlot.kSlot1)
 
@@ -105,6 +105,9 @@ public class IntakeSubsystem extends SubsystemBase {
     
 
     flipMotorEncoder = flipMotorController.getEncoder();
+
+    m_goal = new TrapezoidProfile.State(flipMotorEncoder.getPosition(), 0.0);
+    m_setpoint = m_goal;
   }
 
   @Override
@@ -176,6 +179,10 @@ public class IntakeSubsystem extends SubsystemBase {
 
   public void flipUp() {
     m_goal = new TrapezoidProfile.State(0, 0);
+  }
+
+  public void flipUpHalfway() {
+    m_goal = new TrapezoidProfile.State(-15, 0);
   }
   
   public void latch() {

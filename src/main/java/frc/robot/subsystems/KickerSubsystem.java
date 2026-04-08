@@ -67,7 +67,7 @@ public class KickerSubsystem extends SubsystemBase {
   }
 
   public double getCurrentVelocity() {
-    return kickerMotorController.getVelocity().getValueAsDouble() / 60.0;
+    return -kickerMotorController.getVelocity().getValueAsDouble() * 60.0;
   }
 
   public void kick() {
