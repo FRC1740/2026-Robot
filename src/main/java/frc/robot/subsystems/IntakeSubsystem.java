@@ -32,9 +32,9 @@ public class IntakeSubsystem extends SubsystemBase {
   SparkMax flipMotorController = new SparkMax(Constants.CanIDs.intakeExtensionMotor, MotorType.kBrushless); 
   SparkClosedLoopController flipMotorLoopController;
   TalonFX intakeMotorController = new TalonFX(Constants.CanIDs.intakeMotor,"*"); 
-    private final TrapezoidProfile m_profile =
-        new TrapezoidProfile(new TrapezoidProfile.Constraints(160.0, 160.0*3));
-    private TrapezoidProfile.State m_goal = new TrapezoidProfile.State();
+  private final TrapezoidProfile m_profile =
+  new TrapezoidProfile(new TrapezoidProfile.Constraints(160.0*3, 160.0*8));
+  private TrapezoidProfile.State m_goal = new TrapezoidProfile.State();
     private TrapezoidProfile.State m_setpoint = new TrapezoidProfile.State();
 
   private static IntakeSubsystem instance;
@@ -87,11 +87,11 @@ public class IntakeSubsystem extends SubsystemBase {
 
     flipMotorConfig.closedLoop
       
-      .p(0.02, ClosedLoopSlot.kSlot0)
+      .p(0.04, ClosedLoopSlot.kSlot0)
       .i(0.0, ClosedLoopSlot.kSlot0)
       .d(0.0, ClosedLoopSlot.kSlot0)
       // intake in
-      .p(0.02, ClosedLoopSlot.kSlot1)
+      .p(0.04, ClosedLoopSlot.kSlot1)
       .i(0.0, ClosedLoopSlot.kSlot1)
       .d(0.0, ClosedLoopSlot.kSlot1)
 
@@ -158,7 +158,7 @@ public class IntakeSubsystem extends SubsystemBase {
       spit();
       return;
     }
-    intakeMotorController.setControl(new DutyCycleOut(1).withEnableFOC(true));
+    intakeMotorController.setControl(new DutyCycleOut(.5).withEnableFOC(true));
   }
 
   public void spit() {

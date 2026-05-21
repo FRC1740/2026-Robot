@@ -43,7 +43,7 @@ public class Feed extends Command {
     if (m_shooterSubsystem.spinning()) {
       m_kickerSubsystem.kick();
       m_feederSubsystem.feed();
-      if (Math.floor((intakeFlipTimer.get() + .5) / 1.2) % 2 == 1) {
+      if (Math.floor((intakeFlipTimer.get() + .5) / .7) % 2 == 1) {
         IntakeSubsystem.getInstance().flipUpHalfway();
       }else {
         IntakeSubsystem.getInstance().flipDown();
