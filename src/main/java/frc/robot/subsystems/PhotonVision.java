@@ -43,8 +43,8 @@ public class PhotonVision extends SubsystemBase {
 
     private final double[] m_poseArray = new double[3];
 
-    private GenericEntry BLCamPose =
-        tab.add("BL Cam Pose", m_poseArray)
+    private GenericEntry FrontCamPose =
+        tab.add("Front Cam Pose", m_poseArray)
             .getEntry();
     private GenericEntry FLCamPose =
     tab.add("FL Cam Pose", m_poseArray)
@@ -56,13 +56,13 @@ public class PhotonVision extends SubsystemBase {
     tab.add("FR Cam Pose", m_poseArray)
         .getEntry();
     
-    PhotonCamera backLeftCamera = new PhotonCamera("BackLeft");
+    PhotonCamera frontCamera = new PhotonCamera("Front");
     PhotonCamera frontLeftCamera = new PhotonCamera("FrontLeft");
-    PhotonCamera backRightCamera = new PhotonCamera("BackRight");
+    // PhotonCamera backRightCamera = new PhotonCamera("BackRight");
     PhotonCamera frontRightCamera = new PhotonCamera("FrontRight");
 
-    PhotonPoseEstimator backLeftCameraEstimator = 
-        new PhotonPoseEstimator(VisionConstants.aprilTagFieldLayout, VisionConstants.RobotToBackLeftCamera);
+    PhotonPoseEstimator frontCameraEstimator = 
+        new PhotonPoseEstimator(VisionConstants.aprilTagFieldLayout, VisionConstants.RobotToFrontCamera);
     PhotonPoseEstimator frontLeftCameraEstimator = 
         new PhotonPoseEstimator(VisionConstants.aprilTagFieldLayout, VisionConstants.RobotToFrontLeftCamera);
     PhotonPoseEstimator backRightCameraEstimator = 
@@ -95,9 +95,9 @@ public class PhotonVision extends SubsystemBase {
 
     public PhotonVision() {
         is_teleop = false;
-        cameras.add(new Camera(backLeftCamera, backLeftCameraEstimator, BLCamPose));
+        cameras.add(new Camera(frontCamera, frontCameraEstimator, FrontCamPose));
         cameras.add(new Camera(frontLeftCamera, frontLeftCameraEstimator, FLCamPose));
-        cameras.add(new Camera(backRightCamera, backRightCameraEstimator, BRCamPose));
+        // cameras.add(new Camera(backRightCamera, backRightCameraEstimator, BRCamPose));
         cameras.add(new Camera(frontRightCamera, frontRightCameraEstimator, FRCamPose));
     }
 
@@ -126,9 +126,9 @@ public class PhotonVision extends SubsystemBase {
 
         for (Camera camera : cameras) {
             
-            if (!is_teleop) {
-                continue;
-            }
+            // if (!is_teleop) {
+            //     continue;
+            // }
 
             List<PhotonPipelineResult> res = camera.camera.getAllUnreadResults();
 
@@ -162,9 +162,12 @@ public class PhotonVision extends SubsystemBase {
 
                 camera.CamPose.setDoubleArray(m_poseArray);
                 
-                if (camera.camera.getName() != "BackRight" && camera.camera.getName() != "BackLeft") {
+                if (camera.camera.getName() != "BackRight" && camera.camera.getName() != "BackLeft" && camera.camera.getName() != "Front") {
                     pose = new Pose2d(pose.getTranslation(), CommandSwerveDrivetrain.getInstance().getState().Pose.getRotation());
-                }else {
+                }else if (camera.camera.getName() == "Front") {
+                    // pose = pose;
+                }
+                else {
                     continue;
                     // pose = new Pose2d(CommandSwerveDrivetrain.getInstance().getState().Pose.getTranslation(), pose.getRotation());
                 }
