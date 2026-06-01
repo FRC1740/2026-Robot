@@ -158,7 +158,7 @@ public class IntakeSubsystem extends SubsystemBase {
       spit();
       return;
     }
-    intakeMotorController.setControl(new DutyCycleOut(.5).withEnableFOC(true));
+    intakeMotorController.setControl(new DutyCycleOut(1.0).withEnableFOC(true));
   }
 
   public void spit() {

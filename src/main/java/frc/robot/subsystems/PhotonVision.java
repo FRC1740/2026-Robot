@@ -57,7 +57,7 @@ public class PhotonVision extends SubsystemBase {
         .getEntry();
     
     PhotonCamera frontCamera = new PhotonCamera("Front");
-    PhotonCamera frontLeftCamera = new PhotonCamera("FrontLeft");
+    // PhotonCamera frontLeftCamera = new PhotonCamera("FrontLeft");
     // PhotonCamera backRightCamera = new PhotonCamera("BackRight");
     PhotonCamera frontRightCamera = new PhotonCamera("FrontRight");
 
@@ -96,7 +96,7 @@ public class PhotonVision extends SubsystemBase {
     public PhotonVision() {
         is_teleop = false;
         cameras.add(new Camera(frontCamera, frontCameraEstimator, FrontCamPose));
-        cameras.add(new Camera(frontLeftCamera, frontLeftCameraEstimator, FLCamPose));
+        // cameras.add(new Camera(frontLeftCamera, frontLeftCameraEstimator, FLCamPose));
         // cameras.add(new Camera(backRightCamera, backRightCameraEstimator, BRCamPose));
         cameras.add(new Camera(frontRightCamera, frontRightCameraEstimator, FRCamPose));
     }

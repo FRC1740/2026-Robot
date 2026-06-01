@@ -147,7 +147,7 @@ public class RobotContainer {
   private void configureBindings() {
     //Shooter buttons
     m_coDriverController.leftTrigger().whileTrue(new ShootOn(m_shooterSubsystem, m_kickerSubsystem, m_feederSubsystem));
-    // m_coDriverController.leftBumper().whileTrue(new ShootOnDistance(m_shooterSubsystem, m_kickerSubsystem, m_feederSubsystem));
+    m_coDriverController.leftBumper().whileTrue(new ShootOnDistance(m_shooterSubsystem, m_kickerSubsystem, m_feederSubsystem));
     m_coDriverController.leftBumper().whileTrue(new RunCommand(() -> {m_shooterSubsystem.shootClose();}));
     m_coDriverController.rightTrigger().onTrue(new InstantCommand(() -> {m_shooterSubsystem.toggle();}));
     m_coDriverController.povUp().onTrue(new InstantCommand(() -> {m_shooterSubsystem.increaseSpeed();}));
@@ -225,9 +225,9 @@ public class RobotContainer {
     )));
 
     m_coDriverController.a().whileTrue(new InstantCommand(() -> {m_intakeSubsystem.flipDown();}))
-    .onFalse(new InstantCommand(() -> {m_intakeSubsystem.stopFlip();} ));
+        .onFalse(new InstantCommand(() -> {m_intakeSubsystem.stopFlip();} ));
     m_coDriverController.x().whileTrue(new InstantCommand(() -> {m_intakeSubsystem.flipUp();}))
-    .onFalse(new InstantCommand(() -> {m_intakeSubsystem.stopFlip();} ));
+        .onFalse(new InstantCommand(() -> {m_intakeSubsystem.stopFlip();} ));
 
     m_coDriverController.y().whileTrue(new ParallelCommandGroup(
         new RunCommand(()->{m_kickerSubsystem.spit();}),
