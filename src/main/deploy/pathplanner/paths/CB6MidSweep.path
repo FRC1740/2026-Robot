@@ -1,0 +1,54 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 7.229745008680555,
+        "y": 6.56848509837963
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 7.885981553819442,
+        "y": 5.923205512152778
+      },
+      "isLocked": false,
+      "linkedName": "CB6MidSweep"
+    },
+    {
+      "anchor": {
+        "x": 7.8430722656250005,
+        "y": 3.9103399884259264
+      },
+      "prevControl": {
+        "x": 7.863477141203704,
+        "y": 5.113899594907406
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "CB6EnemyZone"
+    }
+  ],
+  "rotationTargets": [],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -94.49260460485307
+  },
+  "reversed": false,
+  "folder": null,
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": -56.2797968937597
+  },
+  "useDefaultConstraints": true
+}

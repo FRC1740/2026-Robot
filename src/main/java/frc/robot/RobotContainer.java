@@ -102,12 +102,15 @@ public class RobotContainer {
     drivetrain.configureAutoBuilder();
 
     NamedCommands.registerCommand("Shoot", new ShootOn(m_shooterSubsystem, m_kickerSubsystem, m_feederSubsystem).withTimeout(0.1));
+    NamedCommands.registerCommand("RunShoot", new ShootOn(m_shooterSubsystem, m_kickerSubsystem, m_feederSubsystem));
     NamedCommands.registerCommand("ShootMid", new ShootOnRPM(m_shooterSubsystem, m_kickerSubsystem, m_feederSubsystem, 4500).withTimeout(0.1));
     NamedCommands.registerCommand("ShootClose", new ShootOnRPM(m_shooterSubsystem, m_kickerSubsystem, m_feederSubsystem, 4000).withTimeout(0.1));
     NamedCommands.registerCommand("Feed", new Feed(m_shooterSubsystem, m_kickerSubsystem, m_feederSubsystem).withTimeout(4));
+    NamedCommands.registerCommand("Feed8", new Feed(m_shooterSubsystem, m_kickerSubsystem, m_feederSubsystem).withTimeout(1));
     NamedCommands.registerCommand("IntakeFlip", new InstantCommand(() -> {m_intakeSubsystem.flipDown();}));
     NamedCommands.registerCommand("IntakeFlipUp", new InstantCommand(() -> {m_intakeSubsystem.flipUp();}));
     NamedCommands.registerCommand("Intake", new Intake(m_intakeSubsystem).withTimeout(4));
+    NamedCommands.registerCommand("IntakeInf", new Intake(m_intakeSubsystem));
 
     // Configure the trigger bindings
     autoChooser = AutoBuilder.buildAutoChooser("Tests");

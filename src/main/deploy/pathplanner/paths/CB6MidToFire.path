@@ -1,0 +1,75 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 7.8430722656250005,
+        "y": 3.9103399884259264
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 7.882635416666666,
+        "y": 5.67992165798611
+      },
+      "isLocked": false,
+      "linkedName": "CB6EnemyZone"
+    },
+    {
+      "anchor": {
+        "x": 5.335962601273149,
+        "y": 5.40311082175926
+      },
+      "prevControl": {
+        "x": 6.019288094979746,
+        "y": 5.397345296223959
+      },
+      "nextControl": {
+        "x": 4.3482726433699685,
+        "y": 5.411444407620899
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 3.2431834490740745,
+        "y": 5.359217375578703
+      },
+      "prevControl": {
+        "x": 3.5120554108796305,
+        "y": 5.503166883680554
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "CB6F"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 1.0,
+      "rotationDegrees": -53.986623352040894
+    }
+  ],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -48.89964417763164
+  },
+  "reversed": false,
+  "folder": null,
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": -94.49260460485307
+  },
+  "useDefaultConstraints": true
+}
