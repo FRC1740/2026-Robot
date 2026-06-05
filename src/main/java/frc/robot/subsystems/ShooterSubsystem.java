@@ -15,9 +15,15 @@ import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
+
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Transform2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.networktables.GenericEntry;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.Telemetry;
 import frc.robot.Constants;
@@ -157,7 +163,14 @@ public class ShooterSubsystem extends SubsystemBase {
     Constants.Shooter.CalibrationPoint point = Constants.Shooter.getPoint(distance);
     m_hoodSubsystem.setPercent(point.angle + angle_adjustment);
     // currentspeed is dpad
-    rightMotor.setControl(VVShootRequest.withVelocity(point.rpm / 60.0));
+
+    ChassisSpeeds speeds = ChassisSpeeds.fromRobotRelativeSpeeds(
+      CommandSwerveDrivetrain.getInstance().getState().Speeds, 
+      CommandSwerveDrivetrain.getInstance().getState().Pose.getRotation());
+
+    // System.out.println(MathUtil.clamp(Math.abs(speeds.vyMetersPerSecond), 0.0, 1.0) * 300.0);
+
+    rightMotor.setControl(VVShootRequest.withVelocity((point.rpm + MathUtil.clamp(Math.abs(speeds.vyMetersPerSecond), 0.0, 1.0) * 500.0) / 60.0));
   }
   
   public void aimForDistance(double distance) {

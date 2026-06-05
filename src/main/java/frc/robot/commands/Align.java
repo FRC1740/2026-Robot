@@ -82,7 +82,7 @@ public class Align extends Command {
 
     Transform2d onTheMoveOffset = new Transform2d(
       speeds.vxMetersPerSecond * 0.0, // x offsets affect rpm not angle (TODO) 
-      (speeds.vyMetersPerSecond * 1.69), 
+      (MathUtil.clamp(speeds.vyMetersPerSecond, -1.0, 1.0) * 1.69), 
       new Rotation2d(0.0));
       
     target = targetHub.plus(onTheMoveOffset.times(-1)); // if we are moving, we need to account for the estimated
