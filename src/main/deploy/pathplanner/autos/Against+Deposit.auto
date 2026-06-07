@@ -49,57 +49,26 @@
                           {
                             "type": "named",
                             "data": {
-                              "name": "Feed"
+                              "name": "Feed8"
                             }
                           }
                         ]
                       }
                     },
                     {
-                      "type": "wait",
-                      "data": {
-                        "waitTime": 2.0
-                      }
-                    },
-                    {
-                      "type": "path",
-                      "data": {
-                        "pathName": "Hub End to Deposit"
-                      }
-                    },
-                    {
-                      "type": "named",
-                      "data": {
-                        "name": "Intake"
-                      }
-                    },
-                    {
-                      "type": "sequential",
+                      "type": "parallel",
                       "data": {
                         "commands": [
                           {
-                            "type": "race",
+                            "type": "path",
                             "data": {
-                              "commands": [
-                                {
-                                  "type": "named",
-                                  "data": {
-                                    "name": "IntakeFlip"
-                                  }
-                                },
-                                {
-                                  "type": "wait",
-                                  "data": {
-                                    "waitTime": 1.0
-                                  }
-                                }
-                              ]
+                              "pathName": "Hub End to Deposit"
                             }
                           },
                           {
-                            "type": "wait",
+                            "type": "named",
                             "data": {
-                              "waitTime": 3.0
+                              "name": "Intake"
                             }
                           }
                         ]
@@ -141,12 +110,6 @@
                       "type": "race",
                       "data": {
                         "commands": [
-                          {
-                            "type": "wait",
-                            "data": {
-                              "waitTime": 3.0
-                            }
-                          },
                           {
                             "type": "named",
                             "data": {

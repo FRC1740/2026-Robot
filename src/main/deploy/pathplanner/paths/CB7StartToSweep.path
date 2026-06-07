@@ -1,0 +1,127 @@
+{
+  "version": "2025.0",
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 3.5559488570601854,
+        "y": 2.3366057581018516
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 4.533873842592593,
+        "y": 2.384435836226852
+      },
+      "isLocked": false,
+      "linkedName": "CB7Start"
+    },
+    {
+      "anchor": {
+        "x": 6.107083188657408,
+        "y": 2.2384524016203704
+      },
+      "prevControl": {
+        "x": 5.591721590901659,
+        "y": 2.36882258957908
+      },
+      "nextControl": {
+        "x": 6.632033058449075,
+        "y": 2.1056566840277777
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 7.619537181712964,
+        "y": 1.191045862268519
+      },
+      "prevControl": {
+        "x": 6.453375578703705,
+        "y": 0.4560766782407403
+      },
+      "nextControl": {
+        "x": 8.468377861606758,
+        "y": 1.7260246681743525
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 7.892214554398148,
+        "y": 3.2760829716435182
+      },
+      "prevControl": {
+        "x": 7.6636930700231485,
+        "y": 2.458444516782407
+      },
+      "nextControl": {
+        "x": 8.120736038773147,
+        "y": 4.093721426504629
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 5.893914568865742,
+        "y": 2.6564571035879636
+      },
+      "prevControl": {
+        "x": 6.576403528284144,
+        "y": 2.9605209147135425
+      },
+      "nextControl": {
+        "x": 5.211425609447339,
+        "y": 2.3523932924623847
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 3.0980529513888895,
+        "y": 2.283592447916667
+      },
+      "prevControl": {
+        "x": 4.521932725694441,
+        "y": 2.349465422453703
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": "CB7Fire"
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 1.9198704769736827,
+      "rotationDegrees": 70.23343015232668
+    },
+    {
+      "waypointRelativePos": 2.5936986019736836,
+      "rotationDegrees": 87.66658662589495
+    }
+  ],
+  "constraintZones": [],
+  "pointTowardsZones": [],
+  "eventMarkers": [],
+  "globalConstraints": {
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0,
+    "nominalVoltage": 12.0,
+    "unlimited": false
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": 53.45918947621547
+  },
+  "reversed": false,
+  "folder": null,
+  "idealStartingState": {
+    "velocity": 0,
+    "rotation": 60.46003312205279
+  },
+  "useDefaultConstraints": true
+}
