@@ -91,8 +91,8 @@ public class RobotContainer {
       new CommandXboxController(OperatorConstants.kDriverControllerPort);
   private final CommandXboxController m_coDriverController =
       new CommandXboxController(OperatorConstants.kCoDriverControllerPort);
-  private final CommandXboxController m_testController =
-      new CommandXboxController(OperatorConstants.kTestDriverControllerPort);
+//   private final CommandXboxController m_testController =
+//       new CommandXboxController(OperatorConstants.kTestDriverControllerPort);
 
     //   /* Path follower */ 
     SendableChooser<Command> autoChooser;
@@ -160,14 +160,14 @@ public class RobotContainer {
     m_coDriverController.b().whileTrue(new RunCommand(() -> {m_shooterSubsystem.feed();}));
 
 
-    //Left trigger activates the flywheel of the shooter
-    m_testController.leftTrigger().whileTrue(new TestShoot(m_shooterSubsystem));
+    // //Left trigger activates the flywheel of the shooter
+    // m_testController.leftTrigger().whileTrue(new TestShoot(m_shooterSubsystem));
 
-    //A button toggles it on/off
-    m_testController.a().onTrue(new InstantCommand(() -> {m_shooterSubsystem.toggle();}));
+    // //A button toggles it on/off
+    // m_testController.a().onTrue(new InstantCommand(() -> {m_shooterSubsystem.toggle();}));
 
-    //X button increases the speed by 100 RPM
-    m_testController.x().onTrue(new InstantCommand(() -> {m_shooterSubsystem.increaseSpeed();}));
+    // //X button increases the speed by 100 RPM
+    // m_testController.x().onTrue(new InstantCommand(() -> {m_shooterSubsystem.increaseSpeed();}));
     
 
     // m_driverController.a().whileTrue(
