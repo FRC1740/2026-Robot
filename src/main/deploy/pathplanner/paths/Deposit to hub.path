@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.5043373842592598,
-        "y": 7.09133543113426
+        "x": 0.7683541666666671,
+        "y": 7.0307769097222215
       },
       "prevControl": null,
       "nextControl": {
-        "x": 0.499547815393519,
-        "y": 6.67247779224537
+        "x": 0.683454137731482,
+        "y": 6.52596947337963
       },
       "isLocked": false,
       "linkedName": "depit L"
@@ -20,12 +20,12 @@
         "y": 5.790672236689816
       },
       "prevControl": {
-        "x": 0.4793544704339542,
-        "y": 6.215523498691747
+        "x": 0.5921242766203709,
+        "y": 6.263068070023149
       },
       "nextControl": {
-        "x": 0.5257264178240746,
-        "y": 5.486304976851853
+        "x": 0.451898821043494,
+        "y": 5.490594252002099
       },
       "isLocked": false,
       "linkedName": null
@@ -50,34 +50,7 @@
       "rotationDegrees": -90.0
     }
   ],
-  "constraintZones": [
-    {
-      "name": "Constraints Zone",
-      "minWaypointRelativePos": 0.587520764119601,
-      "maxWaypointRelativePos": 1.0806426495016612,
-      "constraints": {
-        "maxVelocity": 1.0,
-        "maxAcceleration": 1.0,
-        "maxAngularVelocity": 540.0,
-        "maxAngularAcceleration": 720.0,
-        "nominalVoltage": 12.0,
-        "unlimited": false
-      }
-    },
-    {
-      "name": "Constraints Zone",
-      "minWaypointRelativePos": 0.0,
-      "maxWaypointRelativePos": 0.5047238372093023,
-      "constraints": {
-        "maxVelocity": 3.0,
-        "maxAcceleration": 2.0,
-        "maxAngularVelocity": 540.0,
-        "maxAngularAcceleration": 720.0,
-        "nominalVoltage": 12.0,
-        "unlimited": false
-      }
-    }
-  ],
+  "constraintZones": [],
   "pointTowardsZones": [],
   "eventMarkers": [],
   "globalConstraints": {
@@ -96,7 +69,7 @@
   "folder": null,
   "idealStartingState": {
     "velocity": 0,
-    "rotation": -90.44986701946067
+    "rotation": -100.85222162596182
   },
   "useDefaultConstraints": false
 }

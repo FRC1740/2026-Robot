@@ -25,6 +25,7 @@ public class KickerSubsystem extends SubsystemBase {
   final VelocityTorqueCurrentFOC VVKickerRequest = new VelocityTorqueCurrentFOC(0).withSlot(0);
   
   private final Telemetry telemetry = Telemetry.getInstance();
+  
   private static KickerSubsystem instance;
 
   private ShuffleboardTab tab = Shuffleboard.getTab("Kicker");
